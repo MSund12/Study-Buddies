@@ -16,24 +16,26 @@ After installing Node.js, make sure you have **npm** (Node Package Manager) avai
 ```bash
 node -v
 npm -v
+```
 
 🚀 Getting Started
 1. Clone the Repository
 First, clone the repository to your local machine using Git. Open your terminal and run:
-
+```bash
 git clone https://github.com/username/repository-name.git
 cd repository-name
+```
 This will download the project files to your local directory and navigate into it.
 
 
 2. Install Dependencies
 Now that you've cloned the repo, install the project dependencies (which are listed in the package.json file) by running:
-
+```bash
 npm install
-
+```
 3. Run the Development Server
 To start the project locally, use the following command:
-
+```bash
 npm run dev
-
+```
 This will launch the development server, and your project will be accessible at http://localhost:3000 (or a different port if configured).
