@@ -17,3 +17,12 @@ After installing Node.js, make sure you have **npm** (Node Package Manager) avai
 node -v
 npm -v
 
+🚀 Getting Started
+1. Clone the Repository
+First, clone the repository to your local machine using Git. Open your terminal and run:
+
+bash
+Copy
+git clone https://github.com/username/repository-name.git
+cd repository-name
+This will download the project files to your local directory and navigate into it.
