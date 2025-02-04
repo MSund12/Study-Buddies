@@ -1,4 +1,4 @@
-# Study Buddies
+# Study Buddies 
 
 Welcome to **Study Buddies**, a fast and simple web project setup using **Vite**. This guide will walk you through the steps to clone, install dependencies, and get the project running on your local machine.
 
