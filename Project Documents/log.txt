@@ -1,1 +1,136 @@
+Meeting Minutes January 9, 2025
+
+Present: Lukasz, Abdullah, Haaris
+Absent: Kashif
+
+Functional Requirements:
+  Home page feed (Basic)
+      Most recent
+      Most upvoted/popular
+  Search function (Basic)
+  Communities
+      Professor makes a request for a community
+      Prof is the admin
+      Prof adds people
+  Communities
+      Yorku staff, profs and students get verified. 
+      People can make whatever communities they want
+
+
+
+
+
+
+
+Meeting Minutes January 13, 2025
+
+Ideas:
+Room booking - Possibly talk to Kevin about implementing
+There are gonna be groups for every subject
+Make a complex login as a feature
+Student will schedule into the room that is pre booked (similar to a Pass Session)
+Groups will have a size of approximately 5, once the group is made the room will be locked
+Possibly include PASS tutoring in the schedule
+Collab with Bethune? Talk to Dr.Wilson
+Add a chat for groups? Possibly route the chat to connect lassonde or embed the chat?
+Study resources tab? (need moderation)
+At first we can start with courses for mandatory 1st and 2nd year students at Lassonde/Bethune (Check lassonde student checklist for mandatory courses)
+Enable students to upload resources (will need to be vetted)
+
+
+
+
+
+
+
+Meeting Minutes January 24, 2025
+Agenda:
+Read the iteration 0 document
+Talk about progress with learning React, express, node and mondoDB
+Talk about features, specify them potentially 
+
+Attendees:
+Lukasz
+Abdullah
+Haaris 
+Kashif 
+Marko
+Farzin
+
+Updates and Ideas:
+  3 Big User Stories
+      Identification
+          Login, accounts etc…
+      Creating a group
+          Availability, different ways to find a group
+      Finding a room
+          Web scraping 
+      Communication
+  Discuss best practices for github committing / coding. 
+      Indentation - whatever the default (4 spaces).
+
+Action Item                             | Owner
+Create a 5 min video                    | Lukasz
+Set up the code base structure          | Abdullah
+Work on vision statement                | Abdullah and Haaris
+Mapping stories -  User Stories         | Farzin, Marko, Kashif, and Lukasz
+
+
+
+
+
+
+
+Meeting with Client, January 29, 2025
+
+Reason for meeting again: Discuss the vision statement and the big user stories. 
+
+Vision statement summary: Study Buddies is a system designed to help York University students create and manage study groups, offering features like group chats with read receipts, polls, and reporting functions to ensure a safe environment. It provides scheduling tools for courses, office hours, and study sessions, along with resource-sharing capabilities that are monitored for accuracy. The platform also enables students to book study rooms, authenticate York University users for security, and track its success through usage metrics and student satisfaction surveys. By fostering collaboration, Study Buddies aims to improve student connections and promote effective group studying.
+
+Big user stories:  User Stories
+Revisiting how room booking is done: Last we discussed, we aren’t able to get information on which rooms are empty and at what time, and the only possible way of getting such information would be through web scraping. 
+Collaborate with the IT department to allow students to book rooms or make a study group for pre-reserved rooms. 
+Revisiting our conversation on chat integration: Our own chat with safeguards. What do you think? Helps us tackle more features for our project requirement. 
+
+Summarize all the points discussed above in 5 minutes (Wrap up): 
+Go through a revised vision statement. 
+Go through the revised user stories 
+
+
+
+
+
+
+
+Meeting Minutes February 4, 2025
+Attendees:
+Abdullah 
+Lukasz
+Farzin
+Marko
+
+Updates:
+    Deadline next Friday the 14th.
+    Create your branch like this: name-iter0 (ex. abdullah-iter0)
+    Start on your individual features on your branches, we'll figure integration of all the parts later.
+    Don't worry about design (UI), we'll figure it out next iteration.
+    Ask for help if you don't understand something, but use AI models and forums to get a solution before asking.
+    We will use 2 test user accounts to work with (still needs to be created)
+    Besides every feature in the #iteration-features channel, we just have to create 2 test accounts. 
+
+
+Action Item:                                                 | Owner
+Have 2 test accounts (this may require building an object)   | Abdullah and Farzin
+Email bethune about major courses for science majors         | Marko
+Create a flowchart to understand integration                 | Abdullah 
+Create a express.js server                                   | Abdullah
+Create a Database                                            | Abdullah 
+Create unit testing                                          | Everyone
+
+Future Updates:
+    Figure out domain name: studymates.org.
+  A  WS for hosting. 
+
+
+
 
