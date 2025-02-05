@@ -129,7 +129,7 @@ Create unit testing                                          | Everyone
 
 Future Updates:
     Figure out domain name: studymates.org.
-  A  WS for hosting. 
+    AWS for hosting. 
 
 
 
