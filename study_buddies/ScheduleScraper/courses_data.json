@@ -1,0 +1,2109 @@
+[
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "W",
+        "Course Name": "Civil Engineering Design Project",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "F",
+        "Course Name": "Civil Engineering Materials",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "F",
+        "Course Name": "Civil Engineering Graphics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "F",
+        "Course Name": "Geological Processes",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "W",
+        "Course Name": "Fluid Mechanics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "W",
+        "Course Name": "Mechanics of Materials",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "W",
+        "Course Name": "Introduction to Environmental Engineering",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "F",
+        "Course Name": "Soil Mechanics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "F",
+        "Course Name": "Hydraulics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "F",
+        "Course Name": "Structural Analysis",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "F",
+        "Course Name": "Civil Engineering Computational Methods",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "F",
+        "Course Name": "Transportation Engineering",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "W",
+        "Course Name": "Geotechnical Engineering",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "W",
+        "Course Name": "Hydrology",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "W",
+        "Course Name": "Introduction to Structural Design",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "W",
+        "Course Name": "Sanitary and Environmental Engineering",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "W",
+        "Course Name": "Transportation Planning and Evaluation",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "Y",
+        "Course Name": "Civil Engineering Capstone Design Project",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "F",
+        "Course Name": "Advanced Structural Analysis",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "F",
+        "Course Name": "Reinforced Concrete Design",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "W",
+        "Course Name": "Structural Steel Design",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "W",
+        "Course Name": "Wood Engineering",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "F",
+        "Course Name": "Geotechnical Modelling",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "F",
+        "Course Name": "Hydrogeology",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "W",
+        "Course Name": "Geological Engineering and Design",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "F",
+        "Course Name": "Water Resources Engineering",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "W",
+        "Course Name": "Pavement Materials and Design",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "W",
+        "Course Name": "Traffic Simulation Modelling",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "F",
+        "Course Name": "Freight Transportation",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "W",
+        "Course Name": "Landfill Design",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "W",
+        "Course Name": "Environmental Impact Assessment and Sustainability",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "F",
+        "Course Name": "Advanced Sanitary and Environmental Engineering",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "F",
+        "Course Name": "Environmental Geotechnics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "F",
+        "Course Name": "Civil Engineering Project Management",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CIVL",
+        "Term": "W",
+        "Course Name": "Civil Engineering for a Sustainable Future",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "COOP",
+        "Term": "F",
+        "Course Name": "Professional Development for Co-Op Students",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "COOP",
+        "Term": "W",
+        "Course Name": "Professional Development for Co-Op Students",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "COOP",
+        "Term": "F",
+        "Course Name": "Lassonde Co-op Work-term",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "COOP",
+        "Term": "W",
+        "Course Name": "Lassonde Co-op Work-term",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "COOP",
+        "Term": "F",
+        "Course Name": "Critical Reflection on Work Experience using Professional Portfolios",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "COOP",
+        "Term": "W",
+        "Course Name": "Critical Reflection on Work Experience using Professional Portfolios",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "COOP",
+        "Term": "F",
+        "Course Name": "Lassonde Co-op Work-term",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "COOP",
+        "Term": "W",
+        "Course Name": "Lassonde Co-op Work-term",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CSSD",
+        "Term": "F",
+        "Course Name": "Coding through Biology (CS1 A)",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CSSD",
+        "Term": "M1",
+        "Course Name": "Coding through Biology (CS1 A)",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CSSD",
+        "Term": "F",
+        "Course Name": "Coding through Chemistry (CS1 B)",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CSSD",
+        "Term": "M2",
+        "Course Name": "Coding through Chemistry (CS1 B)",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CSSD",
+        "Term": "W",
+        "Course Name": "Teamwork and Communication in Software Development",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CSSD",
+        "Term": "W",
+        "Course Name": "Coding with Objects (CS2)",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CSSD",
+        "Term": "W",
+        "Course Name": "Web-Centric Programming",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "CSSD",
+        "Term": "W",
+        "Course Name": "Logic and Computing",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "DIGT",
+        "Term": "F",
+        "Course Name": "Introduction to Computational Problem Solving",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "DIGT",
+        "Term": "Y",
+        "Course Name": "Teamwork and Communication in Software Development",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "DIGT",
+        "Term": "F",
+        "Course Name": "Being a Digital Citizen",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "DIGT",
+        "Term": "WS",
+        "Course Name": "Object-Oriented Problem Solving",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "DIGT",
+        "Term": "WS",
+        "Course Name": "Technology Leadership & Professional Reflection 1",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "DIGT",
+        "Term": "W",
+        "Course Name": "Mobilizing Digital Citizenship",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "DIGT",
+        "Term": "FS",
+        "Course Name": "Data Structures, Algorithms & Analysis",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "DIGT",
+        "Term": "Y",
+        "Course Name": "Introduction to Computer Organization & Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "DIGT",
+        "Term": "FS",
+        "Course Name": "Practice of Software Development",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "DIGT",
+        "Term": "W",
+        "Course Name": "Introduction to Data Science",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "DIGT",
+        "Term": "W",
+        "Course Name": "Computer Networks",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "DIGT",
+        "Term": "WS",
+        "Course Name": "Computer Networks",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "DIGT",
+        "Term": "WS",
+        "Course Name": "Technology Leadership & Professional Reflection 2",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "Y",
+        "Course Name": "Research Directions in Computing",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Computational Thinking Through Procedural Programming and Mechatronics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "LB",
+        "Course Name": "Computational Thinking Through Procedural Programming and Mechatronics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "WL",
+        "Course Name": "Computational Thinking Through Procedural Programming and Mechatronics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Introduction to Computing: A Net-centric Approach",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Introduction to Computing: A Net-centric Approach",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "WL",
+        "Course Name": "Introduction to Computing: A Net-centric Approach",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Introduction to Computer Science and Programming",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Introduction to Computer Science and Programming",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "WL",
+        "Course Name": "Introduction to Computer Science and Programming",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Discrete Mathematics for Computer Science",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Discrete Mathematics for Computer Science",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "WL",
+        "Course Name": "Discrete Mathematics for Computer Science",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Object Oriented Programming from Sensors to Actuators",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Introduction to Object Oriented Programming",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Introduction to Object Oriented Programming",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Discrete Mathematics for Engineers",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Discrete Mathematics for Engineers",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Object Oriented Design and Principles using Python",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Computer Use: Fundamentals",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Computer Use: Fundamentals",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Computer Use: Programming",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Computer Use for the Natural Sciences",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Introduction to Computing for the Physical Sciences",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Introduction to Computing for Mathematics and Statistics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Introduction to Computing for Mathematics and Statistics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Introduction to Computing for Psychology",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Introduction to Computing & Programming",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Introduction \u00e0 l'informatique et \u00e0 la programmation",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Programming for Digital Media",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Building Interactive Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Introduction to the Theory of Computation",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Introduction to the Theory of Computation",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Computer Organization",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Computer Organization",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Advanced Object Oriented Programming",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Advanced Object Oriented Programming",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Software Tools",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Software Tools",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Introduction to Embedded Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Introduction to Embedded Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Fundamentals of Data Structures",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Fundamentals of Data Structures",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Electrical Circuits",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Electrical Circuits",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Electronic Circuits and Devices",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Electronic Circuits and Devices",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Software Development Project",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Fortran and Scientific Computing",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Data Structures for Data Science",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Professional Practice in Computing",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Design and Analysis of Algorithms",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Design and Analysis of Algorithms",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Numerical Methods I",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Numerical Methods II",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Digital Logic Design",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Digital Logic Design",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Communication Networks",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Communication Networks",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Computer Network Protocols and Applications",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Computer Network Protocols and Applications",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Embedded Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Digital Systems Engineering: Modeling, Implementation and Validation",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Digital Systems Engineering: Modeling, Implementation and Validation",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Operating System Fundamentals",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Operating System Fundamentals",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Software Design",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Software Design",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "System Specification and Refinement",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Introduction to Artificial Intelligence and Logic Programming",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Introduction to Artificial Intelligence and Logic Programming",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Applied Machine Learning",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Fundamentals of Machine Learning",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Introduction to Database Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Introduction to Database Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Introduction to 3D Computer Graphics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Signals and Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Signals and Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "User Interfaces",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "User Interfaces",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Applied Cryptography",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Introduction to Computer Security",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Introduction to Computer Security",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Electrical Systems for Mechanical Engineers",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Electromechanical Energy Conversion",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Applied Electromagnetism",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Analog Electronics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Introduction to Power Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Introduction to Biomedical Engineering for Electrical/Computer Engineering",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Introduction to Medical Devices and Biological Instruments",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Industry Practicum",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Industry Practicum",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Directed Studies",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Directed Studies",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Computer Science Project",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Computer Science Project",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "Y",
+        "Course Name": "Computer Science Capstone Project",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "Y",
+        "Course Name": "Software Development Capstone Project",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Advanced Data Structures",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Advanced Data Structures",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Introduction to Quantum Computing",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Introduction to Quantum Computing",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Mathematics of Cryptography",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Advanced Topics in Algorithms",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Computer Architecture",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Computer Architecture",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Digital Communications",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Digital Communications",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Mobile Communications",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Compilers and Interpreters",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Software Engineering Requirements",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Software Engineering Requirements",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Software Engineering Testing",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Software Engineering Testing",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Advanced Software Engineering",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Advanced Software Engineering",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Mission-Critical Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Artificial Intelligence",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Database Management Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Database Management Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Data Mining",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Data Mining",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Building E-Commerce Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Building E-Commerce Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Information Networks",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Big Data Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Big Data Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Introduction to Robotics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Computer Vision",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Human-Computer Interaction",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Human-Computer Interaction",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Mobile User Interfaces",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Hypermedia and Multimedia Technology",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Hypermedia and Multimedia Technology",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Digital Audio",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Introduction to Virtual Reality",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Computer Security Project",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Computer Security Project",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Computer Security Laboratory",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Network Security and Forensics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Malware Analysis",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Technological Countermeasures to Financial Crimes",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Analog Integrated Circuit Design",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Digital Very Large Scale Integration",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Power Electronics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Renewable Energy Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Medical Imaging Techniques: Principles and Applications",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "Y",
+        "Course Name": "Digital Media Project",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "F",
+        "Course Name": "Industry Practicum",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "EECS",
+        "Term": "W",
+        "Course Name": "Industry Practicum",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ENG",
+        "Term": "F",
+        "Course Name": "Renaissance Engineer 1: Ethics, Communication & Problem Solving",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ENG",
+        "Term": "WL",
+        "Course Name": "Renaissance Engineer 1: Ethics, Communication & Problem Solving",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ENG",
+        "Term": "W",
+        "Course Name": "Renaissance Engineer 2: Engineering Design Principles",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ENG",
+        "Term": "WL",
+        "Course Name": "Innovation and Creativity",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ENG",
+        "Term": "F",
+        "Course Name": "Engineering Projects: Management, Economics and Safety",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ENG",
+        "Term": "F",
+        "Course Name": "Effective Engineering Communication",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ENG",
+        "Term": "W",
+        "Course Name": "Effective Engineering Communication",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ENG",
+        "Term": "F",
+        "Course Name": "Professional Engineering Practice",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ENG",
+        "Term": "F",
+        "Course Name": "Interdisciplinary Project Launchpad",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ENG",
+        "Term": "W",
+        "Course Name": "Interdisciplinary Project Launchpad",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ENG",
+        "Term": "Y",
+        "Course Name": "Engineering Project (Capstone)",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ENG",
+        "Term": "Y",
+        "Course Name": "Interdisciplinary Project Odyssey",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ENG",
+        "Term": "F",
+        "Course Name": "Introduction to Control Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ENG",
+        "Term": "W",
+        "Course Name": "Introduction to Control Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ENG",
+        "Term": "W",
+        "Course Name": "Feedback Control Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "F",
+        "Course Name": "The Dynamic Earth and Space Geodesy",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "F",
+        "Course Name": "Introduction to Atmospheric Science",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "W",
+        "Course Name": "The Earth Environment",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "Y",
+        "Course Name": "Natural, Technological and Human-induced Disasters",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "W",
+        "Course Name": "Introductory Meteorology",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "F",
+        "Course Name": "Introduction to Climate Science",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "W",
+        "Course Name": "Planetary Geophysics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "F",
+        "Course Name": "Engineering and the Environment",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "W",
+        "Course Name": "Engineering and the Environment",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "W",
+        "Course Name": "Algorithmic and Computational methods for Geomatics and Space Engineering",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "W",
+        "Course Name": "Space Systems Engineering",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "W",
+        "Course Name": "Introduction to Continuum Mechanics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "LF",
+        "Course Name": "Land Surveying for Civil Engineers",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "W",
+        "Course Name": "Global Geophysics and Geodesy",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "F",
+        "Course Name": "Atmospheric Radiation and Thermodynamics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "F",
+        "Course Name": "Atmospheric Dynamics I",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "F",
+        "Course Name": "Introductory Atmospheric Chemistry",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "W",
+        "Course Name": "Physics of the Space Environment",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "W",
+        "Course Name": "Materials for Space Applications",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "F",
+        "Course Name": "Heat Transfer and Thermal Design",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "F",
+        "Course Name": "Geographical Information Systems (GIS) and Spatial Analysis",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "F",
+        "Course Name": "Research Project",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "W",
+        "Course Name": "Research Project",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "Y",
+        "Course Name": "Research Project",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "F",
+        "Course Name": "Time Series and Spectral Analysis",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "F",
+        "Course Name": "Synoptic Meteorology I",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "W",
+        "Course Name": "Synoptic Meteorology II",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "W",
+        "Course Name": "Dynamics of Space Vehicles",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "F",
+        "Course Name": "Cloud Physics and Radar Meteorology",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "W",
+        "Course Name": "Numerical Weather Prediction",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "F",
+        "Course Name": "Remote Sensing of the Earth's Surface",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "F",
+        "Course Name": "Storms and Weather Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "Y",
+        "Course Name": "Space Hardware",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "F",
+        "Course Name": "Payload Design",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "W",
+        "Course Name": "Space Mission Design",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "W",
+        "Course Name": "Finite Element Methods in Engineering Design",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "W",
+        "Course Name": "Geographical Information Systems (GIS) and Data Integration",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "ESSE",
+        "Term": "W",
+        "Course Name": "Hydrography",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "W",
+        "Course Name": "Mechanical Engineering: Professionalism and Society",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "F",
+        "Course Name": "Thermodynamics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "W",
+        "Course Name": "Heat and Flow Engineering Principles",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "F",
+        "Course Name": "Mechanics of Material 1",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "F",
+        "Course Name": "Dynamics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "W",
+        "Course Name": "Dynamics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "F",
+        "Course Name": "Engineering Graphics & CAD Modeling",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "W",
+        "Course Name": "Mini Design Project 1",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "F",
+        "Course Name": "Modern Instrumentation and Measurement Techniques",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "W",
+        "Course Name": "Modern Instrumentation and Measurement Techniques",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "F",
+        "Course Name": "Engineering Thermodynamics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "F",
+        "Course Name": "Fluid Dynamics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "W",
+        "Course Name": "Heat Transfer",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "W",
+        "Course Name": "Mechanisms for Mechanical Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "W",
+        "Course Name": "Mini Design Project 2",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "F",
+        "Course Name": "Machine Elements Design",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "F",
+        "Course Name": "Solid Mechanics and Materials Laboratory",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "W",
+        "Course Name": "Macro-and-Micro Manufacturing Methods",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "W",
+        "Course Name": "Thermofluid Laboratory",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "F",
+        "Course Name": "Transport Phenomena",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "W",
+        "Course Name": "Aerodynamics",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "W",
+        "Course Name": "Energy Conversion and Storage",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "W",
+        "Course Name": "Introduction to Composite Materials",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "F",
+        "Course Name": "Simulation Tools for Design & Analysis",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "F",
+        "Course Name": "Artificial Intelligence and Generative Design for Mechanical Systems",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "W",
+        "Course Name": "Life Cycle and System Design",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "F",
+        "Course Name": "Vibrations",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "W",
+        "Course Name": "Advanced Mechanical Technologies",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "MECH",
+        "Term": "W",
+        "Course Name": "Principles of Bioengineering",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "TECL",
+        "Term": "W",
+        "Course Name": "Disruptive Technology Innovation & Entrepreneurship",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "TECL",
+        "Term": "WL",
+        "Course Name": "Innovation, Creativity and Entrepreneurship",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "TECL",
+        "Term": "W",
+        "Course Name": "Legal Values: Commercializing IP",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "TECL",
+        "Term": "F",
+        "Course Name": "Management of Interdisciplinary Projects",
+        "Hours": []
+    },
+    {
+        "Fac": "LE",
+        "Dept": "TECL",
+        "Term": "W",
+        "Course Name": "Management of Interdisciplinary Projects",
+        "Hours": []
+    }
+]
