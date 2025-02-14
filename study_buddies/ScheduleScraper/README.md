@@ -42,7 +42,7 @@ Usage
 
 Step 1: Run the Script
 
-Navigate to the folder containing scraper.py and run:
+Navigate to the folder containing HTMLScrape.py and run:
 ```bash
 python HTMLScrape.py
 ```
