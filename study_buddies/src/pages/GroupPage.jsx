@@ -1,39 +1,36 @@
 import React, { useState } from 'react';
+import GroupChatSidebar from './GroupChatSidebar';
 
 const GroupPage = ({ group, onBack }) => {
-  // State to hold the list of resource objects
   const [resources, setResources] = useState([]);
-
-  // State for the resource upload form
   const [resourceForm, setResourceForm] = useState({
     title: '',
     link: '',
     description: '',
   });
-
-  // State for displaying a status message
   const [status, setStatus] = useState('');
 
-  // Handle the resource form submission
   const handleResourceSubmit = (e) => {
     e.preventDefault();
 
-    // Add the new resource to the resources array
+    // Add the new resource to the list
     setResources([...resources, resourceForm]);
-
     // Clear the form
     setResourceForm({ title: '', link: '', description: '' });
-
-    // Display a status message
+    // Display status message
     setStatus('Resource uploaded successfully!');
     setTimeout(() => setStatus(''), 3000);
   };
 
   return (
-    <div className="p-4">
-      <button onClick={onBack} className="px-4 py-2 bg-gray-400 text-white rounded mb-4">Back</button>
+    <div className="p-4 relative">
+      <button onClick={onBack} className="px-4 py-2 bg-gray-400 text-white rounded mb-4">
+        Back
+      </button>
       <h2 className="text-2xl font-bold mb-2">{group.name}</h2>
-      <p className="mb-4">Welcome to {group.name}! Here you can share and view study resources.</p>
+      <p className="mb-4">
+        Welcome to {group.name}! Here you can share and view study resources.
+      </p>
 
       <div className="mb-8 border p-4 rounded bg-gray-50">
         <h3 className="text-xl font-semibold mb-2">Upload Resource</h3>
@@ -94,6 +91,9 @@ const GroupPage = ({ group, onBack }) => {
           ))
         )}
       </div>
+
+      {/* Integrate the toggleable chat sidebar */}
+      <GroupChatSidebar username="Anonymous" />
     </div>
   );
 };
