@@ -17,7 +17,7 @@ This React application is a sample group study finder that demonstrates:
 ## Project Structure
 
 The project is organized as follows:
-
+```
 study_buddies/
 ├── src/
 │   ├── App.jsx             // Main application file; manages overall state and navigation.
@@ -32,55 +32,7 @@ study_buddies/
 └── ScheduleScraper/        // Contains the web scraper script (e.g., scraper.py).
 │       ├── HTMLScrape.py      // The Web Scraping script to extract schedule data.
 │       ├── LoginPage.jsx      // Stores data collected from the web scraper
-
-
-## Detailed File Descriptions
-
-### App.jsx
-- **Location:** `src/App.jsx`
-- **Function:**  
-  - Manages overall state, including the stub database (`users` array) and the current logged-in user.
-  - Controls navigation between registration, login, and the home view.
-
-### RegisterPage.jsx
-- **Location:** `src/pages/RegisterPage.jsx`
-- **Function:**  
-  - Provides a registration form for new users.
-  - On submission, it adds the user (with a username and password) to the `users` array in App.jsx.
-
-### LoginPage.jsx
-- **Location:** `src/pages/LoginPage.jsx`
-- **Function:**  
-  - Displays a login form.
-  - Validates credentials against the `users` array.
-  - On successful login, it sets the current user in App.jsx and transitions to HomePage.
-
-### HomePage.jsx
-- **Location:** `src/pages/HomePage.jsx`
-- **Function:**  
-  - Welcomes the logged-in user (displaying their username).
-  - Offers options to find or create a group.
-  - When "Find a Group" is selected, it renders the GroupFinderPage.
-
-### GroupFinderPage.jsx
-- **Location:** `src/pages/GroupFinderPage.jsx`
-- **Function:**  
-  - Lists available study groups (as clickable items).
-  - When a group is clicked, it passes the group data back to HomePage, which then displays the corresponding GroupPage.
-
-### GroupPage.jsx
-- **Location:** `src/pages/GroupPage.jsx`
-- **Function:**  
-  - Displays details about the selected group.
-  - Contains functionality to upload and view study resources (e.g., links, titles, descriptions).
-  - Integrates the chat sidebar by passing the current user's username to the GroupChatSidebar.
-
-### GroupChatSidebar.jsx
-- **Location:** `src/pages/GroupChatSidebar.jsx`
-- **Function:**  
-  - A toggleable sidebar chat component that is fixed at the bottom-right of the viewport.
-  - Allows users to send messages; each message displays the user's name.
-  - Can be minimized to a simple "Chat" button.
+```
 
 ## Data Flow & Username Passing
 
