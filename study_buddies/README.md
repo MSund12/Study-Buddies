@@ -31,7 +31,7 @@ study_buddies/
 ├── server/                 // Server directory (currently not used).
 └── ScheduleScraper/        // Contains the web scraper script (e.g., scraper.py).
 │       ├── HTMLScrape.py      // The Web Scraping script to extract schedule data.
-│       ├── LoginPage.jsx      // Stores data collected from the web scraper
+│       ├── courses_data.json      // Stores data collected from the web scraper
 ```
 
 ## Data Flow & Username Passing
@@ -47,7 +47,7 @@ study_buddies/
    - On successful login, the current user is stored in state (e.g., `currentUser`) and passed to `HomePage.jsx`.
 
 4. **Username Usage:**  
-   - `HomePage.jsx` displays a welcome message using `currentUser.username`.
+   - `HomePage.jsx` displays a Find a Group button and takes in `currentUser` information.
    - `GroupPage.jsx` receives `currentUser` as a prop and passes `currentUser.username` to `GroupChatSidebar.jsx`, ensuring that the chat displays the proper username.
 
 ## ScheduleScraper Directory
