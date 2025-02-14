@@ -34,11 +34,7 @@ Frontend (React)
 ```bash
 npm install
 ```
-Backend(Express.js)
-```bash
-cd server
-npm install
-```
+
 3. Start Frontend (New Terminal):
 ```bash
 npm run dev
