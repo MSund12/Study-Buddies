@@ -27,3 +27,4 @@ dist-ssr
 server/.env
 node_modules/
 server/node_modules/
+chrome-win64/
