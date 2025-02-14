@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import GroupChatSidebar from './GroupChatSidebar';
 
-const GroupPage = ({ group, onBack }) => {
+const GroupPage = ({ group, onBack, currentUser }) => {
   const [resources, setResources] = useState([]);
   const [resourceForm, setResourceForm] = useState({
     title: '',
@@ -91,9 +91,8 @@ const GroupPage = ({ group, onBack }) => {
           ))
         )}
       </div>
-
-      {/* Integrate the toggleable chat sidebar */}
-      <GroupChatSidebar username="Anonymous" />
+      {/* Group chat on the page*/}
+      <GroupChatSidebar username={currentUser.username} />
     </div>
   );
 };

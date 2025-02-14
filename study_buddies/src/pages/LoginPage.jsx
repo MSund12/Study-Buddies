@@ -14,7 +14,7 @@ const LoginPage = ({ users, onLoginSuccess }) => {
 
     if (user) {
       setMessage('');
-      onLoginSuccess();
+      onLoginSuccess(user);
     } else {
       setMessage('Invalid username or password');
     }

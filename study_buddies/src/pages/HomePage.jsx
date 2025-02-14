@@ -2,16 +2,23 @@ import React, { useState } from 'react';
 import GroupFinderPage from './GroupFinderPage';
 import GroupPage from './GroupPage';
 
-const HomePage = () => {
+const HomePage = ({ currentUser }) => {
   const [showGroupFinder, setShowGroupFinder] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState(null);
 
   if (selectedGroup) {
-    return <GroupPage group={selectedGroup} onBack={() => setSelectedGroup(null)} />;
+    return (<GroupPage 
+    group={selectedGroup} 
+    onBack={() => setSelectedGroup(null)} 
+    currentUser={currentUser}
+    />);
   }
 
   if (showGroupFinder) {
-    return <GroupFinderPage onBack={() => setShowGroupFinder(false)} onSelectGroup={setSelectedGroup} />;
+    return (<GroupFinderPage 
+    onBack={() => setShowGroupFinder(false)} 
+    onSelectGroup={setSelectedGroup} 
+    />);
   }
   
   return (
