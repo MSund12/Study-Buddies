@@ -71,4 +71,16 @@ This React application is a sample group study finder that demonstrates:
    ```bash
    git clone https://github.com/yourusername/group-study-finder.git
    cd group-study-finder
+   ```
+
+2. **Install Dependencies:**
+
+   ```bash
+   npm install
+   ```
+3. **Start the development server:**
+
+   ```bash
+   npm run dev
+   ```
 
