@@ -16,50 +16,40 @@ This React application is a sample group study finder that demonstrates:
 
 ## Project Structure
 
-- **App.jsx:**  
-  - Manages overall state, including the stub database (`users` array) and the current logged-in user.
-  - Controls navigation between registration, login, and the home view.
-  
-- **RegisterPage.jsx:**  
-  - Provides a registration form for new users.
-  - On submission, it adds the user (with a username and password) to the `users` array in App.jsx.
-  
-- **LoginPage.jsx:**  
-  - Displays a login form.
-  - Validates credentials against the `users` array.
-  - On successful login, it sets the current user in App.jsx and moves to the HomePage.
-  
-- **HomePage.jsx:**  
-  - Welcomes the logged-in user (showing their username).
-  - Offers options to find or create a group.
-  - When "Find a Group" is selected, it renders the GroupFinderPage.
-  
-- **GroupFinderPage.jsx:**  
-  - Lists available study groups (as clickable items).
-  - When a group is clicked, it passes the group data back to HomePage, which then displays the corresponding GroupPage.
-  
-- **GroupPage.jsx:**  
-  - Displays details about the selected group.
-  - Contains functionality to upload and view study resources (e.g., links, titles, descriptions).
-  - Integrates the chat sidebar by passing the current user's username to the GroupChatSidebar.
-  
-- **GroupChatSidebar.jsx:**  
-  - A toggleable sidebar chat component that is fixed at the bottom-right of the viewport.
-  - Allows users to send messages; each message displays the user's name.
-  - Can be minimized to a simple "Chat" button.
+The project is organized as follows:
+```
+study_buddies/
+├── src/
+│   ├── App.jsx             // Main application file; manages overall state and navigation.
+│   └── pages/              // Contains all the React component files:
+│       ├── RegisterPage.jsx       // Provides a registration form for new users.
+│       ├── LoginPage.jsx          // Displays a login form and handles authentication.
+│       ├── HomePage.jsx           // Welcomes the logged-in user and offers group selection options.
+│       ├── GroupFinderPage.jsx    // Lists available study groups (as clickable items).
+│       ├── GroupPage.jsx          // Displays details for a selected group, resource upload, and chat.
+│       └── GroupChatSidebar.jsx   // Toggleable sidebar chat component.
+├── server/                 // Server directory (currently not used).
+└── ScheduleScraper/        // Contains the web scraper script (e.g., scraper.py).
+│       ├── HTMLScrape.py      // The Web Scraping script to extract schedule data.
+│       ├── courses_data.json      // Stores data collected from the web scraper
+```
 
 ## Data Flow & Username Passing
 
 1. **Stub Database:**  
    - In `App.jsx`, the line `const [users, setUsers] = useState([]);` serves as your stub database.
-   
+
 2. **User Registration:**  
-   - When a new user registers in **RegisterPage.jsx**, their details are added to this array.
-   
+   - When a new user registers in `RegisterPage.jsx`, their details are added to this array.
+
 3. **Login:**  
-   - In **LoginPage.jsx**, the login form checks the credentials against this array.
-   - On successful login, the current user is stored in state (e.g., `currentUser`) and passed to **HomePage.jsx**.
-   
+   - In `LoginPage.jsx`, the login form checks the credentials against the users array.
+   - On successful login, the current user is stored in state (e.g., `currentUser`) and passed to `HomePage.jsx`.
+
 4. **Username Usage:**  
-   - **HomePage.jsx** displays a welcome message using `currentUser.username`.
-   - **GroupPage.jsx** receives `currentUser` as a prop and passes `currentUser.username` to **GroupChatSidebar.jsx**, ensuring that the chat displays the proper username.
+   - `HomePage.jsx` displays a Find a Group button and takes in `currentUser` information.
+   - `GroupPage.jsx` receives `currentUser` as a prop and passes `currentUser.username` to `GroupChatSidebar.jsx`, ensuring that the chat displays the proper username.
+
+## ScheduleScraper Directory
+
+The `ScheduleScraper` directory contains the web scraper script (e.g., `scraper.py`) used to scrape schedule information. This script is separate from the main React application and can be run independently.
