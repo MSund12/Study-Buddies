@@ -3,7 +3,6 @@
 Welcome to **Study Buddies**, a fast and simple web project setup using **Vite**. This guide will walk you through the steps to clone, install dependencies, and get the project running on your local machine.
 
 ---
-
 ## 📋 Prerequisites
 
 Before running the project, you need to have **Node.js** installed. If you don’t have it yet, follow the steps below to install it:
@@ -40,3 +39,5 @@ npm install
 npm run dev
 ```
 This will launch the development server, and your project will be accessible at http://localhost:3000 (or a different port if configured).
+
+## Please start at log.txt when marking project documents, it will make it easier for you!!
