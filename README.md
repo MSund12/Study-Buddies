@@ -40,4 +40,5 @@ npm run dev
 ```
 This will launch the development server, and your project will be accessible at http://localhost:3000 (or a different port if configured).
 
-## Please start at log.txt when marking project documents, it will make it easier for you!!
+## Please start at log.txt when marking project documents, it will make it easier for you!! 
+Can be found in Project Documents
