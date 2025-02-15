@@ -33,14 +33,22 @@ study_buddies/
 │       ├── HTMLScrape.py      // The Web Scraping script to extract schedule data.
 │       ├── courses_data.json      // Stores data collected from the web scraper
 └── test/
-│       ├── components/
-│             ├── GroupChatSidebar.test.jsx
-│             ├── GroupFinderPage.test.jsx
-│             ├── GroupPage.test.jsx
-│             ├── HomePage.test.jsx
-│             ├── LoginPage.test.jsx
-│             ├── RegisterPage.test.jsx
-│       └── setup.js
+│   ├── components/           // Directory for component-specific tests.
+│   │   ├── GroupChatSidebar.test.jsx  // Tests chat functionality, ensuring messages display correctly.
+│   │   ├── GroupFinderPage.test.jsx   // Tests group list display and selection behavior.
+│   │   │                                // - Ensures available study groups are displayed.
+│   │   │                                // - Simulates clicking a group and verifies navigation.
+│   │   ├── GroupPage.test.jsx          // Tests resource uploads and navigation.
+│   │   │                                // - Simulates uploading a file and verifies success.
+│   │   │                                // - Checks if the back button navigates correctly.
+│   │   ├── HomePage.test.jsx           // Tests UI elements and user interactions on the home page.
+│   │   ├── LoginPage.test.jsx          // Tests login validation.
+│   │   │                                // - Ensures successful login redirects the user.
+│   │   │                                // - Simulates incorrect credentials and checks error messages.
+│   │   ├── RegisterPage.test.jsx       // Tests user registration process.
+│   │   │                                // - Verifies that form inputs exist.
+│   │   │                                // - Simulates form submission and checks if the user is registered.
+│   └── setup.js                         // Jest setup file for configuring matchers and environment.
 
 ```
 
@@ -48,17 +56,29 @@ study_buddies/
 
 1. **Stub Database:**  
    - In `App.jsx`, the line `const [users, setUsers] = useState([]);` serves as your stub database.
+   - Test Coverage: RegisterPage.test.jsx verifies that user details are correctly added to this array upon registration.
 
 2. **User Registration:**  
    - When a new user registers in `RegisterPage.jsx`, their details are added to this array.
+   - Test Coverage: RegisterPage.test.jsx includes:
+     - Checking if the registration form renders correctly.
+     - Ensuring the form submits successfully with valid data.
+     - Verifying error messages appear for missing fields.
 
 3. **Login:**  
    - In `LoginPage.jsx`, the login form checks the credentials against the users array.
    - On successful login, the current user is stored in state (e.g., `currentUser`) and passed to `HomePage.jsx`.
+   - Test Coverage: LoginPage.test.jsx includes:
+     - Testing for successful login handling.
+     - Ensuring error messages appear for invalid credentials.
 
 4. **Username Usage:**  
    - `HomePage.jsx` displays a Find a Group button and takes in `currentUser` information.
    - `GroupPage.jsx` receives `currentUser` as a prop and passes `currentUser.username` to `GroupChatSidebar.jsx`, ensuring that the chat displays the proper username.
+   - Test Coverage:
+     - HomePage.test.jsx verifies correct rendering of the welcome message and navigation options.
+     - GroupPage.test.jsx tests group resource uploads and navigation.
+     - GroupChatSidebar.test.jsx ensures the chat sidebar correctly associates messages with the logged-in user.
 
 ## ScheduleScraper Directory
 
