@@ -1,46 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React, { useState } from 'react';
+// import reactLogo from './assets/react.svg'
+// import viteLogo from '/vite.svg'
 import './App.css'
 import {Routes, Route, Navigate} from 'react-router-dom';
 import RegisterPage from './pages/RegisterPage';
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
 
-function App() {
-  //const [count, setCount] = useState(0)
+const App = () => {
+  //Our stub "database" for registered users
+  const [users, setUsers] = useState([]);
+  //Holds the current logged-in user.
+  const [currentUser, setCurrentUser] = useState(null);
+  const [currentPage, setCurrentPage] = useState('register');
+
+  const handleRegister = (newUser) => {
+    setUsers([...users, newUser]);
+    setCurrentPage('login');
+  };
+
+  const handleLoginSuccess = (loggedInUser) => {
+    setCurrentUser(loggedInUser);
+    setCurrentPage('home');
+  };
 
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/register" replace />} />
-      <Route path="/register" element={<RegisterPage />} />
-    </Routes>
-    // <>
-    //   <div>
-    //     <a href="https://vite.dev" target="_blank">
-    //       <img src={viteLogo} className="logo" alt="Vite logo" />
-    //     </a>
-    //     <a href="https://react.dev" target="_blank">
-    //       <img src={reactLogo} className="logo react" alt="React logo" />
-    //     </a>
-    //   </div>
-    //   <h1>Study Buddies Registration</h1>
-
-    //   <div className='card'>
-    //     <Register />
-    //   </div>
-    //   <div className="card">
-    //     <button onClick={() => setCount((count) => count + 1)}>
-    //       count is {count}
-    //     </button>
-    //     <p>
-    //       Edit <code>src/App.jsx</code> and save to test HMR
-    //     </p>
-    //   </div>
-    //   <p className="read-the-docs">
-    //     Click on the Vite and React logos to learn more
-    //   </p>
-    // </>
-    
+    <div>
+      {currentPage === 'register' && <RegisterPage onRegister={handleRegister} />}
+      {currentPage === 'login' && (
+        <LoginPage users={users} onLoginSuccess={handleLoginSuccess} />
+      )}
+      {currentPage === 'home' && <HomePage currentUser={currentUser} />}
+    </div>
   );
-}
+};
 
 export default App;
