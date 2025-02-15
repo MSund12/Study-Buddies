@@ -40,7 +40,7 @@ study_buddies/
 │             ├── HomePage.test.jsx
 │             ├── LoginPage.test.jsx
 │             ├── RegisterPage.test.jsx
-│      └── setup.js
+│       └── setup.js
 
 ```
 
