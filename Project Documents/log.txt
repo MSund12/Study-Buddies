@@ -141,3 +141,26 @@ Future Updates:
 
 
 
+
+
+Meeting Minutes February 14, 2025
+Agenda
+Go over all the requirements for Iteration 1 and make sure the submission is complete
+
+Attendees:
+Abdullah 
+Lukasz
+Kashif
+Haaris
+
+Updates:
+Finished writing automatic testing (Abdullah)
+Created an architecture sketch (Kashif/Abdullah)
+Uploaded and created all necessary documents for Iteration 1 (Lukasz/Kashif)
+
+Action Item:
+Schedule meeting during reading week to summarize iteration 1 and set new goals (Lukasz/Abdullah)
+
+
+
+
