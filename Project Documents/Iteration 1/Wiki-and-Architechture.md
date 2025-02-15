@@ -29,9 +29,19 @@ study_buddies/
 │       ├── GroupPage.jsx          // Displays details for a selected group, resource upload, and chat.
 │       └── GroupChatSidebar.jsx   // Toggleable sidebar chat component.
 ├── server/                 // Server directory (currently not used).
-└── ScheduleScraper/        // Contains the web scraper script (e.g., scraper.py).
+├── ScheduleScraper/        // Contains the web scraper script (e.g., scraper.py).
 │       ├── HTMLScrape.py      // The Web Scraping script to extract schedule data.
 │       ├── courses_data.json      // Stores data collected from the web scraper
+└── test/
+│       ├── components/
+│             ├── GroupChatSidebar.test.jsx
+│             ├── GroupFinderPage.test.jsx
+│             ├── GroupPage.test.jsx
+│             ├── HomePage.test.jsx
+│             ├── LoginPage.test.jsx
+│             ├── RegisterPage.test.jsx
+│      └── setup.js
+
 ```
 
 ## Data Flow & Username Passing
