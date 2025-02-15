@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import HomePage from '../src/pages/HomePage'
+import HomePage from '../../src/pages/HomePage'
 
 describe('HomePage', () => {
   it('navigates to group finder', () => {

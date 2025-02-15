@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import GroupChatSidebar from '../src/pages/GroupChatSidebar'
+import GroupChatSidebar from '../../src/pages/GroupChatSidebar'
 
 describe('GroupChatSidebar', () => {
   it('toggles open and closed', () => {

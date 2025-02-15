@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import LoginPage from '../src/pages/LoginPage'
+import LoginPage from '../../src/pages/LoginPage'
 
 describe('LoginPage', () => {
   const mockUsers = [
@@ -8,7 +8,7 @@ describe('LoginPage', () => {
   ]
 
   it('handles successful login', () => {
-    const mockLogin = jest.fn()
+    const mockLogin = vi.fn()
     render(<LoginPage users={mockUsers} onLoginSuccess={mockLogin} />)
     
     // Fill credentials
@@ -21,7 +21,7 @@ describe('LoginPage', () => {
   })
 
   it('shows error for invalid login', () => {
-    render(<LoginPage users={mockUsers} onLoginSuccess={jest.fn()} />)
+    render(<LoginPage users={mockUsers} onLoginSuccess={vi.fn()} />)
     
     // Fill wrong credentials
     fireEvent.change(screen.getByPlaceholderText('Username'), { target: { value: 'wrong' } })

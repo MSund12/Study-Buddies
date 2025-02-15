@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import GroupFinderPage from '../src/pages/GroupFinderPage'
+import GroupFinderPage from '../../src/pages/GroupFinderPage'
 
 describe('GroupFinderPage', () => {
   const mockGroups = [
@@ -8,8 +8,8 @@ describe('GroupFinderPage', () => {
   ]
 
   it('displays groups and handles selection', () => {
-    const mockSelect = jest.fn()
-    render(<GroupFinderPage onBack={jest.fn()} onSelectGroup={mockSelect} />)
+    const mockSelect = vi.fn()
+    render(<GroupFinderPage onBack={vi.fn()} onSelectGroup={mockSelect} />)
     
     // Verify groups render
     expect(screen.getByText('EECS 2311')).toBeInTheDocument()
@@ -21,8 +21,8 @@ describe('GroupFinderPage', () => {
   })
 
   it('handles back button', () => {
-    const mockBack = jest.fn()
-    render(<GroupFinderPage onBack={mockBack} onSelectGroup={jest.fn()} />)
+    const mockBack = vi.fn()
+    render(<GroupFinderPage onBack={mockBack} onSelectGroup={vi.fn()} />)
     
     fireEvent.click(screen.getByRole('button', { name: /back/i }))
     expect(mockBack).toHaveBeenCalled()

@@ -1,6 +1,6 @@
 // test/RegisterPage.test.jsx
 import { render, screen, fireEvent } from '@testing-library/react'
-import RegisterPage from '../src/pages/RegisterPage'
+import RegisterPage from '../../src/pages/RegisterPage'
 
 describe('RegisterPage', () => {
   it('renders registration form inputs', () => {

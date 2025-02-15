@@ -1,12 +1,12 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import GroupPage from '../src/pages/GroupPage'
+import GroupPage from '../../src/pages/GroupPage'
 
 describe('GroupPage', () => {
   const mockGroup = { name: 'Test Group' }
   const mockUser = { username: 'testuser' }
 
   it('handles resource upload', () => {
-    render(<GroupPage group={mockGroup} onBack={jest.fn()} currentUser={mockUser} />)
+    render(<GroupPage group={mockGroup} onBack={vi.fn()} currentUser={mockUser} />)
     
     // Fill form
     fireEvent.change(screen.getByPlaceholderText('Title'), { target: { value: 'React Docs' } })
@@ -22,7 +22,7 @@ describe('GroupPage', () => {
   })
 
   it('handles back navigation', () => {
-    const mockBack = jest.fn()
+    const mockBack = vi.fn()
     render(<GroupPage group={mockGroup} onBack={mockBack} currentUser={mockUser} />)
     
     fireEvent.click(screen.getByRole('button', { name: /back/i }))
