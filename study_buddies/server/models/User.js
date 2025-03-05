@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
@@ -8,5 +8,5 @@ const UserSchema = new mongoose.Schema({
   isAdmin: { type: Boolean, default: false }, // New field to check admin status
 }, { timestamps: true });
 
-module.exports = mongoose.model('User', UserSchema);
-e
+const User = mongoose.model('User', UserSchema);
+export default User; // Change this to ES module export
