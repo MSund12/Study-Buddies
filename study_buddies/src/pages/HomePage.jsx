@@ -31,9 +31,9 @@ const HomePage = ({ currentUser }) => {
         <button onClick={() => setShowGroupFinder(true)} className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition">
           Find a Group
         </button>
-        {/* <button className="px-6 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition">
+        {<button className="px-6 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition">
           Create a Group
-        </button> */}
+        </button>}
       </div>
     </div>
   );
