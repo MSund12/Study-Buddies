@@ -4,9 +4,9 @@ body {
   font-family: 'Potta One', cursive;
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
+  overflow: visible;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
 }
@@ -22,6 +22,10 @@ body {
   justify-content: center;
 }
 
+
+/* Beginning of StarterPage.jsx */
+
+
 /* Header - Group Study Finder */
 .header-title {
   position: absolute;
@@ -30,6 +34,13 @@ body {
   font-weight: bold;
   font-size: 1.5vw; /* Responsive font size */
   color: #DE3838;
+  width: 250px;
+  text-wrap: nowrap;
+  z-index: 10;
+}
+
+.header-title:hover{
+  cursor: pointer;
 }
 
 /* Sign In & Sign Up Buttons */
@@ -41,55 +52,6 @@ body {
   align-items: center;
   gap: 3vw;
   white-space: nowrap;
-}
-
-/* HomePage.jsx stuff */
-.buttons-container-home {
-  position: relative;
-  left: 20vh;
-  display: flex;
-  align-items: center;
-  gap: 3vw;
-  white-space: nowrap;
-}
-
-.search-container{
-  position: absolute;
-  top: 15vh;
-  display: flex;
-}
-
-.search-bar{
-  width: 150vh;
-  height: 3.5vh;
-  background-color: #ada5a5;
-  color: black;
-  border: transparent;
-  border-radius: 30px;
-  font-weight: bold;
-  font-family: 'Potta One', cursive;
-  font-size: 0.8vw;
-  padding: 1.5vh;
-}
-
-.placeholder-container{
-  position: relative;
-  top: 8vh;
-  gap: 2vw;
-  width: 100vh;
-  justify-content: flex-start;
-  display: flex;
-  flex-wrap: wrap;
-
-}
-
-.placeholder-box{
-  flex: 1 1 calc(33.33%);
-  max-width: 27%;
-  min-width: 100px;
-  display: flex;
-  height: 300px;
-  background-color:#DE3838;
 }
 
 .buttons{
@@ -163,7 +125,95 @@ body {
   color: #808080;
 }
 
-/* Abstract Shapes */
+/* End of StarterPage.jsx */
+
+
+
+
+/* Beginning of HomePage.jsx */
+.buttons-container-home {
+  top: 4vh;
+  position: relative;
+  left: 20vh;
+  display: flex;
+  align-items: center;
+  gap: 3vw;
+  white-space: nowrap;
+}
+
+.search-container{
+  position: relative;
+  top: 12vh;
+  display: flex;
+}
+
+.search-bar{
+  width: 150vh;
+  height: 3.5vh;
+  background-color: #ada5a5;
+  color: black;
+  border: transparent;
+  border-radius: 30px;
+  font-weight: bold;
+  font-family: 'Potta One', cursive;
+  font-size: 0.8vw;
+  padding: 1.5vh;
+}
+
+.placeholder-container{
+  position: relative;
+  top: 17vh;
+  padding-left: 7vh;
+  gap: 2vh 2vw;
+  width: 120vh;
+  justify-content: flex-start;
+  align-self: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.placeholder-box{
+  flex: 1 1 calc(33.33%);
+  max-width: 23%;
+  min-width: 100px;
+  display: flex;
+  height: 280px;
+  background-color:#DE3838;
+  padding-bottom: 1vh;
+}
+
+.circular-button {
+  position: fixed; /* Keeps button in place even when scrolling */
+  top: 45vh; /* Position from top*/
+  right: 35vh; /* Position from right */
+  width: 180px; /* Circular width */
+  height: 180px; /* Circular height */
+  background-color: #DE3838; /* Red background */
+  color: white;
+  border: none;
+  border-radius: 50%; /* Makes it circular */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Adds slight shadow */
+  transition: transform 0.2s ease-in-out;
+}
+
+.circular-button:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover */
+  background-color: #C93030; /* Darker red on hover */
+}
+
+
+/* End of HomePage.jsx */
+
+
+
+
+/* Beginning of Abstract Shapes */
 .shape-red {
   position: fixed; /* Keeps it fixed to the left */
   left: 0px; /* Stays on the left */
@@ -187,6 +237,8 @@ body {
   width: 18vw;
   height: auto;
 }
+
+/* End of Abstract Shapes */
 
 
 
@@ -273,7 +325,7 @@ body {
 /* Title */
 .signup-title {
   position: relative;
-  top: 10vh;
+  top: 11vh;
   text-align: center;
   font-size: 2vw;
   font-weight: bold;
@@ -396,6 +448,13 @@ body {
   font-size: 1vw;
   margin-top: 1vh;
 }
+
+
+/* End of SignUp.jsx */
+
+
+
+
 
 
 /* Responsive Media Queries */

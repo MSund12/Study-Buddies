@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { PureComponent, useState } from 'react';
 import GroupFinderPage from './GroupFinderPage';
 import GroupPage from './GroupPage';
+import RedShape from './components/RedShape';
+import PinkShape from './components/PinkShape';
+import PurpleShape from './components/PurpleShape';
 
 const HomePage = ({ currentUser }) => {
   const [showGroupFinder, setShowGroupFinder] = useState(false);
@@ -24,6 +27,10 @@ const HomePage = ({ currentUser }) => {
   return (
     <div className="starter-container">
 
+      <RedShape color="#1EE1A8"/>
+      <PinkShape/>
+      <PurpleShape/>
+
       <nav className="buttons-container-home">
         <a href="#" className="buttons">Courses</a>
         <a href="#" className="buttons">Study Groups</a>
@@ -46,7 +53,12 @@ const HomePage = ({ currentUser }) => {
         <div className="placeholder-box">Placeholder 3</div>
         <div className="placeholder-box">Placeholder 4</div>
         <div className="placeholder-box">Placeholder 5</div>
+        <div className="placeholder-box">Placeholder 6</div>
       </div>
+
+      <button className="circular-button">
+        Create a Group
+      </button>
 
       
     </div>

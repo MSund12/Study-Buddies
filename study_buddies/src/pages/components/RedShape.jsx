@@ -4,7 +4,6 @@ const RedShape = ({ top = "10", width = "303", height = "397", color = "#DE3838"
   return (
     <svg
       className="shape-red"
-      top = "10"
       width="303"
       height="397"
       viewBox="0 0 303 397"
@@ -18,18 +17,6 @@ const RedShape = ({ top = "10", width = "303", height = "397", color = "#DE3838"
           stroke={color}
         />
       </g>
-      <defs>
-        <filter id="filter0_d_3_37" x="-50.5356" y="0.5" width="353.4" height="396.005" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-          <feFlood floodOpacity="0" result="BackgroundImageFix"/>
-          <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-          <feOffset dy="4"/>
-          <feGaussianBlur stdDeviation="2"/>
-          <feComposite in2="hardAlpha" operator="out"/>
-          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
-          <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_3_37"/>
-          <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_3_37" result="shape"/>
-        </filter>
-      </defs>
     </svg>
   );
 };
