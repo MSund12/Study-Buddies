@@ -44,35 +44,35 @@ const SignIn = ({ users, onLoginSuccess }) => {
       <RedShape color="#44A944"/>
       <PurpleShape color="#473C60" />
       <PinkShape color="#0000FF"/>
-      <h2 className="auth-title">Log In</h2>
+      <h2 className="login-title">Log In</h2>
 
-      <form onSubmit={handleLogin} className="auth-form">
+      <form onSubmit={handleLogin} className="login-form">
         {/* Email Input */}
-        <label htmlFor="email" className="auth-label">School Email</label>
+        <label htmlFor="email" className="login-label">School Email</label>
         <input
           type="email"
           id="email"
           placeholder="Enter your school email"
           value={loginData.email}
           onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-          className="auth-input"
+          className="login-input"
           required
         />
 
         {/* Password Input */}
-        <label htmlFor="password" className="auth-label">Password</label>
+        <label htmlFor="password" className="login-label">Password</label>
         <input
           type="password"
           id="password"
           placeholder="Enter your password"
           value={loginData.password}
           onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-          className="auth-input"
+          className="login-input"
           required
         />
 
         {/* Login Button */}
-        <button type="submit" className="auth-button">Log In</button>
+        <button type="submit" className="login-button">Log In</button>
       </form>
 
       {message && <p className="error-message">{message}</p>}

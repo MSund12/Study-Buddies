@@ -5,19 +5,17 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
 /* Container to keep layout responsive */
 .starter-container {
   position: relative;
   width: 100%;
-  height: 100vh; /* Full screen height */
+  height: 100%; /* Full screen height */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,6 +40,63 @@ body {
   display: flex;
   align-items: center;
   gap: 3vw;
+  white-space: nowrap;
+}
+
+/* HomePage.jsx stuff */
+.buttons-container-home {
+  position: relative;
+  left: 20vh;
+  display: flex;
+  align-items: center;
+  gap: 3vw;
+  white-space: nowrap;
+}
+
+.search-container{
+  position: absolute;
+  top: 15vh;
+  display: flex;
+}
+
+.search-bar{
+  width: 150vh;
+  height: 3.5vh;
+  background-color: #ada5a5;
+  color: black;
+  border: transparent;
+  border-radius: 30px;
+  font-weight: bold;
+  font-family: 'Potta One', cursive;
+  font-size: 0.8vw;
+  padding: 1.5vh;
+}
+
+.placeholder-container{
+  position: relative;
+  top: 8vh;
+  gap: 2vw;
+  width: 100vh;
+  justify-content: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+
+}
+
+.placeholder-box{
+  flex: 1 1 calc(33.33%);
+  max-width: 27%;
+  min-width: 100px;
+  display: flex;
+  height: 300px;
+  background-color:#DE3838;
+}
+
+.buttons{
+  font-family: 'Potta One', cursive;
+  font-size: 2vh;
+  font-weight: bold;
+  color: black;
 }
 
 .sign-in {
@@ -133,12 +188,18 @@ body {
   height: auto;
 }
 
-.auth-form{
+
+
+/* Beginning SignIn.jsx */
+
+.login-form{
+  position: relative;
+  top: 35vh;
   display: block; 
 }
 
 /* Log In Title */
-.auth-title {
+.login-title {
   position: absolute;
   font-size: 2vw;
   font-weight: bolder;
@@ -149,7 +210,7 @@ body {
 }
 
 /* Labels for Input Fields */
-.auth-label {
+.login-label {
   display: block;
   text-align: center;
   font-size: 1vw;
@@ -159,7 +220,7 @@ body {
 }
 
 /* Input Fields */
-.auth-input {
+.login-input {
   width: 60vh;
   padding: 1vh;
   margin-bottom: 3vh;
@@ -172,8 +233,8 @@ body {
   color: black;
 }
 
-/* Log In Button */
-.auth-button {
+/* Sign In Button */
+.login-button {
   display: block;
   justify-self: center;
   width: 25vh;
@@ -189,7 +250,7 @@ body {
   margin-top: 3vh;
 }
 
-.auth-button:hover {
+.login-button:hover {
   opacity: 0.8;
 }
 
@@ -200,8 +261,19 @@ body {
   margin-top: 1vh;
 }
 
+/* End of SignIn.jsx */
+
+
+
+
+
+/* Beginning of SignUp.jsx */
+
+
 /* Title */
 .signup-title {
+  position: relative;
+  top: 10vh;
   text-align: center;
   font-size: 2vw;
   font-weight: bold;
@@ -211,6 +283,8 @@ body {
 
 /* Form Styling */
 .signup-form {
+  position: relative;
+  top: 15vh;
   display: flex;
   flex-direction: column;
   gap: 2vh;
@@ -289,8 +363,8 @@ body {
 /* Password Warning - Right Aligned */
 .password-warning {
   position: absolute;
-  right: -20vw;
-  top: 30%;
+  right: -16vw;
+  top: 4vh;
   color: #DE3838;
   font-size: 1.2vw;
   font-weight: bold;
