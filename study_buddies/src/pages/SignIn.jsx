@@ -26,9 +26,9 @@ const SignIn = ({ users, onLoginSuccess }) => {
         localStorage.setItem('user', JSON.stringify(data.user));
   
         if (data.user.isAdmin) {
-          navigate('/'); // Redirect admins to admin panel
+          navigate('/home'); // Redirect admins to admin panel
         } else {
-          navigate('/');
+          navigate('/home');
         }
       } else {
         setMessage(data.message || 'Login failed');

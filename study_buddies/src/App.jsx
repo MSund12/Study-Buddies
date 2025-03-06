@@ -27,6 +27,7 @@ const App = () => {
         <Route path="/signin" element={<SignIn users={users} onLoginSuccess={handleLoginSuccess} />} />
         <Route path="/signup" element={<SignUp onRegister={handleRegister} />} />
         <Route path="*" element={<Navigate to="/" />} />
+        <Route path="/home" element={<HomePage currentUser={currentUser} />} />
       </Routes>
     </div>
   );
