@@ -5,8 +5,8 @@ const UserSchema = new mongoose.Schema({
   lastName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  isAdmin: { type: Boolean, default: false }, // New field to check admin status
+  isAdmin: { type: Boolean, default: false }, // Admin status check
 }, { timestamps: true });
 
 const User = mongoose.model('User', UserSchema);
-export default User; // Change this to ES module export
+export default User; 
