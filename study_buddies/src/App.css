@@ -4,7 +4,7 @@ body {
   font-family: 'Potta One', cursive;
   margin: 0;
   padding: 0;
-  overflow: visible;
+  overflow: hidden;
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -308,6 +308,8 @@ body {
 
 /* Error Message */
 .error-message {
+  position:relative;
+  top: 24vh;
   color: #DE3838;
   font-size: 1vw;
   margin-top: 1vh;

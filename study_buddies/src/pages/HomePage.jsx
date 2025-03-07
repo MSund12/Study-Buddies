@@ -33,6 +33,7 @@ const HomePage = ({ currentUser }) => {
 
       <nav className="buttons-container-home">
         <a href="#" className="buttons">Courses</a>
+        
         <a href="#" className="buttons">Study Groups</a>
         <a href="#" className="buttons">Chats</a>
         <a href="#" className="buttons">Empty Rooms</a>
