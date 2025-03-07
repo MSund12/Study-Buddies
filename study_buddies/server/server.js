@@ -1,22 +1,46 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import cors from 'cors';
-import userRoutes from './routes/userRoutes.js'; // Keep this as an ES module import
+import express from "express";
+import dotenv from "dotenv";
+import connectDB from "./config/db.js";
+import authRoutes from "./routes/authRoutes.js";
+import { errorHandler } from "./utils/errorHandler.js";
+import courseRoutes from "./routes/courseRoutes.js";
+import chatRoutes from "./routes/chatRoutes.js";
+import { validateObjectId } from "./middleware/validateObjectId.js";
+import { initWebSocket, getIO } from "./sockets/chat.js";
+import groupRoutes from "./routes/groupRoutes.js";
+import cors from "cors";
+import { paginateResults } from "./middleware/pagination.js"; // Added
+import Course from "./models/Course.js"; // Added
 
 dotenv.config();
+
 const app = express();
-app.use(express.json());
-app.use(cors());
-
-// Use the user routes
-app.use('/api/users', userRoutes);
-
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => console.log("MongoDB Connected"))
-  .catch(err => console.error("MongoDB Connection Failed:", err));
-
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Database Connection
+connectDB();
+
+// Routes
+app.use("/api/auth", authRoutes);
+app.use(
+  "/api/courses",
+  validateObjectId,
+  paginateResults(Course),
+  courseRoutes
+); // Added
+app.use("/api/chat", validateObjectId, chatRoutes);
+app.use("/api/groups", validateObjectId, groupRoutes);
+
+// Error Handling
+app.use(errorHandler);
+
+const httpServer = app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
+// Initialize WebSocket
+initWebSocket(httpServer);
