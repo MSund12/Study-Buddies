@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import RedShape from './components/RedShape';
+import PurpleShape from './components/PurpleShape';
+import PinkShape from './components/PinkShape';
 
 const SchedulePage = () => {
   const [dept, setDept] = useState('');
@@ -90,6 +93,9 @@ const SchedulePage = () => {
 
   return (
     <div className="padding-container">
+      <RedShape color="#58C8D7" />
+      <PurpleShape color="#E6487F"/>
+      <PinkShape color="#F6960A"/>
       <div className="header-container">
         <a href="/" className="back-button">&larr; Back</a>
         <h1>Schedule Viewer</h1>
