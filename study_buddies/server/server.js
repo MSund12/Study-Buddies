@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import userRoutes from './routes/userRoutes.js';
+import courseRoutes from './routes/courseRoutes.js';
 
 dotenv.config();
 const app = express();
@@ -11,6 +12,8 @@ app.use(cors());
 
 // Use the user routes
 app.use('/api/users', userRoutes);
+// Use the course routes
+app.use('/api/courses', courseRoutes);
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,

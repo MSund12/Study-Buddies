@@ -12,13 +12,16 @@ const courseSchema = new mongoose.Schema({
       Meet: { type: Number },
       "Cat.No": { type: String },
       Day: { type: String },
-      Time: { type: String }, // Stored as "HH:MM" (24-hour format)
+      Time: { type: String },
       Dur: { type: Number },
       Campus: { type: String },
       Room: { type: String },
       "Full Course ID": { type: String },
     },
   ],
+}, {
+  collection: 'Courses', 
+  timestamps: true,
 });
 
 export default mongoose.model("Course", courseSchema);
