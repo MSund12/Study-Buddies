@@ -5,14 +5,14 @@ const Header = ({ currentUser }) => {
 
   const handleHeaderClick = () => {
     if (currentUser) {
-      navigate('/home'); // Navigate to HomePage
+      navigate('/home'); // Navigate to HomePage if logged in
     } else {
-      navigate('/starter'); // Navigate to StarterPage
+      navigate('/starter'); // Navigate to StarterPage if not logged in
     }
   };
 
   return (
-    <h1 className="header-title" onClick={handleHeaderClick}>
+    <h1 className="header-title" onClick={handleHeaderClick} style={{ cursor: 'pointer' }}>
       Group Study Finder
     </h1>
   );
