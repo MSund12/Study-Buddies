@@ -87,6 +87,10 @@ The project root (`/STUDY_BUDDIES`) is organized into three primary segments: we
 
    - **Schedule:**
      - `SchedulePage.jsx` presents study schedules; this data is supplemented by the scraping functionality in the `/ScheduleScraper` directory.
+    
+   - **Chat:**
+
+     - The `GroupChatSidebar.jsx` component provides a temporary chat implementation
 
 ---
 
