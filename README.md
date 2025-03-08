@@ -17,6 +17,8 @@ node -v
 npm -v
 ```
 
+Note: If you have an issue when running npm -v view the bottom of this doc 
+
 🚀 Getting Started
 1. Clone the Repository
 First, clone the repository to your local machine using Git. Open your terminal and run:
@@ -34,11 +36,36 @@ Frontend (React)
 npm install
 ```
 
-3. Start Frontend (New Terminal):
+3. Create .env file
+In the server folder create a new file titled .env
+In that file paste what was emailed. Note the contents of this file is sensitive and do not share it.
+
+4. Start Server
+From the server folder, run:
+'''bash
+node server.js
+```
+If you're not already in the server folder, navigate to it with:
 ```bash
+cd <File-Path-to-Server-Folder>
+```
+
+5. Start Frontend (New Terminal):
+cd into the study_buddies folder and then run the npm run command
+```bash
+cd <File-Path-to-study_buddies-Folder>
 npm run dev
 ```
 This will launch the development server, and your project will be accessible at http://localhost:3000 (or a different port if configured).
 
 ## Please start at log.txt when marking project documents, it will make it easier for you!! 
 Can be found in Project Documents
+
+
+## ⚠️ Potential Issues
+
+If when runing npm -v it says running scripts is disabled on this system, simply run the following command:
+
+```bash
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
+```
