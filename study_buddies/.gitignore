@@ -28,3 +28,4 @@ server/.env
 node_modules/
 server/node_modules/
 chrome-win64/
+/server/.env
