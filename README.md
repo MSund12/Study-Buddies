@@ -43,24 +43,29 @@ In that file paste what was emailed.
 
 4. Start Server
 From the **server** folder, run:
-'''bash
+
+```bash
 node server.js
 ```
 If you're not already in the server folder, navigate to it with:
+
 ```bash
 cd <File-Path-to-Server-Folder>
 ```
 
 5. Start Frontend (New Terminal):
 From the **study_buddies** folder, run:
-'''bash
-npm i
+
+```bash
 npm run dev
 ```
+
 If you're not already in the study_buddies folder, navigate to it with:
+
 ```bash
 cd <File-Path-to-study_buddies-Folder>
 ```
+
 This will launch the development server, and your project will be accessible at the link provided in the terminal
 
 ## Please start at log.txt when marking project documents, it will make it easier for you!! 
