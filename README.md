@@ -38,10 +38,11 @@ npm install
 
 3. Create .env file
 In the server folder create a new file titled .env
-In that file paste what was emailed. Note the contents of this file is sensitive and do not share it.
+In that file paste what was emailed. 
+**Remember: Do not share this file publicly, as it contains sensitive information.**
 
 4. Start Server
-From the server folder, run:
+From the **server** folder, run:
 '''bash
 node server.js
 ```
@@ -51,12 +52,16 @@ cd <File-Path-to-Server-Folder>
 ```
 
 5. Start Frontend (New Terminal):
-cd into the study_buddies folder and then run the npm run command
-```bash
-cd <File-Path-to-study_buddies-Folder>
+From the **study_buddies** folder, run:
+'''bash
+npm i
 npm run dev
 ```
-This will launch the development server, and your project will be accessible at http://localhost:3000 (or a different port if configured).
+If you're not already in the study_buddies folder, navigate to it with:
+```bash
+cd <File-Path-to-study_buddies-Folder>
+```
+This will launch the development server, and your project will be accessible at the link provided in the terminal
 
 ## Please start at log.txt when marking project documents, it will make it easier for you!! 
 Can be found in Project Documents
