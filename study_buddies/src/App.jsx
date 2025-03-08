@@ -7,6 +7,7 @@ import SignUp from './pages/SignUp';
 import Header from './Header';
 import SchedulePage from './pages/SchedulePage';
 import './App.css';
+import GroupChatSidebar from './pages/GroupChatSidebar';
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -39,6 +40,7 @@ const App = () => {
           <Route path="/schedule" element={<SchedulePage currentUser={currentUser} />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/home" element={<HomePage currentUser={currentUser} />} />
+          <Route path="/chat" element={<GroupChatSidebar currentUser={currentUser} />} />
           <Route path="/starter" element={<StarterPage />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
