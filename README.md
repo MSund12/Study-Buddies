@@ -54,7 +54,6 @@ cd <File-Path-to-Server-Folder>
 5. Start Frontend (New Terminal):
 From the **study_buddies** folder, run:
 '''bash
-npm i
 npm run dev
 ```
 If you're not already in the study_buddies folder, navigate to it with:
