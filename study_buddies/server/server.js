@@ -1,46 +1,32 @@
 import express from "express";
-import dotenv from "dotenv";
 import connectDB from "./config/db.js";
-import authRoutes from "./routes/authRoutes.js";
-import { errorHandler } from "./utils/errorHandler.js";
-import courseRoutes from "./routes/courseRoutes.js";
-import chatRoutes from "./routes/chatRoutes.js";
-import { validateObjectId } from "./middleware/validateObjectId.js";
-import { initWebSocket, getIO } from "./sockets/chat.js";
-import groupRoutes from "./routes/groupRoutes.js";
-import cors from "cors";
-import { paginateResults } from "./middleware/pagination.js"; // Added
-import Course from "./models/Course.js"; // Added
 
-dotenv.config();
+// Determine which repository to use based on an environment variable
+const useStub = process.env.DB_MODE === "stub";
+const userRepository = useStub
+  ? (await import("./repositories/userRepositoryStub.js")).default
+  : (await import("./repositories/userRepository.js")).default;
+
+import userRoutes from "./routes/userRoutes.js";
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
+// Connect to MongoDB only if not using the stub
+if (!useStub) {
+  await connectDB();
+}
+
 app.use(express.json());
 
-// Database Connection
-connectDB();
-
-// Routes
-app.use("/api/auth", authRoutes);
-app.use(
-  "/api/courses",
-  validateObjectId,
-  paginateResults(Course),
-  courseRoutes
-); // Added
-app.use("/api/chat", validateObjectId, chatRoutes);
-app.use("/api/groups", validateObjectId, groupRoutes);
-
-// Error Handling
-app.use(errorHandler);
-
-const httpServer = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+// Inject the repository into each request
+app.use((req, res, next) => {
+  req.userRepository = userRepository;
+  next();
 });
 
-// Initialize WebSocket
-initWebSocket(httpServer);
+app.use("/users", userRoutes);
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+export default app;
