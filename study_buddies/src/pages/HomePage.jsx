@@ -1,6 +1,7 @@
 import React, { PureComponent, useState } from 'react';
 import GroupFinderPage from './GroupFinderPage';
 import GroupPage from './GroupPage';
+import GroupCreationPage from './GroupCreationPage';
 import RedShape from './components/RedShape';
 import PinkShape from './components/PinkShape';
 import PurpleShape from './components/PurpleShape';
@@ -8,6 +9,7 @@ import PurpleShape from './components/PurpleShape';
 const HomePage = ({ currentUser }) => {
   const [showGroupFinder, setShowGroupFinder] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState(null);
+  const [showGroupCreation, setShowGroupCreation] = useState(false);
 
   if (selectedGroup) {
     return (<GroupPage 
@@ -22,6 +24,11 @@ const HomePage = ({ currentUser }) => {
       onBack={() => setShowGroupFinder(false)} 
       onSelectGroup={setSelectedGroup} 
     />);
+  }
+  if (showGroupCreation) {
+    return (<GroupCreationPage
+    onBack={() => setShowGroupCreation(false)}  />
+    );
   }
   
   return (
@@ -56,7 +63,7 @@ const HomePage = ({ currentUser }) => {
         <div className="placeholder-box">Placeholder 6</div>
       </div>
 
-      <button className="circular-button">
+      <button className="circular-button" onClick={() => setShowGroupCreation(true)}>
         Create a Group
       </button>
 
