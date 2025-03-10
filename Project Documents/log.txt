@@ -164,3 +164,69 @@ Schedule meeting during reading week to summarize iteration 1 and set new goals 
 
 
 
+
+Meeting Minutes February 18, 2025
+Agenda:
+Summarize iteration 1, discuss UI, update user stories and assign next set of user stories
+
+Attendees:
+Lukasz
+Abdullah
+Haaris
+Marko
+
+Updates:
+  Iteration 1 went well, gotta get stuff done faster next time
+  Added a feature where students can see a list of students enrolled in a course
+  Chat will be in a separate tab plus bottom right corner popup
+  Students will be able to DM each other
+  There will be a tab for courses within each course there will be a list of study groups in it
+  Students will be able to request to join
+  There will also be a tab for all study groups you are part of
+
+Action Item:                                    | Owner
+UI Design figma                                 | Abdullah and Lukasz
+Account verification                            | Kashif
+Integrate course schedules within each course   | Marko
+Improve the look of the chat, give it a new tab | Farzin
+Be able to suggest assignment, test, etc dates  | Haaris
+Server creation (express.js)                    | Abdullah and Lukasz
+Database integration(MongoDB)                   | Abdullah and Lukasz
+Basic Security                                  | Abdullah and Lukasz
+
+
+
+
+
+
+Meeting Minutes March 3rd, 2025
+Agenda:
+Update everyone on tasks and ensure progress
+
+Attendees:
+Abdullah 
+Lukasz
+Kashif
+Marko
+Haaris
+Farzin
+
+Updates:
+            Old                        |          New
+UI Design firma                        |  Improve GUI
+Account verification                   |  Sign up and store users
+Integrate schedule viewer              |  Search schedules
+Improve look of chat and give it a tab |  Create a group
+Be able to suggest important dates     |  Update look of the chat
+
+Action Item:             | Owner
+Improve GUI              | Everyone
+Sign up and store users  | Lukasz
+Search schedules         | Marko
+Create a group           | Haaris
+Update look of chat      | Farzin
+Add more unit testing    | Kashif
+
+
+
+
