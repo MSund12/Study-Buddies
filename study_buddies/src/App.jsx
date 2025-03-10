@@ -44,7 +44,6 @@ const App = () => {
           <Route path="/home" element={<HomePage currentUser={currentUser} />} />
           <Route path="/chat" element={<GroupChatSidebar currentUser={currentUser} />} />
           <Route path="/starter" element={<StarterPage />} />
-          <Route path="/group" element={<GroupPage/>}/>
           <Route path="/groupfinder" element={<GroupFinderPage/>}/>
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
