@@ -6,6 +6,8 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Header from './Header';
 import SchedulePage from './pages/SchedulePage';
+import GroupPage from './pages/GroupPage'
+import GroupFinderPage from './pages/GroupFinderPage'
 import './App.css';
 import GroupChatSidebar from './pages/GroupChatSidebar';
 
@@ -42,6 +44,8 @@ const App = () => {
           <Route path="/home" element={<HomePage currentUser={currentUser} />} />
           <Route path="/chat" element={<GroupChatSidebar currentUser={currentUser} />} />
           <Route path="/starter" element={<StarterPage />} />
+          <Route path="/group" element={<GroupPage/>}/>
+          <Route path="/groupfinder" element={<GroupFinderPage/>}/>
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
