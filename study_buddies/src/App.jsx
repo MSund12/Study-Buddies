@@ -9,7 +9,7 @@ import SchedulePage from './pages/SchedulePage';
 import GroupPage from './pages/GroupPage'
 import GroupFinderPage from './pages/GroupFinderPage'
 import './App.css';
-import GroupChatSidebar from './pages/GroupChatSidebar';
+import ChatSidebar from './pages/ChatSidebar';
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -42,7 +42,7 @@ const App = () => {
           <Route path="/schedule" element={<SchedulePage currentUser={currentUser} />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/home" element={<HomePage currentUser={currentUser} />} />
-          <Route path="/chat" element={<GroupChatSidebar currentUser={currentUser} />} />
+          <Route path="/chat" element={<ChatSidebar currentUser={currentUser} />} />
           <Route path="/starter" element={<StarterPage />} />
           <Route path="/groupfinder" element={<GroupFinderPage/>}/>
           <Route path="*" element={<Navigate to="/" />} />
