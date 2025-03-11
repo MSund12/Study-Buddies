@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchCourseData, clearCourseData } from '../features/courseSlice';
 import RedShape from './components/RedShape';
 import PurpleShape from './components/PurpleShape';
 import PinkShape from './components/PinkShape';
@@ -7,48 +9,18 @@ const SchedulePage = () => {
   const [dept, setDept] = useState('');
   const [courseId, setCourseId] = useState('');
   const [term, setTerm] = useState('F'); // Term is either "F" or "W"
-  const [courseData, setCourseData] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
 
-  // Schedule grid start time: 8:30 AM = 510 minutes from midnight
+  const dispatch = useDispatch();
+  const { courseData, loading, error } = useSelector((state) => state.courses);
+
   const scheduleStartMinutes = 8 * 60 + 30;
 
-  // Fetch course data from the endpoint with dept, courseId, and term as query parameters.
-  const handleSubmit = async (e) => {
+  // Submit handler to dispatch Redux async thunk
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-        const response = await fetch(`http://localhost:5000/api/courses?dept=${dept}&courseId=${courseId}&term=${term}`);
-
-  
-      // Check for 404
-      if (response.status === 404) {
-        const data = await response.json();
-        setError(data.message || 'Course not found.');
-        setCourseData(null);
-      } else if (!response.ok) {
-        throw new Error('Failed to fetch course data');
-      } else {
-        const data = await response.json();
-        if (Array.isArray(data) && data.length > 0) {
-          setCourseData(data[0]);
-          setError(null);
-        } else {
-          setError('Course not found.');
-          setCourseData(null);
-        }
-      }
-    } catch (err) {
-      console.error(err);
-      setError('Error fetching course data.');
-      setCourseData(null);
-    }
-    setLoading(false);
+    dispatch(fetchCourseData({ dept, courseId, term }));
   };
-  
 
-  // Mapping from day abbreviations (from the database) to full weekday names.
   const dayMap = {
     M: 'Monday',
     T: 'Tuesday',
@@ -57,7 +29,6 @@ const SchedulePage = () => {
     F: 'Friday'
   };
 
-  // Prepare meetings for each day.
   let meetingsByDay = {
     Monday: [],
     Tuesday: [],
@@ -71,11 +42,11 @@ const SchedulePage = () => {
       const dayLetter = meeting.Day;
       const fullDay = dayMap[dayLetter];
       if (fullDay) {
-        // Convert the meeting start time ("HH:MM") into minutes since midnight.
         const [hourStr, minuteStr] = meeting.Time.split(':');
         const meetingStartMinutes = parseInt(hourStr, 10) * 60 + parseInt(minuteStr, 10);
         const topOffset = meetingStartMinutes - scheduleStartMinutes;
         const endMinutes = meetingStartMinutes + meeting.Dur;
+
         const formatTime = (minutes) => {
           const hrs = Math.floor(minutes / 60);
           const mins = minutes % 60;
@@ -121,8 +92,10 @@ const SchedulePage = () => {
           <button type="submit">Show Schedule</button>
         </form>
       </div>
+
       {loading && <p>Loading course data...</p>}
       {error && <p className="error-message">{error}</p>}
+
       {courseData && (
         <div>
           <h2>
