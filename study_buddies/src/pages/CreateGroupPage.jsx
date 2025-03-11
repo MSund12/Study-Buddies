@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { createGroup, clearMessages } from '../features/groupSlice';
 import { useNavigate } from 'react-router-dom';
+import './styles/CreateGroupPage.css'
 
 const CreateGroupPage = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [groupData, setGroupData] = useState({
@@ -9,34 +13,23 @@ const CreateGroupPage = () => {
     groupName: '',
     maxMembers: ''
   });
-  const [message, setMessage] = useState('');
+
+  const { loading, error, successMessage } = useSelector((state) => state.groups);
+
+  // Clear success/error messages when navigating away
+  useEffect(() => {
+    dispatch(clearMessages());
+  }, [dispatch]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setGroupData({ ...groupData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    try {
-      const response = await fetch('http://localhost:5000/api/groups/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(groupData),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setMessage('Group created successfully!');
-        setTimeout(() => navigate('/home'), 2000); // Redirect to home after success
-      } else {
-        setMessage(data.message || 'Failed to create group');
-      }
-    } catch (error) {
-      setMessage('Error connecting to server');
-    }
+    dispatch(createGroup(groupData));
+    setGroupData({ course: '', groupName: '', maxMembers: '' }); // Clear form fields
   };
 
   return (
@@ -44,7 +37,6 @@ const CreateGroupPage = () => {
       <h2>Create a New Study Group</h2>
 
       <form onSubmit={handleSubmit} className="create-group-form">
-        {/* Course Selection */}
         <div className="input-group">
           <label htmlFor="course">Select Course</label>
           <select
@@ -63,7 +55,6 @@ const CreateGroupPage = () => {
           </select>
         </div>
 
-        {/* Group Name */}
         <div className="input-group">
           <label htmlFor="groupName">Group Name</label>
           <input
@@ -77,7 +68,6 @@ const CreateGroupPage = () => {
           />
         </div>
 
-        {/* Maximum Members */}
         <div className="input-group">
           <label htmlFor="maxMembers">Max Members</label>
           <input
@@ -91,13 +81,13 @@ const CreateGroupPage = () => {
           />
         </div>
 
-        {/* Submit Button */}
-        <button type="submit" className="create-group-button">
-          Create Group
+        <button type="submit" className="create-group-button" disabled={loading}>
+          {loading ? 'Creating...' : 'Create Group'}
         </button>
       </form>
 
-      {message && <p className="status-message">{message}</p>}
+      {successMessage && <p className="status-message success">{successMessage}</p>}
+      {error && <p className="status-message error">{error}</p>}
     </div>
   );
 };

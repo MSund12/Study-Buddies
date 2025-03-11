@@ -1,26 +1,26 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux'; // Import Redux hooks
-import { logout } from '../features/authSlice'; // Import logout action
-import { useNavigate } from 'react-router-dom'; // For redirection
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../features/authSlice';
+import { useNavigate } from 'react-router-dom';
 import GroupFinderPage from './GroupFinderPage';
 import GroupPage from './GroupPage';
 import RedShape from './components/RedShape';
 import PinkShape from './components/PinkShape';
 import PurpleShape from './components/PurpleShape';
-import './styles/HomePage.css'
+import './styles/HomePage.css';
 
 const HomePage = () => {
   const [showGroupFinder, setShowGroupFinder] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState(null);
 
-  const dispatch = useDispatch(); // Redux dispatch
-  const navigate = useNavigate(); // React Router navigation
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const currentUser = useSelector((state) => state.auth.currentUser);
 
   // Handle logout
   const handleSignOut = () => {
     dispatch(logout());
-    navigate('/signin'); // Redirect to SignIn after logout
+    navigate('/signin');
   };
 
   if (selectedGroup) {
@@ -50,21 +50,42 @@ const HomePage = () => {
 
       <nav className="buttons-container-home">
         <a href="#" className="buttons">Courses</a>
-        <a href="#" className="buttons">Study Groups</a>
+
+        <a
+          href="#"
+          className="buttons"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate('/group-finder');
+          }}
+        >
+          Study Groups
+        </a>
 
         {/* Navigate to Chat Page */}
-        <a 
-          href="#" 
-          className="buttons" 
+        <a
+          href="#"
+          className="buttons"
           onClick={(e) => {
-            e.preventDefault(); // Prevent default anchor behavior
+            e.preventDefault();
             navigate('/chat');
           }}
         >
           Chats
         </a>
 
-        <a href="#" className="buttons">Empty Rooms</a>
+        {/* Navigate to Schedule Page */}
+        <a
+          href="#"
+          className="buttons"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate('/schedule');
+          }}
+        >
+          Schedules
+        </a>
+
         <a href="#" className="buttons">Book a Room</a>
       </nav>
 
@@ -87,12 +108,11 @@ const HomePage = () => {
 
       <button
         className="circular-button"
-        onClick={() => navigate('/create-group')}  // Navigate to Create Group Page
+        onClick={() => navigate('/create-group')}
       >
         Create a Group
       </button>
 
-      {/* Sign Out Button */}
       {currentUser && (
         <button
           className="signout-button"

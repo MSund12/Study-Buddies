@@ -1,0 +1,27 @@
+.status-message {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 999; /* Ensures it appears above other content */
+  }
+  
+  .success {
+    background-color: #d4edda; /* Light green background */
+    border: 2px solid #28a745; /* Dark green border */
+    color: #155724; /* Dark green text */
+  }
+  
+  .error {
+    background-color: #f8d7da; /* Light red background */
+    border: 2px solid #dc3545; /* Dark red border */
+    color: #721c24; /* Dark red text */
+  }
+  
