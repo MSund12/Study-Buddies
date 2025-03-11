@@ -44,6 +44,18 @@ const HomePage = () => {
 
   return (
     <div className="starter-container">
+      {/* Sign Out Button in Top Right */}
+      {currentUser && (
+        <div className="signout-container">
+          <button
+            className="signout-button"
+            onClick={handleSignOut}
+          >
+            Sign Out
+          </button>
+        </div>
+      )}
+
       <RedShape color="#1EE1A8" />
       <PinkShape />
       <PurpleShape />
@@ -62,7 +74,6 @@ const HomePage = () => {
           Study Groups
         </a>
 
-        {/* Navigate to Chat Page */}
         <a
           href="#"
           className="buttons"
@@ -74,7 +85,6 @@ const HomePage = () => {
           Chats
         </a>
 
-        {/* Navigate to Schedule Page */}
         <a
           href="#"
           className="buttons"
@@ -112,24 +122,6 @@ const HomePage = () => {
       >
         Create a Group
       </button>
-
-      {currentUser && (
-        <button
-          className="signout-button"
-          style={{
-            marginTop: '20px',
-            backgroundColor: '#ff4d4d',
-            color: 'white',
-            border: 'none',
-            padding: '10px 20px',
-            borderRadius: '20px',
-            cursor: 'pointer'
-          }}
-          onClick={handleSignOut}
-        >
-          Sign Out
-        </button>
-      )}
     </div>
   );
 };

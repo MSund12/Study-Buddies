@@ -76,4 +76,24 @@
   }
   
   
+  .signout-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+  
+  .signout-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .signout-button:hover {
+    background-color: #e03c3c;
+  }
   /* End of HomePage.jsx */
