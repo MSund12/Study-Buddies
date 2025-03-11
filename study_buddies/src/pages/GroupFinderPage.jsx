@@ -1,21 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchGroups } from '../features/groupSlice';
 
 const GroupFinderPage = ({ onBack, onSelectGroup }) => {
+  const dispatch = useDispatch();
+  const { groups, loading, error } = useSelector((state) => state.groups);
+
   const [sortOrder, setSortOrder] = useState('asc'); // Sorting order state
-  const groups = [
-    { id: 1, name: 'EECS 2311' },
-    { id: 2, name: 'Math 2015' },
-    { id: 3, name: 'ENG 2003' },
-    { id: 4, name: 'LOLZ Academy' },
-    { id: 5, name: 'LLMS DUDE' },
-  ];
+
+  // Fetch groups from the database when the page loads
+  useEffect(() => {
+    dispatch(fetchGroups());
+  }, [dispatch]);
 
   // Sorting logic
   const sortedGroups = [...groups].sort((a, b) => {
     if (sortOrder === 'asc') {
-      return a.name.localeCompare(b.name);
+      return a.groupName.localeCompare(b.groupName);
     } else {
-      return b.name.localeCompare(a.name);
+      return b.groupName.localeCompare(a.groupName);
     }
   });
 
@@ -32,11 +35,15 @@ const GroupFinderPage = ({ onBack, onSelectGroup }) => {
         </select>
       </div>
 
+      {/* Display Loading or Error States */}
+      {loading && <p>Loading groups...</p>}
+      {error && <p className="error-message">{error}</p>}
+
       {/* Group Display */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginTop: '16px' }}>
         {sortedGroups.map((group) => (
           <div
-            key={group.id}
+            key={group._id}
             onClick={() => onSelectGroup(group)}
             style={{
               width: '150px',
@@ -51,7 +58,7 @@ const GroupFinderPage = ({ onBack, onSelectGroup }) => {
               color: 'white'
             }}
           >
-            {group.name}
+            {group.groupName} - {group.course}
           </div>
         ))}
       </div>

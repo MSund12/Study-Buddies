@@ -25,3 +25,35 @@
     color: #721c24; /* Dark red text */
   }
   
+  .course-results {
+    list-style: none;
+    padding: 0;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  .course-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .course-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .selected-course {
+    margin-top: 8px;
+    color: #28a745;
+    font-weight: bold;
+  }
+  
+  .no-results {
+    color: #dc3545;
+    font-weight: bold;
+    margin-top: 5px;
+  }

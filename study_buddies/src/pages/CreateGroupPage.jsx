@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createGroup, clearMessages } from '../features/groupSlice';
 import { useNavigate } from 'react-router-dom';
-import './styles/CreateGroupPage.css'
+import './styles/CreateGroupPage.css';
 
 const CreateGroupPage = () => {
   const dispatch = useDispatch();
@@ -14,12 +14,42 @@ const CreateGroupPage = () => {
     maxMembers: ''
   });
 
+  const [courseSearch, setCourseSearch] = useState('');
+  const [courseResults, setCourseResults] = useState([]);
+
   const { loading, error, successMessage } = useSelector((state) => state.groups);
 
   // Clear success/error messages when navigating away
   useEffect(() => {
     dispatch(clearMessages());
   }, [dispatch]);
+
+  // Search for courses from the database
+  useEffect(() => {
+    const fetchCourses = async () => {
+      if (!courseSearch.trim()) {
+        setCourseResults([]);
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:5000/api/courses/search?query=${courseSearch}`);
+        const data = await response.json();
+
+        if (response.ok) {
+          setCourseResults(data);
+        } else {
+          setCourseResults([]);
+        }
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+        setCourseResults([]);
+      }
+    };
+
+    const delaySearch = setTimeout(fetchCourses, 300); // Add debounce to reduce API calls
+    return () => clearTimeout(delaySearch); // Clear timeout on cleanup
+  }, [courseSearch]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -32,28 +62,57 @@ const CreateGroupPage = () => {
     setGroupData({ course: '', groupName: '', maxMembers: '' }); // Clear form fields
   };
 
+  // Handle course selection from search results
+  const handleSelectCourse = (dept, courseId) => {
+    setGroupData({ ...groupData, course: `${dept} ${courseId}` });
+    setCourseSearch(''); // Clear search input after selection
+    setCourseResults([]); // Clear displayed results
+  };
+
   return (
     <div className="create-group-container">
       <h2>Create a New Study Group</h2>
 
       <form onSubmit={handleSubmit} className="create-group-form">
+        {/* Course Search Bar */}
         <div className="input-group">
-          <label htmlFor="course">Select Course</label>
-          <select
-            id="course"
-            name="course"
-            value={groupData.course}
-            onChange={handleInputChange}
-            required
-          >
-            <option value="">-- Select a Course --</option>
-            <option value="EECS 2311">EECS 2311</option>
-            <option value="Math 2015">Math 2015</option>
-            <option value="ENG 2003">ENG 2003</option>
-            <option value="LOLZ Academy">LOLZ Academy</option>
-            <option value="LLMS DUDE">LLMS DUDE</option>
-          </select>
+          <label htmlFor="course">Search Course Code</label>
+          <input
+            type="text"
+            id="courseSearch"
+            name="courseSearch"
+            placeholder="Type Dept or Course ID"
+            value={courseSearch}
+            onChange={(e) => setCourseSearch(e.target.value)}
+          />
+
+          {/* Display Matching Results */}
+          {courseResults.length > 0 && (
+            <ul className="course-results">
+              {courseResults.map((course) => (
+                <li
+                  key={course._id}
+                  onClick={() => handleSelectCourse(course.Dept, course['Course ID'])}
+                  className="course-item"
+                >
+                  {course.Dept} {course['Course ID']} - {course['Course Name']}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {/* Display 'No Results' Message */}
+          {courseResults.length === 0 && courseSearch && (
+            <p className="no-results">No matching courses found.</p>
+          )}
         </div>
+
+        {/* Display Selected Course */}
+        {groupData.course && (
+          <p className="selected-course">
+            Selected Course: <strong>{groupData.course}</strong>
+          </p>
+        )}
 
         <div className="input-group">
           <label htmlFor="groupName">Group Name</label>
