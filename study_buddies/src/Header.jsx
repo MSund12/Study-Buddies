@@ -1,13 +1,15 @@
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-const Header = ({ currentUser }) => {
-  const navigate = useNavigate(); // Hook for navigation
+const Header = () => {
+  const navigate = useNavigate();
+  const currentUser = useSelector((state) => state.auth.currentUser);
 
   const handleHeaderClick = () => {
     if (currentUser) {
-      navigate('/home'); // Navigate to HomePage if logged in
+      navigate('/home');
     } else {
-      navigate('/starter'); // Navigate to StarterPage if not logged in
+      navigate('/starter');
     }
   };
 
