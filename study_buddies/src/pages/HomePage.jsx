@@ -7,6 +7,7 @@ import GroupPage from './GroupPage';
 import RedShape from './components/RedShape';
 import PinkShape from './components/PinkShape';
 import PurpleShape from './components/PurpleShape';
+import './styles/HomePage.css'
 
 const HomePage = () => {
   const [showGroupFinder, setShowGroupFinder] = useState(false);
