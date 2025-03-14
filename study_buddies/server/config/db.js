@@ -4,7 +4,7 @@ const connectDB = async () => {
   try {
     // Replace with your MongoDB connection string
     const conn = await mongoose.connect(
-      process.env.MONGO_URI || "mongodb+srv://yorkstudygroupfinder:QjdeoOxa2RERs5Ea@studygroupfinder.08k9b.mongodb.net/",
+      process.env.MONGO_URI || "",
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,
