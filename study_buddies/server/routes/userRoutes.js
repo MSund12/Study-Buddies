@@ -1,10 +1,14 @@
-import express from 'express';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
-
+import express from "express";
 const router = express.Router();
+import {
+  getAllUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser,
+} from "../controllers/userController.js";
 
+<<<<<<< HEAD
 // Generate JWT Token Function
 const generateToken = (userId) => {
   return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
@@ -99,5 +103,12 @@ function authenticateToken(req, res, next) {
     res.status(403).json({ message: "Invalid token" });
   }
 }
+=======
+router.get("/", getAllUsers);
+router.get("/:id", getUserById);
+router.post("/", createUser);
+router.put("/:id", updateUser);
+router.delete("/:id", deleteUser);
+>>>>>>> f1c13e3ffe33ace1151ba084565bf4aa8fb013df
 
 export default router;

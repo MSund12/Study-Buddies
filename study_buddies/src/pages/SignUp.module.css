@@ -1,0 +1,149 @@
+/* SignUp.module.css */
+.container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.signupTitle {
+  text-align: center;
+  font-size: 2vw;
+  font-weight: bold;
+  color: #1c1c1c;
+  margin-bottom: 3vh;
+}
+
+.signupForm {
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.signupRow {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 2vw;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  width: 48%;
+}
+
+.inputGroup label {
+  text-align: left;
+  font-size: 1vw;
+  font-weight: 550;
+  color: #1c1c1c;
+  margin-bottom: 1vh;
+}
+
+.inputGroup input {
+  width: 40vh;
+  padding: 1vh;
+  border-radius: 5px;
+  border: none;
+  background: #e5e5e5;
+  font-size: 0.8vw;
+  font-weight: bold;
+  font-family: "Potta One", cursive;
+}
+
+.inputGroup2 {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.inputGroup2 input {
+  width: 87vh;
+  padding: 1vh;
+  border-radius: 5px;
+  border: none;
+  background: #e5e5e5;
+  font-size: 0.8vw;
+  font-weight: bold;
+  font-family: "Potta One", cursive;
+}
+
+.passwordWarning {
+  position: absolute;
+  right: -20vw;
+  top: 30%;
+  color: #de3838;
+  font-size: 1.2vw;
+  font-weight: bold;
+  text-align: center;
+  line-height: 3;
+}
+
+.signupButton {
+  margin-top: 2vh;
+  padding: 1.5vh 3vw;
+  font-size: 1.2vw;
+  font-weight: bold;
+  color: #ffffff;
+  background: black;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.signupButton:hover {
+  opacity: 0.8;
+}
+
+.successMessage {
+  color: green;
+  font-size: 1vw;
+  margin-top: 1vh;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+  .signupTitle {
+    font-size: 4vw;
+  }
+
+  .inputGroup {
+    width: 100%;
+  }
+
+  .inputGroup input {
+    width: 100%;
+    font-size: 2vw;
+  }
+
+  .inputGroup2 input {
+    width: 100%;
+    font-size: 2vw;
+  }
+
+  .passwordWarning {
+    position: static;
+    font-size: 2vw;
+    text-align: center;
+    margin: 2vh 0;
+  }
+
+  .signupButton {
+    font-size: 3vw;
+  }
+
+  .successMessage {
+    font-size: 2vw;
+  }
+}
