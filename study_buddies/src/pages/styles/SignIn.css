@@ -1,4 +1,4 @@
-body {
+  body {
   background: #FFFFFF;
   font-family: 'Potta One', cursive;
   margin: 0;
@@ -8,10 +8,10 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
-}
+  }
 
-/* Container to keep layout responsive */
-.starter-container {
+  /* Container to keep layout responsive */
+  .starter-container {
   position: relative;
   width: 100%;
   height: 100%; /* Full screen height */
@@ -19,79 +19,92 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  }
+
+  /* Beginning SignIn.jsx */
+
+.signin-form{
+  position: relative;
+  top: 20vh;
+  display: block;
+  justify-content: center;
 }
 
-/* Beginning SignIn.jsx */
+/* Log In Title */
+.signin-title {
+  position: relative;
+  font-size: 2vw;
+  font-weight: bolder;
+  color: black;
+  margin-bottom: 2vh;
+  top: 15vh;
+  white-space: nowrap;
+}
 
-.login-form{
-    position: relative;
-    top: 35vh;
-    display: block; 
-  }
-  
-  /* Log In Title */
-  .login-title {
-    position: absolute;
-    font-size: 2vw;
-    font-weight: bolder;
-    color: black;
-    margin-bottom: 2vh;
-    top: 18vh;
-    white-space: nowrap;
-  }
-  
-  /* Labels for Input Fields */
-  .login-label {
-    display: block;
-    text-align: center;
-    font-size: 1vw;
-    font-weight: 800;
-    color: #1C1C1C;
-    margin-bottom: 2vh;
-  }
-  
-  /* Input Fields */
-  .login-input {
-    width: 60vh;
-    padding: 1vh;
-    margin-bottom: 3vh;
-    border-radius: 8px;
-    border-color: transparent;
-    background-color: #D9D9D9;
-    font-size: 0.8vw;
-    font-weight: bold;
-    font-family:'Potta One', cursive;
-    color: black;
-  }
-  
+.signin-title span{
+  color: red;
+}
+
+/* Input Group */
+.signin-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+}
+
+/* Labels for Inputs */
+.signin-group label {
+  text-align: center;
+  font-size: 1vw;
+  font-weight: 550;
+  color: #1C1C1C;
+  margin-bottom: 1vh;
+}
+
+/* Input Fields */
+.signin-group input {
+  width: 30vw;
+  padding: 1vh;
+  border-color: transparent;
+  border-radius: 5px;
+  font-size: 0.8vw;
+  background: #E5E5E5; /* Matches the image */
+  color: black;
+  font-weight: bold;
+  text-transform: 'Potta One', cursive;
+  margin-bottom: 2vh;
+}
+
+
   /* Sign In Button */
-  .login-button {
-    display: block;
-    justify-self: center;
-    width: 25vh;
-    padding: 1vh;
-    font-size: 1.2vw;
-    font-weight: bold;
-    color: #FFFFFF;
-    background: black;
-    border: none;
-    border-radius: 40px;
-    cursor: pointer;
-    transition: 0.3s;
-    margin-top: 3vh;
+.signin-button {
+  display: block;
+  justify-self: center;
+  width: 25vh;
+  padding: 1vh;
+  font-size: 1.2vw;
+  font-weight: bold;
+  color: #FFFFFF;
+  background: black;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 3vh;
+}
+
+  .signin-button:hover {
+  opacity: 0.8;
   }
-  
-  .login-button:hover {
-    opacity: 0.8;
-  }
-  
+
   /* Error Message */
   .error-message {
-    position:relative;
-    top: 24vh;
-    color: #DE3838;
-    font-size: 1vw;
-    margin-top: 1vh;
+  position:relative;
+  top: 24vh;
+  color: #DE3838;
+  font-size: 1vw;
+  margin-top: 1vh;
   }
-  
+
   /* End of SignIn.jsx */

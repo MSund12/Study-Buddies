@@ -27,7 +27,7 @@ body {
 .header-title {
   position: absolute;
   top: 2vh; /* Responsive top spacing */
-  left: 4vw;
+  left: 8vw;
   font-weight: bold;
   font-size: 1.5vw; /* Responsive font size */
   color: #DE3838;

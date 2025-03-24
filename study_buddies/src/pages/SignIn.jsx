@@ -45,14 +45,14 @@ const SignIn = () => {
   return (
     <div className="starter-container">
       <Header currentUser={currentUser} />
-      <RedShape />
-      <PurpleShape />
-      <PinkShape />
+      <RedShape color="#44A944"/>
+      <PurpleShape color="#473C60"/>
+      <PinkShape color="#0000FF"/>
 
-      <h2 className="signin-title">Welcome Back!</h2>
+      <h2 className="signin-title">Welcome <span>Back!</span></h2>
 
       <form onSubmit={handleLogin} className="signin-form">
-        <div className="input-group2">
+        <div className="signin-group">
           <label htmlFor="email">Email Address</label>
           <input
             type="email"
@@ -64,7 +64,7 @@ const SignIn = () => {
           />
         </div>
 
-        <div className="input-group2">
+        <div className="signin-group">
           <label htmlFor="password">Password</label>
           <input
             type="password"
