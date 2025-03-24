@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import Header from '../Header';
+import "./styles/GroupChatSidebar.css"
 
 export default function GroupChatSidebar({ username = "Anonymous" }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,7 +30,8 @@ export default function GroupChatSidebar({ username = "Anonymous" }) {
   }, [messages]);
 
   return (
-    <div className="starter-container">
+    <div className="starter-container1">
+    <div className="chat">
       <Header currentUser={currentUser} />
       {isOpen ? (
         <div className="bg-white w-80 h-96 rounded-lg shadow-lg flex flex-col">
@@ -74,11 +76,12 @@ export default function GroupChatSidebar({ username = "Anonymous" }) {
       ) : (
         <button
           onClick={() => setIsOpen(true)}
-          className="bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700"
+          className="chat-button"
         >
           Chat
         </button>
       )}
+    </div>
     </div>
   );
 }

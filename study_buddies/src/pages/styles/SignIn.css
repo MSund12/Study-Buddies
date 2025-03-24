@@ -1,0 +1,74 @@
+/* Beginning SignIn.jsx */
+
+.login-form{
+    position: relative;
+    top: 35vh;
+    display: block; 
+  }
+  
+  /* Log In Title */
+  .login-title {
+    position: absolute;
+    font-size: 2vw;
+    font-weight: bolder;
+    color: black;
+    margin-bottom: 2vh;
+    top: 18vh;
+    white-space: nowrap;
+  }
+  
+  /* Labels for Input Fields */
+  .login-label {
+    display: block;
+    text-align: center;
+    font-size: 1vw;
+    font-weight: 800;
+    color: #1C1C1C;
+    margin-bottom: 2vh;
+  }
+  
+  /* Input Fields */
+  .login-input {
+    width: 60vh;
+    padding: 1vh;
+    margin-bottom: 3vh;
+    border-radius: 8px;
+    border-color: transparent;
+    background-color: #D9D9D9;
+    font-size: 0.8vw;
+    font-weight: bold;
+    font-family:'Potta One', cursive;
+    color: black;
+  }
+  
+  /* Sign In Button */
+  .login-button {
+    display: block;
+    justify-self: center;
+    width: 25vh;
+    padding: 1vh;
+    font-size: 1.2vw;
+    font-weight: bold;
+    color: #FFFFFF;
+    background: black;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 3vh;
+  }
+  
+  .login-button:hover {
+    opacity: 0.8;
+  }
+  
+  /* Error Message */
+  .error-message {
+    position:relative;
+    top: 24vh;
+    color: #DE3838;
+    font-size: 1vw;
+    margin-top: 1vh;
+  }
+  
+  /* End of SignIn.jsx */

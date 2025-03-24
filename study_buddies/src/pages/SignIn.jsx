@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { loginSuccess } from '../features/authSlice'; // Import Redux action
+import { useSelector } from 'react-redux';
 import RedShape from './components/RedShape';
 import PurpleShape from './components/PurpleShape';
 import PinkShape from './components/PinkShape';
 import Header from '../Header';
+import "./styles/SignIn.css"
 
 const SignIn = () => {
   const currentUser = useSelector((state) => state.auth.currentUser);

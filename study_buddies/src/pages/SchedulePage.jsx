@@ -5,6 +5,7 @@ import RedShape from './components/RedShape';
 import PurpleShape from './components/PurpleShape';
 import PinkShape from './components/PinkShape';
 import Header from '../Header';
+import "./styles/SchedulePage.css"
 
 const SchedulePage = () => {
   const currentUser = useSelector((state) => state.auth.currentUser);
