@@ -51,6 +51,10 @@
     color: #28a745;
     font-weight: bold;
   }
+
+  .course-results{
+    color: black;
+  }
   
   .no-results {
     color: #dc3545;

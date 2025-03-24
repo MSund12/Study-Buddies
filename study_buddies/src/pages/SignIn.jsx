@@ -5,8 +5,10 @@ import { loginSuccess } from '../features/authSlice'; // Import Redux action
 import RedShape from './components/RedShape';
 import PurpleShape from './components/PurpleShape';
 import PinkShape from './components/PinkShape';
+import Header from '../Header';
 
 const SignIn = () => {
+  const currentUser = useSelector((state) => state.auth.currentUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -40,6 +42,7 @@ const SignIn = () => {
 
   return (
     <div className="starter-container">
+      <Header currentUser={currentUser} />
       <RedShape />
       <PurpleShape />
       <PinkShape />

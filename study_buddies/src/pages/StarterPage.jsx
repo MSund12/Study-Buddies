@@ -4,12 +4,15 @@ import RedShape from './components/RedShape';
 import PurpleShape from './components/PurpleShape';
 import PinkShape from './components/PinkShape';
 import './styles/StarterPage.css';
+import Header from '../Header';
 
 const StarterPage = () => {
   const navigate = useNavigate();
+  const currentUser = useSelector((state) => state.auth.currentUser);
 
   return (
     <div className="starter-container">
+      <Header currentUser={currentUser} />
       {/* Abstract Shapes */}
       <RedShape />
       <PurpleShape />

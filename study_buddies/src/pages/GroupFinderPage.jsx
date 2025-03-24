@@ -1,30 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../features/groupSlice';
+import "./styles/GroupFinderPage.css"
+import Header from '../Header';
+
+
 
 const GroupFinderPage = ({ onBack, onSelectGroup }) => {
+  const currentUser = useSelector((state) => state.auth.currentUser);
   const dispatch = useDispatch();
-  const { groups, loading, error } = useSelector((state) => state.groups);
+  const { groups = [], loading, error } = useSelector((state) => state.groups); // Default groups to an empty array
 
-  const [sortOrder, setSortOrder] = useState('asc'); // Sorting order state
+  const [sortOrder, setSortOrder] = useState('asc');
 
-  // Fetch groups from the database when the page loads
+  // Fetch groups when the page loads
   useEffect(() => {
     dispatch(fetchGroups());
   }, [dispatch]);
 
-  // Sorting logic
-  const sortedGroups = [...groups].sort((a, b) => {
-    if (sortOrder === 'asc') {
-      return a.groupName.localeCompare(b.groupName);
-    } else {
-      return b.groupName.localeCompare(a.groupName);
-    }
-  });
+  // Sorting logic with a defensive array check
+  const sortedGroups = Array.isArray(groups)
+    ? [...groups].sort((a, b) => {
+        if (sortOrder === 'asc') {
+          return a.groupName.localeCompare(b.groupName);
+        } else {
+          return b.groupName.localeCompare(a.groupName);
+        }
+      })
+    : [];
 
   return (
-    <div>
-      <button onClick={onBack} className="px-4 py-2 bg-gray-400 text-white rounded">Back</button>
+    <div className="starting-container">
+      <Header currentUser={currentUser} />
 
       {/* Sorting Controls */}
       <div className="sorting-controls">
@@ -40,7 +47,7 @@ const GroupFinderPage = ({ onBack, onSelectGroup }) => {
       {error && <p className="error-message">{error}</p>}
 
       {/* Group Display */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginTop: '16px' }}>
+      <div className="group-display">
         {sortedGroups.map((group) => (
           <div
             key={group._id}
@@ -61,6 +68,7 @@ const GroupFinderPage = ({ onBack, onSelectGroup }) => {
             {group.groupName} - {group.course}
           </div>
         ))}
+        {!loading && sortedGroups.length === 0 && <p>No groups found.</p>}
       </div>
     </div>
   );

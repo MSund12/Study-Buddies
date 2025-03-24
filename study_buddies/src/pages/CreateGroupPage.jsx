@@ -3,10 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createGroup, clearMessages } from '../features/groupSlice';
 import { useNavigate } from 'react-router-dom';
 import './styles/CreateGroupPage.css';
+import Header from '../Header';
 
 const CreateGroupPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const currentUser = useSelector((state) => state.auth.currentUser);
 
   const [groupData, setGroupData] = useState({
     course: '',
@@ -70,83 +72,87 @@ const CreateGroupPage = () => {
   };
 
   return (
-    <div className="create-group-container">
-      <h2>Create a New Study Group</h2>
+    <div className="starter-container">
+      <Header currentUser={currentUser} />
 
-      <form onSubmit={handleSubmit} className="create-group-form">
+      <div className="create-group-container">
+        <h2>Create a New Study Group</h2>
+
+        <form onSubmit={handleSubmit} className="create-group-form">
         {/* Course Search Bar */}
-        <div className="input-group">
-          <label htmlFor="course">Search Course Code</label>
-          <input
-            type="text"
-            id="courseSearch"
-            name="courseSearch"
-            placeholder="Type Dept or Course ID"
-            value={courseSearch}
-            onChange={(e) => setCourseSearch(e.target.value)}
-          />
+          <div className="input-group">
+            <label htmlFor="course">Search Course Code</label>
+            <input
+              type="text"
+              id="courseSearch"
+              name="courseSearch"
+              placeholder="Type Dept or Course ID"
+              value={courseSearch}
+              onChange={(e) => setCourseSearch(e.target.value)}
+            />
 
           {/* Display Matching Results */}
-          {courseResults.length > 0 && (
-            <ul className="course-results">
-              {courseResults.map((course) => (
-                <li
-                  key={course._id}
-                  onClick={() => handleSelectCourse(course.Dept, course['Course ID'])}
-                  className="course-item"
-                >
-                  {course.Dept} {course['Course ID']} - {course['Course Name']}
-                </li>
-              ))}
-            </ul>
-          )}
+            {courseResults.length > 0 && (
+              <ul className="course-results">
+                {courseResults.map((course) => (
+                  <li
+                    key={course._id}
+                    onClick={() => handleSelectCourse(course.Dept, course['Course ID'])}
+                    className="course-item"
+                  >
+                    {course.Dept} {course['Course ID']} - {course['Course Name']}
+                  </li>
+                ))}
+              </ul>
+            )}
 
           {/* Display 'No Results' Message */}
-          {courseResults.length === 0 && courseSearch && (
-            <p className="no-results">No matching courses found.</p>
+            {courseResults.length === 0 && courseSearch && (
+              <p className="no-results">No matching courses found.</p>
+            )}
+          </div>
+
+          {/* Display Selected Course */}
+          {groupData.course && (
+            <p className="selected-course">
+              Selected Course: <strong>{groupData.course}</strong>
+            </p>
           )}
-        </div>
 
-        {/* Display Selected Course */}
-        {groupData.course && (
-          <p className="selected-course">
-            Selected Course: <strong>{groupData.course}</strong>
-          </p>
-        )}
+          <div className="input-group">
+            <label htmlFor="groupName">Group Name</label>
+            <input
+              type="text"
+              id ="groupName"
+              name="groupName"
+              placeholder="Enter group name"
+              value={groupData.groupName}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
 
-        <div className="input-group">
-          <label htmlFor="groupName">Group Name</label>
-          <input
-            type="text"
-            id="groupName"
-            name="groupName"
-            placeholder="Enter group name"
-            value={groupData.groupName}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
+          <div className="input-group">
+            <label htmlFor="maxMembers">Max Members</label>
+            <input
+              type="number"
+              id="maxMembers"
+              name="maxMembers"
+              placeholder="Enter max members"
+              value={groupData.maxMembers}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
 
-        <div className="input-group">
-          <label htmlFor="maxMembers">Max Members</label>
-          <input
-            type="number"
-            id="maxMembers"
-            name="maxMembers"
-            placeholder="Enter max members"
-            value={groupData.maxMembers}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
+          <button type="submit" className="create-group-button" disabled={loading}>
+            {loading ? 'Creating...' : 'Create Group'}
+          </button>
+        </form>
 
-        <button type="submit" className="create-group-button" disabled={loading}>
-          {loading ? 'Creating...' : 'Create Group'}
-        </button>
-      </form>
-
-      {successMessage && <p className="status-message success">{successMessage}</p>}
-      {error && <p className="status-message error">{error}</p>}
+        {successMessage && <p className="status-message success">{successMessage}</p>}
+        {error && <p className="status-message error">{error}</p>}
+      </div>
     </div>
   );
 };
