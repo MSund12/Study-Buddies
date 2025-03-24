@@ -79,7 +79,7 @@ const CreateGroupPage = () => {
         <h2>Create a New Study Group</h2>
 
         <form onSubmit={handleSubmit} className="create-group-form">
-        {/* Course Search Bar */}
+          {/* Course Search Bar */}
           <div className="input-group">
             <label htmlFor="course">Search Course Code</label>
             <input
@@ -91,7 +91,7 @@ const CreateGroupPage = () => {
               onChange={(e) => setCourseSearch(e.target.value)}
             />
 
-          {/* Display Matching Results */}
+            {/* Display Matching Results */}
             {courseResults.length > 0 && (
               <ul className="course-results">
                 {courseResults.map((course) => (

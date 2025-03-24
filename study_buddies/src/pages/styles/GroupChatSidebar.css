@@ -25,10 +25,10 @@ body {
 /* Header - Group Study Finder */
 .header-title {
     position: absolute;
-    top: 2vh; /* Responsive top spacing */
+    top: 2vh;
     left: 4vw;
     font-weight: bold;
-    font-size: 1.5vw; /* Responsive font size */
+    font-size: 1.5vw;
     color: #DE3838;
     width: 250px;
     text-wrap: nowrap;

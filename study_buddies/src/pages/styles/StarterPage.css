@@ -25,16 +25,16 @@ body {
 
 /* Header - Group Study Finder */
 .header-title {
-    position: absolute;
-    top: 2vh; /* Responsive top spacing */
-    left: 4vw;
-    font-weight: bold;
-    font-size: 1.5vw; /* Responsive font size */
-    color: #DE3838;
-    width: 250px;
-    text-wrap: nowrap;
-    z-index: 10;
-  }
+  position: absolute;
+  top: 2vh; /* Responsive top spacing */
+  left: 4vw;
+  font-weight: bold;
+  font-size: 1.5vw; /* Responsive font size */
+  color: #DE3838;
+  width: 250px;
+  text-wrap: nowrap;
+  z-index: 10;
+}
   
   .header-title:hover{
     cursor: pointer;
