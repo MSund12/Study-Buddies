@@ -1,35 +1,35 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { loginSuccess } from '../features/authSlice'; // Import Redux action
 import RedShape from './components/RedShape';
 import PurpleShape from './components/PurpleShape';
 import PinkShape from './components/PinkShape';
 
-const SignIn = ({ users, onLoginSuccess }) => {
-  const [loginData, setLoginData] = useState({ email: '', password: '' });
-  const [message, setMessage] = useState('');
+const SignIn = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+  const [message, setMessage] = useState('');
 
   const handleLogin = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await fetch('http://localhost:5000/api/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(loginData),
+        body: JSON.stringify(formData),
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-  
-        if (data.user.isAdmin) {
-          navigate('/home'); // Redirect admins to admin panel
-        } else {
-          navigate('/home');
-        }
+        dispatch(loginSuccess(data.user)); // Update Redux store with logged-in user
+        navigate('/home'); // Redirect to homepage
       } else {
         setMessage(data.message || 'Login failed');
       }
@@ -37,42 +37,41 @@ const SignIn = ({ users, onLoginSuccess }) => {
       setMessage('Error connecting to server');
     }
   };
-  
 
   return (
     <div className="starter-container">
-      <RedShape color="#44A944"/>
-      <PurpleShape color="#473C60" />
-      <PinkShape color="#0000FF"/>
-      <h2 className="login-title">Log In</h2>
+      <RedShape />
+      <PurpleShape />
+      <PinkShape />
 
-      <form onSubmit={handleLogin} className="login-form">
-        {/* Email Input */}
-        <label htmlFor="email" className="login-label">School Email</label>
-        <input
-          type="email"
-          id="email"
-          placeholder="Enter your school email"
-          value={loginData.email}
-          onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-          className="login-input"
-          required
-        />
+      <h2 className="signin-title">Welcome Back!</h2>
 
-        {/* Password Input */}
-        <label htmlFor="password" className="login-label">Password</label>
-        <input
-          type="password"
-          id="password"
-          placeholder="Enter your password"
-          value={loginData.password}
-          onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-          className="login-input"
-          required
-        />
+      <form onSubmit={handleLogin} className="signin-form">
+        <div className="input-group2">
+          <label htmlFor="email">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="Your Email"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            required
+          />
+        </div>
 
-        {/* Login Button */}
-        <button type="submit" className="login-button">Log In</button>
+        <div className="input-group2">
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="Your Password"
+            value={formData.password}
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            required
+          />
+        </div>
+
+        <button type="submit" className="signin-button">Sign In</button>
       </form>
 
       {message && <p className="error-message">{message}</p>}

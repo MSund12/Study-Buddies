@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { loginSuccess } from '../features/authSlice'; // Import Redux action
 import RedShape from './components/RedShape';
 import PurpleShape from './components/PurpleShape';
 import PinkShape from './components/PinkShape';
 
-const SignUp = ({ onRegister }) => {
+const SignUp = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -12,23 +16,22 @@ const SignUp = ({ onRegister }) => {
     password: ''
   });
   const [message, setMessage] = useState('');
-  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await fetch('http://localhost:5000/api/users/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok) {
-        setMessage('Registration successful! Redirecting...');
-        setTimeout(() => navigate('/signin'), 1500);
+        dispatch(loginSuccess(data.user)); // Store user in Redux after signup
+        navigate('/home'); // Redirect to homepage
       } else {
         setMessage(data.message || 'Registration failed');
       }
@@ -36,7 +39,6 @@ const SignUp = ({ onRegister }) => {
       setMessage('Error connecting to server');
     }
   };
-  
 
   return (
     <div className="starter-container">
@@ -47,7 +49,6 @@ const SignUp = ({ onRegister }) => {
       <h2 className="signup-title">Create your account</h2>
 
       <form onSubmit={handleRegister} className="signup-form">
-        {/* First Name & Last Name - Side by Side */}
         <div className="signup-row">
           <div className="input-group">
             <label htmlFor="firstName">First Name</label>
@@ -74,7 +75,6 @@ const SignUp = ({ onRegister }) => {
           </div>
         </div>
 
-        {/* School Email Address */}
         <div className="input-group2">
           <label htmlFor="email">School Email Address</label>
           <input
@@ -87,7 +87,6 @@ const SignUp = ({ onRegister }) => {
           />
         </div>
 
-        {/* Password Field */}
         <div className="input-group2">
           <label htmlFor="password">Password</label>
           <input
@@ -100,10 +99,10 @@ const SignUp = ({ onRegister }) => {
           />
         </div>
 
-        {/* Password Warning (Right-Aligned in Red) */}
-        <p className="password-warning">Please Select a<br/>Password Different<br/>From Passport York</p>
+        <p className="password-warning">
+          Please Select a<br/>Password Different<br/>From Passport York
+        </p>
 
-        {/* Sign Up Button */}
         <button type="submit" className="signup-button">Create an account</button>
       </form>
 

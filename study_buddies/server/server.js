@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import userRoutes from './routes/userRoutes.js';
 import courseRoutes from './routes/courseRoutes.js';
+import groupRoutes from './routes/groupRoutes.js';  // Import groupRoutes
 
 dotenv.config();
 const app = express();
@@ -14,6 +15,8 @@ app.use(cors());
 app.use('/api/users', userRoutes);
 // Use the course routes
 app.use('/api/courses', courseRoutes);
+// Use the group routes
+app.use('/api/groups', groupRoutes);
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
