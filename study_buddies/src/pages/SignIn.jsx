@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { loginSuccess } from '../features/authSlice'; // Import Redux action
+import { useSelector } from 'react-redux';
 import RedShape from './components/RedShape';
 import PurpleShape from './components/PurpleShape';
 import PinkShape from './components/PinkShape';
+import Header from '../Header';
+import "./styles/SignIn.css"
 
 const SignIn = () => {
+  const currentUser = useSelector((state) => state.auth.currentUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -40,14 +44,15 @@ const SignIn = () => {
 
   return (
     <div className="starter-container">
-      <RedShape />
-      <PurpleShape />
-      <PinkShape />
+      <Header currentUser={currentUser} />
+      <RedShape color="#44A944"/>
+      <PurpleShape color="#473C60"/>
+      <PinkShape color="#0000FF"/>
 
-      <h2 className="signin-title">Welcome Back!</h2>
+      <h2 className="signin-title">Welcome <span>Back!</span></h2>
 
       <form onSubmit={handleLogin} className="signin-form">
-        <div className="input-group2">
+        <div className="signin-group">
           <label htmlFor="email">Email Address</label>
           <input
             type="email"
@@ -59,7 +64,7 @@ const SignIn = () => {
           />
         </div>
 
-        <div className="input-group2">
+        <div className="signin-group">
           <label htmlFor="password">Password</label>
           <input
             type="password"

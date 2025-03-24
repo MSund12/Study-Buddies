@@ -8,6 +8,7 @@ import RedShape from './components/RedShape';
 import PinkShape from './components/PinkShape';
 import PurpleShape from './components/PurpleShape';
 import './styles/HomePage.css';
+import Header from '../Header';
 
 const HomePage = () => {
   const [showGroupFinder, setShowGroupFinder] = useState(false);
@@ -44,6 +45,7 @@ const HomePage = () => {
 
   return (
     <div className="starter-container">
+      <Header currentUser={currentUser} />
       {/* Sign Out Button in Top Right */}
       {currentUser && (
         <div className="signout-container">

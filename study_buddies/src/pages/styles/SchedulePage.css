@@ -1,0 +1,120 @@
+body {
+  background: #FFFFFF;
+  font-family: 'Potta One', cursive;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Container to keep layout responsive */
+.starter-container {
+  position: relative;
+  width: 100%;
+  height: 100%; /* Full screen height */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Beginning of SchedulePage.jsx */
+
+.padding-container {
+    padding: 10px;
+    margin: 0 auto;
+  }
+  
+  .header-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .back-button {
+    font-size: 1.5rem;
+    text-decoration: none;
+    color: #007bff;
+    margin-right: 10px;
+  }
+  
+  .back-button:hover {
+    color: #0056b3;
+  }
+  
+  .filter-container {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .filter-container input {
+    margin: 0 5px;
+    padding: 5px;
+    font-size: 1rem;
+  }
+  
+  .filter-container button {
+    padding: 5px 10px;
+    font-size: 1rem;
+  }
+  
+  .schedule {
+    position: relative;
+    height: 840px; /* Represents the number of minutes in the day segment (e.g., 840 minutes = 14 hours) */
+    border: 1px solid #ddd;
+    margin-top: 20px;
+    display: flex;
+  }
+  
+  .day {
+    flex: 1;
+    position: relative;
+    border-left: 1px solid #ddd;
+    min-width: 80px;
+  }
+  
+  .date-block {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  /* These classes style the blocks differently based on meeting type. Adjust colors as desired. */
+  .lecture {
+    background-color: rgba(255, 182, 193, 0.7);
+  }
+  
+  .seminar {
+    background-color: rgba(173, 216, 230, 0.7);
+  }
+  
+  .lab {
+    background-color: rgba(144, 238, 144, 0.7);
+  }
+  
+  .time-block {
+    position: absolute;
+    border: 1px solid #007bff;
+    color: black;
+    padding: 5px;
+    border-radius: 4px;
+    white-space: normal;
+    width: 90%;
+    box-sizing: border-box;
+    left: 5%;
+    overflow: visible;
+    text-overflow: ellipsis;
+    font-size: calc(0.5rem + 0.05vw);
+    line-height: 1.2;
+  }
+  
+  .time-block p {
+    margin: 0;
+    overflow: hidden;
+  }
+  
+  /* End of SchedulePage.jsx */
