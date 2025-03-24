@@ -42,9 +42,9 @@ body {
   
   /* Sign In & Sign Up Buttons */
   .buttons-container {
-    position: absolute;
+    position: relative;
     top: 3vh;
-    left: 40vh;
+    left: 20vw;
     display: flex;
     align-items: center;
     gap: 3vw;
@@ -99,8 +99,8 @@ body {
     position: absolute;
     width: 40vw; /* Scales with viewport width */
     text-align: left;
-    top: 20vh;
-    font-size: 4vw;
+    top: 17vh;
+    font-size: 3.9vw;
     font-weight: bolder;
     color: #1C1C1C;
   }
@@ -116,7 +116,7 @@ body {
     position: absolute;
     width: 40vw;
     text-align: left;
-    top: 52vh;
+    top: 57vh;
     font-size: 1.2vw;
     font-weight: 550;
     color: #808080;
