@@ -12,7 +12,7 @@ const generateToken = (res, userId) => {
   res.cookie("token", token, {
     httpOnly: true, 
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict", 
+    sameSite: "strict",
     maxAge: 60 * 60 * 1000, // 1 hour
   });
   return token;
@@ -58,8 +58,6 @@ router.post('/register', async (req, res) => {
       CodeExpiry: codeExpiry
     });
     await tempUser.save();
-
-    // TODO: Integrate your email service to send the verification code to the user
 
     res.status(201).json({
       message: "User registered successfully! A verification code has been sent to your email."
@@ -182,3 +180,4 @@ function authenticateToken(req, res, next) {
 }
 
 export default router;
+

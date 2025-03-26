@@ -26,7 +26,7 @@ router.post('/create', async (req, res) => {
   }
 });
 
-// ➤ Get All Groups with Sorting, Search, and Pagination
+//  Get All Groups with Sorting, Search, and Pagination
 router.get('/', async (req, res) => {
   const { sortOrder = 'asc', search = '', page = 1, limit = 10 } = req.query;
 

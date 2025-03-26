@@ -1,28 +1,40 @@
 /* Beginning of StarterPage.jsx */
 
+body {
+  background: #FFFFFF;
+  font-family: 'Potta One', cursive;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 /* Container to keep layout responsive */
 .starter-container {
-    position: relative;
-    width: 100%;
-    height: 100%; /* Full screen height */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
+  position: relative;
+  width: 100%;
+  height: 100%; /* Full screen height */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
 /* Header - Group Study Finder */
 .header-title {
-    position: absolute;
-    top: 2vh; /* Responsive top spacing */
-    left: 20%;
-    font-weight: bold;
-    font-size: 1.5vw; /* Responsive font size */
-    color: #DE3838;
-    width: 250px;
-    text-wrap: nowrap;
-    z-index: 10;
-  }
+  position: absolute;
+  top: 2vh; /* Responsive top spacing */
+  left: 8vw;
+  font-weight: bold;
+  font-size: 1.5vw; /* Responsive font size */
+  color: #DE3838;
+  width: 250px;
+  text-wrap: nowrap;
+  z-index: 10;
+}
   
   .header-title:hover{
     cursor: pointer;
@@ -30,9 +42,9 @@
   
   /* Sign In & Sign Up Buttons */
   .buttons-container {
-    position: absolute;
+    position: relative;
     top: 3vh;
-    left: 40vh;
+    left: 20vw;
     display: flex;
     align-items: center;
     gap: 3vw;
@@ -87,8 +99,8 @@
     position: absolute;
     width: 40vw; /* Scales with viewport width */
     text-align: left;
-    top: 20vh;
-    font-size: 4vw;
+    top: 17vh;
+    font-size: 3.9vw;
     font-weight: bolder;
     color: #1C1C1C;
   }
@@ -104,7 +116,7 @@
     position: absolute;
     width: 40vw;
     text-align: left;
-    top: 52vh;
+    top: 57vh;
     font-size: 1.2vw;
     font-weight: 550;
     color: #808080;

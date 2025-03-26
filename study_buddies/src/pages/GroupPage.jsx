@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import GroupChatSidebar from './GroupChatSidebar';
+import Header from '../Header';
 
 const GroupPage = ({ group, onBack, currentUser }) => {
   const [resources, setResources] = useState([]);
@@ -23,12 +24,13 @@ const GroupPage = ({ group, onBack, currentUser }) => {
   };
 
   return (
-    <div className="p-4 relative min-h-screen">
-      <button onClick={onBack} className="px-4 py-2 bg-gray-400 text-white rounded mb-4">
+    <div className="starter-container">
+      <Header currentUser={currentUser} />
+      <button onClick={onBack} className="back-button">
         Back
       </button>
-      <h2 className="text-2xl font-bold mb-2">{group.name}</h2>
-      <p className="mb-4">
+      <h2 className="group-name">{group.name}</h2>
+      <p className="group-message">
         Welcome to {group.name}! Here you can share and view study resources.
       </p>
 

@@ -4,8 +4,11 @@ import { fetchCourseData, clearCourseData } from '../features/courseSlice';
 import RedShape from './components/RedShape';
 import PurpleShape from './components/PurpleShape';
 import PinkShape from './components/PinkShape';
+import Header from '../Header';
+import "./styles/SchedulePage.css"
 
 const SchedulePage = () => {
+  const currentUser = useSelector((state) => state.auth.currentUser);
   const [dept, setDept] = useState('');
   const [courseId, setCourseId] = useState('');
   const [term, setTerm] = useState('F'); // Term is either "F" or "W"
@@ -64,6 +67,7 @@ const SchedulePage = () => {
 
   return (
     <div className="padding-container">
+      <Header currentUser={currentUser} />
       <RedShape color="#58C8D7" />
       <PurpleShape color="#E6487F"/>
       <PinkShape color="#F6960A"/>

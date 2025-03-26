@@ -7,8 +7,11 @@ import HomePage from './pages/HomePage';
 import StarterPage from './pages/StarterPage';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
+
 import Verify from './pages/Verify';
 import Header from './Header';
+
+
 import SchedulePage from './pages/SchedulePage';
 import './App.css';
 import CreateGroupPage from './pages/CreateGroupPage';
@@ -29,7 +32,6 @@ const App = () => {
 
   return (
     <div className="app-container">
-      <Header currentUser={currentUser} />
       <Routes>
         <Route path="/" element={currentUser ? <HomePage currentUser={currentUser} /> : <StarterPage />} />
         <Route path="/signin" element={<SignIn onLoginSuccess={handleLoginSuccess} />} />
