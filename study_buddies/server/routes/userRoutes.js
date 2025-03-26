@@ -6,7 +6,13 @@ import User from '../models/User.js';
 const router = express.Router();
 
 // Generate JWT Token Function
-const generateToken = (userId) => {
+const generateToken = (res, userId) => {
+  res.cookie("token", token, {
+    httpOnly: true, 
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict", //The three lines above including this one are for security purposes
+    maxAge: 60 * 60 * 1000, // 1 hour
+  });
   return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
 };
 
@@ -28,7 +34,7 @@ router.post('/register', async (req, res) => {
     await user.save();
 
     // Generate JWT Token
-    const token = generateToken(user._id);
+    const token = generateToken(res, user._id);
 
     res.status(201).json({
       message: "User registered successfully",
@@ -57,7 +63,7 @@ router.post('/login', async (req, res) => {
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
     // Generate JWT Token
-    const token = generateToken(user._id);
+    const token = generateToken(res, user._id);
 
     res.json({
       message: "Login successful",
