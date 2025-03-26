@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage';
 import StarterPage from './pages/StarterPage';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
+import Verify from './pages/Verify';
 import Header from './Header';
 import SchedulePage from './pages/SchedulePage';
 import './App.css';
@@ -34,6 +35,7 @@ const App = () => {
         <Route path="/signin" element={<SignIn onLoginSuccess={handleLoginSuccess} />} />
         <Route path="/schedule" element={<SchedulePage currentUser={currentUser} />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/verify" element={<Verify />} />
         <Route path="/home" element={<HomePage currentUser={currentUser} />} />
         <Route path="/chat" element={<GroupChatSidebar currentUser={currentUser} />} />
         <Route path="/starter" element={<StarterPage />} />
