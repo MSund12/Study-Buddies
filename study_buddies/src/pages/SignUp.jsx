@@ -27,6 +27,16 @@ const SignUp = () => {
       return;
     }
 
+    // Password must be at least 8 characters long,
+    // contain at least one uppercase letter, one lowercase letter, and one special character.
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/;
+    if (!passwordRegex.test(formData.password)) {
+      setMessage(
+        'Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one special character.'
+      );
+      return;
+    }
+
     try {
       const response = await fetch('http://localhost:5000/api/users/register', {
         method: 'POST',
@@ -37,8 +47,8 @@ const SignUp = () => {
       const data = await response.json();
 
       if (response.ok) {
-        dispatch(loginSuccess(data.user)); // Store user in Redux after signup
-        navigate('/home'); // Redirect to homepage
+        setMessage("Please check email for your verification code");
+        navigate('/verify'); // Redirect to homepage
       } else {
         setMessage(data.message || 'Registration failed');
       }
