@@ -20,6 +20,13 @@ const SignUp = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
 
+    const emailRegex = /@(yorku\.ca|my\.yorku\.ca)$/;
+
+    if (!emailRegex.test(formData.email)) {
+      setMessage('Email must end with @yorku.ca or @my.yorku.ca');
+      return;
+    }
+
     try {
       const response = await fetch('http://localhost:5000/api/users/register', {
         method: 'POST',
