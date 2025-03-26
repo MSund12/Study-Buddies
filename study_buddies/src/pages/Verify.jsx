@@ -33,7 +33,7 @@ const VerifyPage = () => {
         setMessage('Verification successful!');
         // Optionally, navigate the user to home or login after a short delay
         setTimeout(() => {
-          navigate('/home'); // Or use '/login' if that makes more sense
+          navigate('/signin'); // Or use '/login' if that makes more sense
         }, 1500);
       } else {
         setMessage(data.message || 'Verification failed');
