@@ -53,10 +53,10 @@ const VerifyPage = () => {
   return (
     <div className="starter-container">
       <Header currentUser={currentUser} />
-      <RedShape/>
-      <PinkShape/>
-      <PurpleShape/>
-      <h2 className='title'>Verify Your Account</h2>
+      <RedShape color='#449AA9'/>
+      <PurpleShape color='#8F2F9D'/>
+      <PinkShape color="#61B961"/>
+      <h2 className='title'>Verify <span>Your </span> Account</h2>
       <form onSubmit={handleVerify} className='form' >
         <div className="email-input">
           <label htmlFor="email">
@@ -86,7 +86,7 @@ const VerifyPage = () => {
             required
           />
         </div>
-        <button type="submit">
+        <button className="button"type="submit">
           Verify Account
         </button>
       </form>
