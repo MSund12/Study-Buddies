@@ -66,15 +66,58 @@ const SchedulePage = () => {
   }
 
   return (
-    <div className="padding-container">
+    <div className="starter-container">
       <Header currentUser={currentUser} />
       <RedShape color="#58C8D7" />
       <PurpleShape color="#E6487F"/>
       <PinkShape color="#F6960A"/>
-      <div className="header-container">
-        <a href="/" className="back-button">&larr; Back</a>
-        <h1>Schedule Viewer</h1>
-      </div>
+
+      <nav className="buttons-container-home">
+        <a href="#" className="buttons">Courses</a>
+
+        <a
+          href="#"
+          className="buttons"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate('/group-finder');
+          }}
+        >
+          Study Groups
+        </a>
+
+        <a
+          href="#"
+          className="buttons"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate('/chat');
+          }}
+        >
+          Chats
+        </a>
+
+        <a
+          href="#"
+          className="buttons"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate('/schedule');
+          }}
+        >
+          Schedules
+        </a>
+
+        <a 
+        href="#" 
+        className="buttons"
+        onClick={(e) => {e.preventDefault();
+            navigate('/book')
+        }}
+        >Book a Room</a>
+      </nav>
+        
+      <h1 className='title'>Schedule Viewer</h1>
       <div className="filter-container">
         <form onSubmit={handleSubmit}>
           <input
