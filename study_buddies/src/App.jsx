@@ -7,7 +7,7 @@ import HomePage from './pages/HomePage';
 import StarterPage from './pages/StarterPage';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
-
+import BookRoom from './pages/BookRoom';
 import Verify from './pages/Verify';
 import Header from './Header';
 
@@ -17,6 +17,7 @@ import './App.css';
 import CreateGroupPage from './pages/CreateGroupPage';
 import GroupChatSidebar from './pages/GroupChatSidebar';
 import GroupFinderPage from './pages/GroupFinderPage';
+import { current } from '@reduxjs/toolkit';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const App = () => {
         <Route path="/starter" element={<StarterPage />} />
         <Route path="/create-group" element={<CreateGroupPage />} />
         <Route path="/group-finder" element={<GroupFinderPage />} />
+        <Route path="/book" element={<BookRoom currentUser={currentUser}/>}/>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </div>
