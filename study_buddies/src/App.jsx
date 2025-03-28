@@ -17,6 +17,7 @@ import './App.css';
 import CreateGroupPage from './pages/CreateGroupPage';
 import GroupChatSidebar from './pages/GroupChatSidebar';
 import GroupFinderPage from './pages/GroupFinderPage';
+import RoomBooking from './pages/RoomBooking';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const App = () => {
         <Route path="/starter" element={<StarterPage />} />
         <Route path="/create-group" element={<CreateGroupPage />} />
         <Route path="/group-finder" element={<GroupFinderPage />} />
+        <Route path="/book" element={<RoomBooking />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </div>
