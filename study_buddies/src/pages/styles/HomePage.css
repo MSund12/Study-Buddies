@@ -32,6 +32,15 @@ body {
     gap: 3vw;
     white-space: nowrap;
   }
+
+  .buttons{
+    text-decoration: none;
+  }
+
+  .buttons:hover{
+    color: blue;
+    opacity: 0.6;
+  }
   
   .search-container{
     position: relative;

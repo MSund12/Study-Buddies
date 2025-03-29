@@ -107,29 +107,8 @@ const HomePage = () => {
         >Book a Room</a>
       </nav>
 
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Search courses..."
-          className="search-bar"
-        />
-      </div>
 
-      <div className="placeholder-container">
-        <div className="placeholder-box">Placeholder 1</div>
-        <div className="placeholder-box">Placeholder 2</div>
-        <div className="placeholder-box">Placeholder 3</div>
-        <div className="placeholder-box">Placeholder 4</div>
-        <div className="placeholder-box">Placeholder 5</div>
-        <div className="placeholder-box">Placeholder 6</div>
-      </div>
-
-      <button
-        className="circular-button"
-        onClick={() => navigate('/create-group')}
-      >
-        Create a Group
-      </button>
+    
     </div>
   );
 };

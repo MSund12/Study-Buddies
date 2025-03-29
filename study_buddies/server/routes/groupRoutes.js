@@ -16,13 +16,15 @@ router.post('/create', async (req, res) => {
 
     await newGroup.save();
 
+    console.log("Group Created:", newGroup);
+
     res.status(201).json({
       message: 'Group created successfully!',
       group: newGroup
     });
   } catch (error) {
     console.error('Error creating group:', error);
-    res.status(500).json({ message: 'Failed to create group. Please try again later.' });
+    res.status(500).json({ message: 'Failed to create group' });
   }
 });
 
@@ -32,10 +34,10 @@ router.get('/', async (req, res) => {
 
   try {
     const query = search
-      ? { 
+      ? {
           $or: [
             { groupName: { $regex: search, $options: 'i' } }, // Search by group name
-            { course: { $regex: search, $options: 'i' } }     // Search by course code
+            { course: { $regex: search, $options: 'i' } }      // Search by course code
           ]
         }
       : {};
@@ -43,11 +45,13 @@ router.get('/', async (req, res) => {
     const sortOption = sortOrder === 'asc' ? 1 : -1;
 
     const groups = await Group.find(query)
-      .sort({ course: sortOption })          // Sorting logic
-      .skip((page - 1) * limit)              // Pagination logic
-      .limit(parseInt(limit));               // Limit for pagination
+      .sort({ course: sortOption })      // Sorting logic
+      .skip((page - 1) * limit)          // Pagination logic
+      .limit(parseInt(limit));          // Limit for pagination
 
-    const totalGroups = await Group.countDocuments(query);  // For total count of matched groups
+    const totalGroups = await Group.countDocuments(query); // For total count of matched groups
+
+    console.log("Groups Fetched:", groups);
 
     res.status(200).json({
       totalGroups,

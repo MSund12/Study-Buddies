@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector} from 'react-redux';
+import RedShape from './components/RedShape';
+import PinkShape from './components/PinkShape';
+import PurpleShape from './components/PurpleShape';
+import "./styles/Verify.css";
+import Header from '../Header';
 
 const VerifyPage = () => {
+  const currentUser = useSelector((state) => state.auth.currentUser);
   const [formData, setFormData] = useState({
     email: '',
     verificationCode: '',
@@ -33,7 +40,7 @@ const VerifyPage = () => {
         setMessage('Verification successful!');
         // Optionally, navigate the user to home or login after a short delay
         setTimeout(() => {
-          navigate('/home'); // Or use '/login' if that makes more sense
+          navigate('/signin'); // Or use '/login' if that makes more sense
         }, 1500);
       } else {
         setMessage(data.message || 'Verification failed');
@@ -44,11 +51,15 @@ const VerifyPage = () => {
   };
 
   return (
-    <div className="verify-container" style={{ textAlign: 'center', marginTop: '50px' }}>
-      <h2>Verify Your Account</h2>
-      <form onSubmit={handleVerify} style={{ maxWidth: '400px', margin: '0 auto' }}>
-        <div style={{ marginBottom: '15px' }}>
-          <label htmlFor="email" style={{ display: 'block', marginBottom: '5px' }}>
+    <div className="starter-container">
+      <Header currentUser={currentUser} />
+      <RedShape color='#449AA9'/>
+      <PurpleShape color='#8F2F9D'/>
+      <PinkShape color="#61B961"/>
+      <h2 className='title'>Verify <span>Your </span> Account</h2>
+      <form onSubmit={handleVerify} className='form' >
+        <div className="email-input">
+          <label htmlFor="email">
             Email
           </label>
           <input
@@ -59,10 +70,9 @@ const VerifyPage = () => {
             value={formData.email}
             onChange={handleChange}
             required
-            style={{ width: '100%', padding: '8px' }}
           />
         </div>
-        <div style={{ marginBottom: '15px' }}>
+        <div className='code-input'>
           <label htmlFor="verificationCode" style={{ display: 'block', marginBottom: '5px' }}>
             Verification Code
           </label>
@@ -74,14 +84,13 @@ const VerifyPage = () => {
             value={formData.verificationCode}
             onChange={handleChange}
             required
-            style={{ width: '100%', padding: '8px' }}
           />
         </div>
-        <button type="submit" style={{ padding: '10px 20px' }}>
+        <button className="button"type="submit">
           Verify Account
         </button>
       </form>
-      {message && <p style={{ marginTop: '20px', color: 'green' }}>{message}</p>}
+      {message && <p className='errorMessage'>{message}</p>}
     </div>
   );
 };
