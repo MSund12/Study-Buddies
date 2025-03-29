@@ -21,6 +21,11 @@ body {
   justify-content: center;
 }
 
+.create-group-container{
+  position: relative;
+  top: 10vh;
+}
+
 .status-message {
   position: fixed;
   bottom: 20px;
