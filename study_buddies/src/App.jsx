@@ -44,7 +44,7 @@ const App = () => {
         <Route path="/starter" element={<StarterPage />} />
         <Route path="/create-group" element={<CreateGroupPage />} />
         <Route path="/group-finder" element={<GroupFinderPage />} />
-        <Route path="/book" element={<RoomBooking />} />
+        <Route path="/book" element={<RoomBooking currentUser={currentUser}/>} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </div>
