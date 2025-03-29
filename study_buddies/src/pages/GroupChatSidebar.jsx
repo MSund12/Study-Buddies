@@ -1,7 +1,15 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import { FaPlus, FaUsers, FaSpinner } from "react-icons/fa";
+import { logout } from '../features/authSlice';
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { io } from "socket.io-client";
+import "./styles/GroupChatSidebar.css";
+import RedShape from './components/RedShape';
+import PinkShape from './components/PinkShape';
+import PurpleShape from './components/PurpleShape';
+import Header from '../Header';
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
@@ -14,6 +22,14 @@ const GroupChatSidebar = ({ currentUser, onSelectGroup }) => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newGroupName, setNewGroupName] = useState("");
   const [socket, setSocket] = useState(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Handle logout
+  const handleSignOut = () => {
+      dispatch(logout());
+      navigate('/signin');
+    };
 
   // Initialize WebSocket connection
   useEffect(() => {
@@ -23,6 +39,8 @@ const GroupChatSidebar = ({ currentUser, onSelectGroup }) => {
     setSocket(newSocket);
     return () => newSocket.disconnect();
   }, []);
+
+
 
   // WebSocket listeners
   useEffect(() => {
@@ -115,7 +133,70 @@ const GroupChatSidebar = ({ currentUser, onSelectGroup }) => {
   };
 
   return (
-    <div className="group-chat-sidebar">
+    <div className="starter-container">
+      <Header currentUser={currentUser} />
+
+      {currentUser && (
+        <div className="signout-container">
+          <button
+            className="signout-button"
+            onClick={handleSignOut}
+          >
+            Sign Out
+          </button>
+        </div>
+      )}
+
+      <RedShape color="#1EE1A8" />
+      <PinkShape />
+      <PurpleShape />
+
+      <nav className="buttons-container-home">
+        <a href="#" className="buttons">Courses</a>
+
+        <a
+          href="#"
+          className="buttons"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate('/group-finder');
+          }}
+        >
+          Study Groups
+        </a>
+
+        <a
+          href="#"
+          className="buttons"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate('/chat');
+          }}
+        >
+          Chats
+        </a>
+
+        <a
+          href="#"
+          className="buttons"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate('/schedule');
+          }}
+        >
+          Schedules
+        </a>
+
+        <a 
+        href="#" 
+        className="buttons"
+        onClick={(e) => {e.preventDefault();
+            navigate('/book')
+        }}
+        >Book a Room</a>
+      </nav>
+
+
       <div className="sidebar-header">
         <h2>
           <FaUsers /> Group Chats
