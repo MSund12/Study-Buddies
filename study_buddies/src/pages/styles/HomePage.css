@@ -94,30 +94,51 @@ body {
   }
 
 /* --- UPDATED PLACEHOLDER BOX --- */
-  .placeholder-box{
-    /* flex: 1 1 calc(33.33%); */ /* Old value */
-    /* max-width: 23%; */ /* Old value */
-    flex: 1 1 250px; /* Allow growing/shrinking around a 250px base */
-    max-width: 300px; /* Set a max width */
-    min-width: 200px; /* Set a min width */
-    display: flex;
-    /* --- Added for centering --- */
-    align-items: center; /* Vertical centering */
-    justify-content: center; /* Horizontal centering */
-    text-align: center; /* Ensure text itself centers if it wraps */
-    /* --- End centering --- */
-    height: 200px; /* Adjusted height */
-    background-color:#DE3838;
-    /* padding-bottom: 1vh; */ /* Removed padding */
-    border-radius: 10px; /* Add slightly rounded corners */
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.1); /* Add subtle shadow */
-    /* --- Text styles --- */
-    color: white;
-    font-size: 1.5em; /* Larger font size */
-    font-weight: bold;
-    padding: 15px; /* Add padding inside the box */
-    box-sizing: border-box;
-  }
+  /* HomePage.css */
+
+/* Ensure styles apply correctly to the button element */
+.placeholder-box {
+  /* --- Keep existing styles for layout and appearance --- */
+  flex: 1 1 250px;
+  max-width: 300px;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 200px;
+  background-color: #DE3838; /* Keep red background */
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  padding: 15px;
+  box-sizing: border-box;
+
+  /* --- Text styles --- */
+  color: white; /* Keep white text */
+  font-size: 1.5em;
+  font-weight: bold;
+  font-family: inherit; /* Inherit font from body/container */
+
+  /* --- Add/Ensure styles for BUTTON behavior --- */
+  border: none; /* Remove default button border */
+  cursor: pointer; /* Show pointer on hover */
+  transition: transform 0.2s ease, background-color 0.2s ease; /* Add transition */
+}
+
+.placeholder-box:hover {
+  /* Optional: Add hover effect */
+  background-color: #C93030; /* Darker red */
+  transform: translateY(-2px); /* Slight lift effect */
+}
+
+.placeholder-box:focus {
+  /* Optional: Improve focus outline for accessibility */
+  outline: 2px solid blue;
+  outline-offset: 2px;
+}
+
+/* Other styles (.placeholder-container, etc.) remain the same */
+/* ... */
 
   .circular-button {
     position: fixed; /* Keeps button in place */
