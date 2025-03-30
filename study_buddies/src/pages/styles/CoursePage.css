@@ -1,0 +1,196 @@
+/* src/pages/styles/CoursePage.css */
+
+/* --- Reused/Adapted Styles from HomePage.css --- */
+
+/* Apply to the main container div in CoursePage.jsx if needed */
+/* .course-page-container inherits from .starter-container if used */
+.course-page-container {
+    /* Add specific overrides if needed, otherwise relies on .starter-container */
+    padding-bottom: 100px; /* Ensure space for pagination/button */
+  }
+  
+  /* Container for the group boxes */
+  .placeholder-container {
+    margin-top: 3vh;
+    padding: 0 5%;
+    gap: 25px; /* Space between group boxes */
+    width: 90%;
+    max-width: 1200px;
+    justify-content: center; /* Center boxes if fewer than 3 */
+    /* Use space-around if you prefer space on sides for full rows */
+    /* justify-content: space-around; */
+    display: flex;
+    flex-wrap: wrap;
+    z-index: 5;
+    min-height: 250px; /* Minimum height to prevent collapse when empty */
+  }
+  
+  /* Styling for each group box (now a DIV) */
+  .placeholder-box.group-box { /* Target specifically */
+    flex: 1 1 250px; /* Grow/shrink around 250px base */
+    max-width: 300px; /* Max width prevents boxes getting too large */
+    min-width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 180px; /* Adjusted height for group info */
+    background-color: #DE3838; /* Red background */
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    padding: 15px;
+    box-sizing: border-box;
+    color: white;
+    font-family: 'Potta One', cursive; /* Keep font if desired */
+    cursor: pointer; /* Indicate it's clickable */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden; /* Hide potential text overflow */
+  }
+  
+  .placeholder-box.group-box:hover {
+    transform: translateY(-3px); /* Lift effect on hover */
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.15);
+  }
+  
+  .placeholder-box.group-box:focus {
+    /* Basic focus style for accessibility on the div */
+    outline: 2px solid blue;
+    outline-offset: 2px;
+  }
+  
+  
+  /* Style for the content wrapper inside the group box */
+  .group-box-content {
+    display: flex;
+    flex-direction: column; /* Stack name and members vertically */
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Space between name and members */
+    width: 100%;
+  }
+  
+  .group-name {
+    font-size: 1.2em; /* Adjust size */
+    font-weight: bold;
+    word-break: break-word; /* Wrap long group names */
+    line-height: 1.2;
+  }
+  
+  .group-members {
+    font-size: 0.9em; /* Adjust size */
+    font-weight: normal;
+    opacity: 0.9;
+  }
+  
+  /* Circular Create Button (copied from HomePage.css) */
+  .circular-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 150px;
+    height: 150px;
+    background-color: #1E90FF; /* Example blue color */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease-in-out, background-color 0.2s ease;
+    z-index: 100;
+    padding: 10px; /* Add padding for text wrapping */
+    box-sizing: border-box;
+    line-height: 1.2; /* Improve text wrapping */
+  }
+  
+  .circular-button:hover {
+    transform: scale(1.05);
+    background-color: #1C86EE; /* Darker blue on hover */
+  }
+  
+  /* Error message (copied from HomePage.css/shared styles) */
+  .error-message {
+    color: #D8000C;
+    background-color: #FFD2D2;
+    border: 1px solid #D8000C;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 4px;
+    text-align: center;
+    width: 80%;
+    max-width: 600px;
+  }
+  
+  /* Loading/No Groups Messages */
+  .loading-message, .no-groups-message {
+      width: 100%; /* Span full container width */
+      text-align: center;
+      font-size: 1.1em;
+      color: #555;
+      padding: 40px 20px;
+  }
+  
+  /* --- New Styles Specific to CoursePage.jsx --- */
+  
+  .course-page-header {
+    text-align: center;
+    margin: 3vh 0 4vh 0; /* Adjust vertical spacing */
+    position: relative; /* Keep if shapes need to go behind */
+    z-index: 5;
+  }
+  
+  .course-page-header h1 {
+    margin-bottom: 10px;
+    font-size: 2em; /* Adjust title size */
+    color: #333; /* Example color */
+  }
+  
+  .course-page-header .back-link {
+    color: #005fff; /* Example link color */
+    text-decoration: underline;
+    font-size: 0.9em;
+  }
+  
+  /* Pagination Controls Styles */
+  .pagination-controls {
+    margin-top: 40px; /* Space above pagination */
+    margin-bottom: 20px; /* Space below pagination */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    z-index: 5; /* Ensure above background shapes */
+    width: 100%;
+  }
+  
+  .pagination-controls button {
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background-color: #e9e9ed; /* Light grey */
+      border: 1px solid #caced1; /* Subtle border */
+      border-radius: 4px;
+      color: #333;
+      transition: background-color 0.2s ease;
+  }
+  
+  .pagination-controls button:hover:not(:disabled) {
+      background-color: #d8dadf; /* Darker grey */
+  }
+  
+  .pagination-controls button:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+      background-color: #f5f5f5; /* Lighter disabled look */
+  }
+  
+  .pagination-controls span {
+      font-weight: bold;
+      font-size: 0.95rem;
+      color: #444;
+  }
