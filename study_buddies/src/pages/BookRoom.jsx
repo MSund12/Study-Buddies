@@ -208,51 +208,29 @@ const BookRoom = () => {
         setSelectedDuration(parseInt(event.target.value, 10));
     };
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        setError('');
-        setSuccessMessage('');
+    // Inside BookRoom.jsx -> handleSubmit function
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  setError('');
+  setSuccessMessage('');
 
-        if (!currentUser || !token) { setError('You must be logged in to book.'); return; }
-        if (!selectedStartTime || !isValid(selectedStartTime)) { setError('Please select a valid start time.'); return; }
-        if (!selectedDuration) { setError('Please select a duration.'); return; }
+  // ***** ADD LOGS *****
+  console.log('--- handleSubmit ---');
+  console.log('Value of currentUser:', currentUser);
+  console.log('Value of token:', token);
+  // ***** END LOGS *****
 
-        const finalEndTime = addMinutes(selectedStartTime, selectedDuration);
-        if (!isValid(finalEndTime)){ setError('Calculated end time is invalid.'); return; }
-        if (isAfter(finalEndTime, bookingEndTimeLimit)) { setError(`Booking must end by ${format(bookingEndTimeLimit, 'p')}.`); return; }
+  if (!currentUser || !token) {
+      console.error('!!! Frontend Auth Check Failed !!!'); // Add log here too
+      setError('You must be logged in to book.');
+      return;
+  }
 
-        setIsSubmitting(true);
-        try {
-            const payload = {
-                 roomName: ROOM_NAME,
-                 startTime: selectedStartTime.toISOString(),
-                 endTime: finalEndTime.toISOString(),
-            };
-            // Uses the corrected API_BASE_URL
-            const response = await axios.post(`${API_BASE_URL}/bookings`, payload, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+  console.log('Frontend auth check passed. Proceeding to API call...'); // Log success
 
-            setSuccessMessage(`Room booked: ${format(selectedStartTime, 'PPP p')} - ${format(finalEndTime, 'p')}`);
-            setSelectedStartTime(null);
-
-            // Refresh data after successful booking using the correct base URL
-            await fetchAllBookingsForDay(selectedDate);
-            await fetchMyBookings();
-
-        } catch (err) {
-            console.error("Booking submission failed:", err.response?.data || err.message);
-             if (err.code === 'ERR_NETWORK' || err.message === 'Network Error') {
-                 setError('Connection failed. Ensure the backend server is running on port 5000.');
-             } else if (err.response?.status === 401 || err.response?.status === 403) {
-                 setError(err.response?.data?.message || 'Authentication failed. Please log in again.');
-             } else {
-                setError(err.response?.data?.message || 'Booking failed. Slot may be taken or daily limit exceeded.');
-             }
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
+  setIsSubmitting(true);
+  // ... rest of the function ...
+};
 
     // --- Date Picker Filter ---
     const isWeekday = (date) => {

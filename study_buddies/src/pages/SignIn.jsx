@@ -32,7 +32,7 @@ const SignIn = () => {
       const data = await response.json();
 
       if (response.ok) {
-        dispatch(loginSuccess(data.user)); // Update Redux store with logged-in user
+        dispatch(loginSuccess({ user: data.user, token: data.token })); // Update Redux store with logged-in user
         navigate('/home'); // Redirect to homepage
       } else {
         setMessage(data.message || 'Login failed');
