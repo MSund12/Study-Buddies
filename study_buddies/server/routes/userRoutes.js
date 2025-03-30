@@ -1,3 +1,4 @@
+// routes/userRoutes.js
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -10,7 +11,7 @@ const router = express.Router();
 const generateToken = (res, userId) => {
   const token = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
   res.cookie("token", token, {
-    httpOnly: true, 
+    httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     maxAge: 60 * 60 * 1000, // 1 hour
@@ -28,32 +29,27 @@ router.post('/register', async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
 
-    // Check if user already exists in the permanent collection
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ message: "User already exists" });
 
-    // Also check if a registration is pending in the temporary collection
     let tempUser = await TempUser.findOne({ email });
     if (tempUser) {
-      return res.status(400).json({ 
-        message: "A registration is already pending. Please check your email for the verification code." 
+      return res.status(400).json({
+        message: "A registration is already pending. Please check your email for the verification code."
       });
     }
 
-    // Hash the password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Generate a verification code and its expiration (1 hour)
     const verificationCode = generateVerificationCode();
-    const codeExpiry = new Date(Date.now() + 60 * 60 * 1000); // 1 hour from now
+    const codeExpiry = new Date(Date.now() + 60 * 60 * 1000);
 
-    // Create new temporary user record
-    tempUser = new TempUser({ 
-      firstName, 
-      lastName, 
-      email, 
-      password: hashedPassword, 
+    tempUser = new TempUser({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
       VerifCode: verificationCode,
       CodeExpiry: codeExpiry
     });
@@ -63,8 +59,8 @@ router.post('/register', async (req, res) => {
       message: "User registered successfully! A verification code has been sent to your email."
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
+    console.error("Registration Error:", err);
+    res.status(500).json({ message: "Server error during registration" });
   }
 });
 
@@ -72,24 +68,20 @@ router.post('/register', async (req, res) => {
 router.post('/verify', async (req, res) => {
   try {
     const { email, verificationCode } = req.body;
-    
-    // Find the temporary user record
+
     const tempUser = await TempUser.findOne({ email });
     if (!tempUser) {
       return res.status(400).json({ message: "No pending registration for this email." });
     }
 
-    // Check that the provided code matches the stored verification code
     if (tempUser.VerifCode !== verificationCode) {
       return res.status(400).json({ message: "Invalid verification code." });
     }
-    
-    // Check that the code has not expired
+
     if (tempUser.CodeExpiry < Date.now()) {
       return res.status(400).json({ message: "Verification code expired. Please register again." });
     }
 
-    // Create the permanent user and mark as verified
     const newUser = new User({
       firstName: tempUser.firstName,
       lastName: tempUser.lastName,
@@ -99,10 +91,8 @@ router.post('/verify', async (req, res) => {
     });
     await newUser.save();
 
-    // Remove the temporary registration record
     await TempUser.deleteOne({ email });
 
-    // Generate JWT Token for the verified user
     const token = generateToken(res, newUser._id);
 
     res.status(201).json({
@@ -116,8 +106,8 @@ router.post('/verify', async (req, res) => {
       }
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
+    console.error("Verification Error:", err);
+    res.status(500).json({ message: "Server error during verification" });
   }
 });
 
@@ -125,15 +115,15 @@ router.post('/verify', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    
-    // Only allow login for verified users in the permanent collection
+
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "User not found or not verified. Please sign up and verify your account." });
+    if (!user || !user.isVerified) {
+         return res.status(400).json({ message: "User not found or not verified. Please sign up and verify your account." });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
-    // Generate JWT Token
     const token = generateToken(res, user._id);
 
     res.json({
@@ -147,8 +137,8 @@ router.post('/login', async (req, res) => {
       }
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
+    console.error("Login Error:", err);
+    res.status(500).json({ message: "Server error during login" });
   }
 });
 
@@ -158,46 +148,44 @@ router.get('/profile', authenticateToken, async (req, res) => {
     const user = await User.findById(req.user.userId).select('-password');
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    res.json(user);
+    res.json({
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        isVerified: user.isVerified,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+    });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
+    console.error("Get Profile Error:", err);
+    res.status(500).json({ message: "Server error fetching profile" });
   }
 });
 
 // ---------- JWT Authentication Middleware ----------
 export function authenticateToken(req, res, next) {
-  console.log(`>>> authenticateToken MIDDLEWARE executing for: ${req.method} ${req.originalUrl}`); // Log entry + URL
   const authHeader = req.header("Authorization");
-  console.log(`>>> Auth Header present: ${!!authHeader}`); // Log if header exists
-
   const token = authHeader?.split(" ")[1];
 
   if (!token) {
-    console.log(">>> authenticateToken: No token found. Sending 401."); // Log exit
     return res.status(401).json({ message: "Access denied, no token provided" });
   }
 
   try {
-    console.log(">>> authenticateToken: Verifying token..."); // Log before verify
-    // Ensure JWT_SECRET is loaded correctly from .env
     if (!process.env.JWT_SECRET) {
-         console.error("!!! FATAL: JWT_SECRET environment variable not set!");
+         console.error("!!! FATAL: JWT_SECRET environment variable not set!"); // Keep
          return res.status(500).json({ message: "Internal server error: JWT configuration missing." });
     }
     const verified = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(">>> authenticateToken: Token verified. Payload:", verified); // Log success
-    req.user = verified; // Attach payload ({ userId: ... })
-    console.log(">>> authenticateToken: Calling next()..."); // Log before next()
-    next(); // Proceed to the next middleware/route handler
+    req.user = verified;
+    next();
   } catch (err) {
-    console.error("!!! authenticateToken: JWT Verification Error:", err.name, err.message); // Log specific error
-    console.log(">>> authenticateToken: Invalid token. Sending 403."); // Log exit
-    // Handle specific errors if needed (e.g., TokenExpiredError)
+    console.error("!!! authenticateToken: JWT Verification Error:", err.name, err.message); // Keep
     const message = err.name === 'TokenExpiredError' ? 'Token expired' : 'Invalid token';
     return res.status(403).json({ message: message });
   }
 }
 
 export default router;
-
