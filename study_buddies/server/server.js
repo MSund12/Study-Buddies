@@ -11,7 +11,7 @@ import userRoutes from "./routes/userRoutes.js";
 import courseRoutes from "./routes/courseRoutes.js";
 import groupRoutes from "./routes/groupRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
-// import chatRoutes from "./routes/chatRoutes.js";
+// import chatRoutes from "./routes/chatRoutes.js"; // Assuming chatRoutes might be added later
 
 dotenv.config();
 const app = express();
@@ -27,10 +27,11 @@ const allowedOrigins = [
 
 const corsOptions = {
   origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl, Postman) OR origins in our allowed list
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
-      console.error(`CORS Error: Origin ${origin} not allowed.`); // Keep essential CORS error log
+      console.error(`CORS Error: Origin ${origin} not allowed.`);
       callback(new Error("Not allowed by CORS"));
     }
   },
@@ -63,11 +64,11 @@ const io = new Server(server, {
 app.use("/api/users", userRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/groups", groupRoutes);
-app.use("/api/bookings", bookingRoutes); // Mounts all routes from bookingRoutes.js under /api/bookings
+app.use("/api/bookings", bookingRoutes);
 // app.use("/api/chat", chatRoutes);
 
-// Stream Chat server initialization (if used)
-// Ensure API_KEY and API_SECRET are correctly set in your .env file
+// --- Stream Chat Initialization & Token Endpoint (Merged) ---
+// Use conditional check for API keys and include token endpoint
 if (process.env.API_KEY && process.env.API_SECRET) {
     const serverClient = StreamChat.getInstance(process.env.API_KEY, process.env.API_SECRET);
 
@@ -78,26 +79,29 @@ if (process.env.API_KEY && process.env.API_SECRET) {
         return res.status(400).send("userId is required");
       }
       // IMPORTANT: Add validation/authentication here in a real app
+      // to ensure only authorized users can get tokens for specific user IDs.
       try {
         const token = serverClient.createToken(userId);
         res.send({ token });
       } catch (error) {
-        console.error("Error creating Stream token:", error); // Keep essential error log
+        console.error("Error creating Stream token:", error);
         res.status(500).send("Error generating token");
       }
     });
 } else {
+     // Warn if keys are missing, so Stream Chat features won't silently fail
      console.warn("Stream Chat API Key or Secret not found in environment variables. Stream Chat features disabled.");
 }
+// --- End Stream Chat ---
 
 
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI, {
-    // Add any newer recommended options if needed, otherwise leave empty
+    // Add any newer recommended Mongoose options here if needed, otherwise leave empty
   })
-  .then(() => console.log("MongoDB Connected")) // Keep connection logs
-  .catch((err) => console.error("MongoDB Connection Failed:", err)); // Keep connection error logs
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.error("MongoDB Connection Failed:", err));
 
 // Optional: Basic Socket.io connection listener
 // io.on("connection", (socket) => {
@@ -109,4 +113,4 @@ mongoose
 
 // Define PORT and Start Server
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`)); // Keep server start log
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
