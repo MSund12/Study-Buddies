@@ -1,33 +1,48 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { sendMessage } from "../features/chatSlice"; // Import sendMessage only
-import Header from "../Header";
+import { useSelector } from 'react-redux';
+import Header from '../Header';
 import "./styles/GroupChatSidebar.css";
 
-export default function GroupChatSidebar({ username = "Anonymous", chatId = "test" }) {
+export default function GroupChatSidebar({ username = "Anonymous" }) {
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef(null);
-  const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.auth.currentUser);
+
+  // Load messages from localStorage when the component mounts
+  useEffect(() => {
+    const savedMessages = JSON.parse(localStorage.getItem("chatMessages"));
+    if (savedMessages) {
+      setMessages(savedMessages);
+    }
+  }, []);
+
+  // Save messages to localStorage whenever they change
+  useEffect(() => {
+    if (messages.length > 0) {
+      localStorage.setItem("chatMessages", JSON.stringify(messages));
+    }
+  }, [messages]);
+
+  const sendMessage = () => {
+    if (!input.trim()) return;
+
+    const newMessage = {
+      id: Date.now(),
+      user: username,
+      text: input,
+      timestamp: new Date().toISOString(),
+    };
+
+    // Using functional state update to avoid stale state
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+    setInput("");
+  };
 
   // Auto-scroll to the latest message
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, []);
-
-  const handleSendMessage = () => {
-    if (!input.trim()) return;
-
-    // Dispatch the sendMessage action
-    dispatch(sendMessage({
-      sender: currentUser.username,
-      receiver: username,
-      message: input,
-      chatId
-    }));
-
-    setInput(""); // Clear the input after sending
-  };
+  }, [messages]);
 
   return (
     <div className="starter-container1">
@@ -40,6 +55,16 @@ export default function GroupChatSidebar({ username = "Anonymous", chatId = "tes
             <span className="font-bold">Group Chat</span>
           </div>
 
+          {/* Message area */}
+          <div className="flex-1 p-2 overflow-y-auto border-b">
+            {messages.map((msg) => (
+              <div key={msg.id} className="mb-2 p-1 border rounded bg-gray-100">
+                <strong>{msg.user}:</strong> {msg.text}
+              </div>
+            ))}
+            <div ref={messagesEndRef} /> {/* Auto-scroll anchor */}
+          </div>
+
           {/* Input area */}
           <div className="p-2 flex">
             <input
@@ -48,16 +73,16 @@ export default function GroupChatSidebar({ username = "Anonymous", chatId = "tes
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type a message..."
-              onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
             />
             <button
-              onClick={handleSendMessage}
-              className="ml-2 bg-blue-600 text-white px-3 rounded hover:bg-blue-700"
+              onClick={sendMessage}
+              disabled={!input.trim()}
+              className={`ml-2 px-3 rounded ${input.trim() ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-gray-300 text-gray-500 cursor-not-allowed"}`}
             >
               Send
             </button>
           </div>
-          <div ref={messagesEndRef} /> {/* Auto-scroll anchor */}
         </div>
       </div>
     </div>
