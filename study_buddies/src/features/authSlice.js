@@ -1,45 +1,55 @@
-import { createSlice } from "@reduxjs/toolkit";
+// features/authSlice.js
+import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
-  // Initialize currentUser by trying to parse from localStorage
-  currentUser: (() => {
-    try {
-      return JSON.parse(localStorage.getItem("user")) || null;
-    } catch (error) {
-      console.error("Error reading user from localStorage:", error);
-      localStorage.removeItem("user"); // Clear corrupted item
-      localStorage.removeItem("token"); // Also clear token if user data is bad
-      return null;
+// Function to safely parse JSON from localStorage
+const safeJsonParse = (key) => {
+  try {
+    const item = localStorage.getItem(key);
+    return item ? JSON.parse(item) : null;
+  } catch (error) {
+    console.error(`Error reading or parsing ${key} from localStorage:`, error);
+    localStorage.removeItem(key); // Clear corrupted item
+    // Also clear associated items if one part is corrupted
+    if (key === 'user') {
+         localStorage.removeItem('token');
+    } else if (key === 'token'){
+         localStorage.removeItem('user');
     }
-  })(),
-  // Add token state if you want to manage it in Redux too (optional)
-  // token: localStorage.getItem('token') || null,
+    return null;
+  }
+};
+
+// Initialize state by safely reading from localStorage
+const initialState = {
+  currentUser: safeJsonParse('user') || null, // Safely parse user
+  token: localStorage.getItem('token') || null, // Get token (plain string, no parse needed)
 };
 
 const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {
+    // Expects action.payload to be { user: Object, token: string }
     loginSuccess: (state, action) => {
-      // Assuming action.payload is the user object
-      state.currentUser = action.payload;
-      localStorage.setItem("user", JSON.stringify(action.payload));
-      // Note: Token itself is stored directly in SignIn.jsx using localStorage.setItem('token', ...)
-      // If you wanted to store it in Redux state too:
-      // state.token = action.payload.token; // Assumes token is passed alongside user in action payload
+      // Ensure payload structure is correct before updating
+      if (action.payload && action.payload.user && action.payload.token) {
+          state.currentUser = action.payload.user;
+          state.token = action.payload.token;
+          // Store in localStorage
+          localStorage.setItem('user', JSON.stringify(action.payload.user));
+          localStorage.setItem('token', action.payload.token);
+      } else {
+          // Log an error if payload is incorrect - helps debugging
+          console.error("loginSuccess action received invalid payload:", action.payload);
+      }
     },
+    // Clears both state and localStorage
     logout: (state) => {
       state.currentUser = null;
-      // state.token = null; // Clear token from Redux state if managing it here
-      localStorage.removeItem("user");
-      // --- ADDED: Remove the token from localStorage ---
-      localStorage.removeItem("token");
-      // --- END ADDED ---
+      state.token = null; // Clear token from state
+      localStorage.removeItem('user');
+      localStorage.removeItem('token'); // Clear from storage
     },
-    // Optional: Action to explicitly set token in Redux state if needed elsewhere
-    // setToken: (state, action) => {
-    //    state.token = action.payload;
-    // }
   },
 });
 

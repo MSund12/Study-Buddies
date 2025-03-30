@@ -21,9 +21,8 @@ body {
   justify-content: center;
 }
 
-.create-group-container{
-  position: relative;
-  top: 10vh;
+.header-title{
+  bottom: 50vh;
 }
 
 .status-message {

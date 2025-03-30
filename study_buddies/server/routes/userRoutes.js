@@ -1,8 +1,9 @@
-import express from "express";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import User from "../models/User.js"; // Assuming this path is correct
-import TempUser from "../models/TempUser.js"; // Assuming this path is correct
+// routes/userRoutes.js
+import express from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js'; // Assuming paths are correct and models use ESM export
+import TempUser from '../models/TempUser.js';
 
 const router = express.Router();
 
@@ -11,15 +12,14 @@ const generateToken = (res, userId) => {
   const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
     expiresIn: "1h",
   });
-  // Note: Cookies are not typically read by fetch unless credentials are included
-  // Frontend might rely on storing token from response body instead.
+  // Note: Cookies may not be the primary auth method if frontend uses Authorization header.
   res.cookie("token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production", // should be true in production (HTTPS)
-    sameSite: "strict", // Consider 'Lax' if needed, 'strict' is more secure
+    sameSite: "strict", // 'strict' is more secure, consider 'Lax' only if necessary
     maxAge: 60 * 60 * 1000, // 1 hour
   });
-  return token;
+  return token; // Return token so it can be sent in response body
 };
 
 // Helper Function: Generate a 6-digit verification code
@@ -32,28 +32,22 @@ router.post("/register", async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
 
-    // Check if user already exists in the permanent collection
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ message: "User already exists" });
 
-    // Also check if a registration is pending in the temporary collection
     let tempUser = await TempUser.findOne({ email });
     if (tempUser) {
       return res.status(400).json({
-        message:
-          "A registration is already pending. Please check your email for the verification code.",
+        message: "A registration is already pending. Please check your email for the verification code."
       });
     }
 
-    // Hash the password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Generate a verification code and its expiration (1 hour)
     const verificationCode = generateVerificationCode();
     const codeExpiry = new Date(Date.now() + 60 * 60 * 1000); // 1 hour from now
 
-    // Create new temporary user record
     tempUser = new TempUser({
       firstName,
       lastName,
@@ -68,9 +62,7 @@ router.post("/register", async (req, res) => {
     console.log(`Verification code for ${email}: ${verificationCode}`); // Log for testing
 
     res.status(201).json({
-      message:
-        "User registration initiated! A verification code has been sent to your email (check console for testing).",
-      // In production, remove the code from the response/log
+      message: "User registration initiated! A verification code should be sent to your email (check console for testing).",
     });
   } catch (err) {
     console.error("Registration Error:", err);
@@ -91,15 +83,13 @@ router.post("/verify", async (req, res) => {
       });
     }
 
-    // Check that the provided code matches the stored verification code
     if (tempUser.VerifCode !== verificationCode) {
       return res.status(400).json({ message: "Invalid verification code." });
     }
 
     // Check that the code has not expired
     if (tempUser.CodeExpiry < Date.now()) {
-      // Optionally delete expired temp user here
-      await TempUser.deleteOne({ email });
+      await TempUser.deleteOne({ email }); // Clean up expired temp user
       return res
         .status(400)
         .json({ message: "Verification code expired. Please register again." });
@@ -114,27 +104,22 @@ router.post("/verify", async (req, res) => {
         .json({ message: "User already exists and is verified." });
     }
 
-    // Create the permanent user and mark as verified
     const newUser = new User({
       firstName: tempUser.firstName,
       lastName: tempUser.lastName,
       email: tempUser.email,
-      password: tempUser.password, // Use the hashed password from temp user
+      password: tempUser.password,
       isVerified: true,
     });
     await newUser.save();
 
-    // Remove the temporary registration record
     await TempUser.deleteOne({ email });
 
-    // Generate JWT Token for the verified user (optional after verification, user usually logs in next)
-    // const token = generateToken(res, newUser._id); // Or skip token generation here
-
+    // Standard flow: Verification successful, user should login next.
+    // No token generated here.
     res.status(201).json({
       message: "User verified successfully. Please proceed to login.",
-      // token, // Only include token if you want immediate login
       user: {
-        // Return minimal user info confirming verification
         id: newUser._id,
         firstName: newUser.firstName,
         lastName: newUser.lastName,
@@ -158,8 +143,7 @@ router.post("/login", async (req, res) => {
     // Check if user exists and is verified
     if (!user || !user.isVerified) {
       return res.status(400).json({
-        message:
-          "User not found or not verified. Please sign up and verify your account.",
+        message: "User not found or not verified. Please sign up and verify your account.",
       });
     }
 
@@ -177,7 +161,7 @@ router.post("/login", async (req, res) => {
       token, // Send token in response body
       user: {
         // Send user details needed by frontend
-        id: user._id, // Ensure frontend uses 'id'
+        id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
@@ -190,35 +174,40 @@ router.post("/login", async (req, res) => {
 });
 
 // ---------- JWT Authentication Middleware ----------
-// This middleware verifies the token sent (usually in the Authorization header)
-function authenticateToken(req, res, next) {
-  // Prefer Authorization header
-  let token = req.header("Authorization")?.split(" ")[1];
-
-  // Fallback to checking cookies if no header (adjust if needed)
-  if (!token) {
-    token = req.cookies?.token;
-  }
+// Exported for use in other route files (like bookingRoutes)
+export function authenticateToken(req, res, next) {
+  // Prioritize Authorization header
+  const authHeader = req.header("Authorization");
+  const token = authHeader?.split(" ")[1];
 
   if (!token) {
+    // If header fails, you could optionally check req.cookies.token here
+    // if your frontend might rely on cookies sometimes, but header is standard for APIs.
     return res
       .status(401)
       .json({ message: "Access denied, no token provided" });
   }
 
   try {
+     // Verify JWT_SECRET is loaded
+     if (!process.env.JWT_SECRET) {
+         console.error("!!! FATAL: JWT_SECRET environment variable not set!");
+         return res.status(500).json({ message: "Internal server error: JWT configuration missing." });
+     }
     // Verify the token
     const verified = jwt.verify(token, process.env.JWT_SECRET);
     // Add the verified user payload (which contains userId) to the request object
     req.user = verified; // req.user will contain { userId: '...', iat: ..., exp: ... }
     next(); // Proceed to the next middleware or route handler
   } catch (err) {
-    if (err.name === "TokenExpiredError") {
-      return res
-        .status(401)
-        .json({ message: "Token expired, please log in again" });
-    }
-    return res.status(403).json({ message: "Invalid or malformed token" });
+     console.error("!!! authenticateToken: JWT Verification Error:", err.name, err.message); // Keep essential error log
+     let message = "Invalid token";
+     if (err.name === "TokenExpiredError") {
+         message = "Token expired, please log in again";
+     }
+     // Use 401 for expired, 403 for invalid/malformed
+     const status = err.name === "TokenExpiredError" ? 401 : 403;
+     return res.status(status).json({ message: message });
   }
 }
 
@@ -231,7 +220,7 @@ router.get("/profile", authenticateToken, async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User profile not found" });
     }
-    // Return data in the format frontend expects (map _id to id if needed)
+    // Return data in the format frontend expects
     res.json({
       id: user._id,
       firstName: user.firstName,
@@ -248,8 +237,8 @@ router.get("/profile", authenticateToken, async (req, res) => {
   }
 });
 
-// ---------- NEW: User Search Route ----------
-// Added authenticateToken middleware to ensure only logged-in users can search
+// ---------- User Search Route ----------
+// Added authenticateToken middleware
 router.get("/search", authenticateToken, async (req, res) => {
   const searchQuery = req.query.query || "";
   const currentUserId = req.user.userId; // Get current user's ID from authenticated token
@@ -259,26 +248,22 @@ router.get("/search", authenticateToken, async (req, res) => {
   }
 
   try {
-    // Create a case-insensitive regex for searching
-    const queryRegex = new RegExp(searchQuery, "i");
+    const queryRegex = new RegExp(searchQuery, "i"); // Case-insensitive search
 
-    // Find users matching first name or last name, excluding the current user
     const users = await User.find({
       _id: { $ne: currentUserId }, // Exclude the user performing the search
       isVerified: true, // Only search verified users
       $or: [
-        // Match first OR last name
         { firstName: queryRegex },
         { lastName: queryRegex },
-        // Add { email: queryRegex } here if you want to search emails too
+        // { email: queryRegex }, // Uncomment to search emails too
       ],
     })
       .select("_id firstName lastName") // Select only necessary fields
-      .limit(10); // Limit the number of results
+      .limit(10); // Limit results
 
-    // Map the results to the format expected by the frontend { id, name }
     const results = users.map((user) => ({
-      id: user._id.toString(), // Ensure ID is a string
+      id: user._id.toString(), // Ensure ID is string
       firstName: user.firstName,
       lastName: user.lastName,
       name: `${user.firstName} ${user.lastName}`, // Combine name for display
@@ -290,6 +275,6 @@ router.get("/search", authenticateToken, async (req, res) => {
     res.status(500).json({ message: "Error searching for users" });
   }
 });
-// ---------- End NEW User Search Route ----------
+// ---------- End User Search Route ----------
 
-export default router;
+export default router; // Keep ESM export default

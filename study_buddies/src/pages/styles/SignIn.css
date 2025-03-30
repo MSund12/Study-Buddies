@@ -99,7 +99,7 @@
   }
 
   /* Error Message */
-.error-message {
+  .error-message {
   position:relative;
   top: 24vh;
   color: #DE3838;

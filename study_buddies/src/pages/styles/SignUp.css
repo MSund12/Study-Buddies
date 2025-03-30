@@ -72,7 +72,7 @@ body {
   
   /* Input Fields */
   .input-group input {
-    width: 20vw;
+    width: 40vh;
     padding: 1vh;
     border-color: transparent;
     border-radius: 5px;
@@ -102,7 +102,7 @@ body {
   }
   
   .input-group2 input {
-    width: 43vw;
+    width: 87vh;
     padding: 1vh;
     border-color: transparent;
     border-radius: 5px;
@@ -149,8 +149,6 @@ body {
     color: green;
     font-size: 1vw;
     margin-top: 1vh;
-    position: relative;
-    top: 18vh;
   }
   
   
