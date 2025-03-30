@@ -29,40 +29,41 @@ router.post('/create', async (req, res) => {
 });
 
 //  Get All Groups with Sorting, Search, and Pagination
-router.get('/', async (req, res) => {
-  const { sortOrder = 'asc', search = '', page = 1, limit = 10 } = req.query;
+router.get('/', async (req, res) => { // Assuming no auth for now
+  // ***** ADD THIS LOG AT THE VERY TOP *****
+  console.log(`--- GET /api/groups --- Received req.query:`, JSON.stringify(req.query, null, 2));
+  // ***** END ADDED LOG *****
+
+  // Destructure query parameters AFTER logging the raw query object
+  const { sortOrder = 'asc', search = '', course = '', page = 1, limit = 10 } = req.query;
 
   try {
-    const query = search
-      ? {
-          $or: [
-            { groupName: { $regex: search, $options: 'i' } }, // Search by group name
-            { course: { $regex: search, $options: 'i' } }      // Search by course code
-          ]
-        }
-      : {};
+    let query = {}; // Initialize empty query object
 
-    const sortOption = sortOrder === 'asc' ? 1 : -1;
+    // --- Filtering Logic ---
+    // This block is likely NOT being entered currently
+    if (course) {
+      const escapedCourse = escapeRegex(course.trim());
+      query = { course: { $regex: new RegExp('^' + escapedCourse + '$', 'i') } };
+      console.log(`Filtering by specific course (case-insensitive): "${course}"`); // You probably won't see this
+    } else if (search) {
+      // ... broad search logic ...
+      console.log(`Searching broadly for: "${search}"`);
+    } else {
+      // This block IS likely being entered
+      console.log(`No course or search filters applied. Query remains {}.`); // Added log here
+    }
+    // --- End Filtering Logic ---
 
-    const groups = await Group.find(query)
-      .sort({ course: sortOption })      // Sorting logic
-      .skip((page - 1) * limit)          // Pagination logic
-      .limit(parseInt(limit));          // Limit for pagination
+    // Log the final query object being used
+    console.log("Executing Group.find with query:", JSON.stringify(query));
 
-    const totalGroups = await Group.countDocuments(query); // For total count of matched groups
+    // ... Sorting/Pagination/DB Query ...
+    const groups = await Group.find(query) /* ... */ ;
+    console.log(`Found ${groups.length} groups matching query.`);
+    res.status(200).json({ /* ... response ... */ });
 
-    console.log("Groups Fetched:", groups);
-
-    res.status(200).json({
-      totalGroups,
-      totalPages: Math.ceil(totalGroups / limit),
-      currentPage: parseInt(page),
-      groups
-    });
-  } catch (error) {
-    console.error('Error fetching groups:', error);
-    res.status(500).json({ message: 'Failed to fetch groups' });
-  }
+  } catch (error) { /* ... error handling ... */ }
 });
 
 // ➤ Get a Single Group by ID
