@@ -21,17 +21,51 @@ body {
   justify-content: center;
 }
 
-  .sorting-controls{
-    position: relative;
-    top: 10vh;
-  }
+.buttons-container-home {
+  top: 4vh;
+  position: relative;
+  left: 20vh;
+  display: flex;
+  align-items: center;
+  gap: 3vw;
+  white-space: nowrap;
+}
 
-  .error-message{
-    color: black;
-  }
+.sorting-controls{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  top: 13vh;
+  gap: 2vh;
+}
 
-  .group-display{
-    position: absolute;
-    top: 25vh;
-    color: black;
-  }
+.sorting-controls label{
+  font-size: 1.5vw;
+  font-weight: bold;
+  font-family: 'Potta One', cursive;
+}
+
+.sorting-controls select{
+  width: 6vw;
+  padding: 6px;
+  border-radius: 20px;
+  font-family: 'Potta One', cursive;
+  font-weight: bold;
+  text-align: center;
+  font-size: 0.6vw;
+}
+  
+.loading-message{
+  top: 20vh;
+  position: relative;
+  color: black;
+  font-weight: bold;
+  font-size: 1vw;
+}
+
+.group-display{
+  position: relative;
+  top: 25vh;
+  color: black;
+}

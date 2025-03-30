@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../features/groupSlice';
+import { useNavigate } from 'react-router-dom';
 import "./styles/GroupFinderPage.css"
 import Header from '../Header';
+import RedShape from './components/RedShape';
+import PinkShape from './components/PinkShape';
+import PurpleShape from './components/PurpleShape';
 
 
 
 const GroupFinderPage = ({ onBack, onSelectGroup }) => {
   const currentUser = useSelector((state) => state.auth.currentUser);
+  const [showGroupFinder, setShowGroupFinder] = useState(false);
+  const [selectedGroup, setSelectedGroup] = useState(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { groups = [], loading, error } = useSelector((state) => state.groups); // Default groups to an empty array
 
   const [sortOrder, setSortOrder] = useState('asc');
@@ -17,6 +24,30 @@ const GroupFinderPage = ({ onBack, onSelectGroup }) => {
   useEffect(() => {
     dispatch(fetchGroups());
   }, [dispatch]);
+
+  const handleSignOut = () => {
+      dispatch(logout());
+      navigate('/starter');
+    };
+
+    if (selectedGroup) {
+      return (
+        <GroupPage
+          group={selectedGroup}
+          onBack={() => setSelectedGroup(null)}
+          currentUser={currentUser}
+        />
+      );
+    }
+  
+    if (showGroupFinder) {
+      return (
+        <GroupFinderPage
+          onBack={() => setShowGroupFinder(false)}
+          onSelectGroup={setSelectedGroup}
+        />
+      );
+    }
 
   // Sorting logic with a defensive array check
   const sortedGroups = Array.isArray(groups)
@@ -30,9 +61,68 @@ const GroupFinderPage = ({ onBack, onSelectGroup }) => {
     : [];
 
   return (
-    <div className="starting-container">
+    <div className="starter-container">
       <Header currentUser={currentUser} />
+      {/* Sign Out Button in Top Right */}
+      {currentUser && (
+        <div className="signout-container">
+          <button
+            className="signout-button"
+            onClick={handleSignOut}
+          >
+            Sign Out
+          </button>
+        </div>
+      )}
 
+      <RedShape color="#1EE1A8" />
+      <PinkShape />
+      <PurpleShape />
+
+      <nav className="buttons-container-home">
+        <a href="#" className="buttons">Courses</a>
+
+        <a
+          href="#"
+          className="buttons"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate('/group-finder');
+          }}
+        >
+          Study Groups
+        </a>
+
+        <a
+          href="#"
+          className="buttons"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate('/chat');
+          }}
+        >
+          Chats
+        </a>
+
+        <a
+          href="#"
+          className="buttons"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate('/schedule');
+          }}
+        >
+          Schedules
+        </a>
+
+        <a 
+        href="#" 
+        className="buttons"
+        onClick={(e) => {e.preventDefault();
+            navigate('/book')
+        }}
+        >Book a Room</a>
+      </nav>
       {/* Sorting Controls */}
       <div className="sorting-controls">
         <label>Sort by Course Code:</label>
@@ -43,8 +133,10 @@ const GroupFinderPage = ({ onBack, onSelectGroup }) => {
       </div>
 
       {/* Display Loading or Error States */}
-      {loading && <p>Loading groups...</p>}
-      {error && <p className="error-message">{error}</p>}
+      <div className='loading-message'>
+        {loading && <p>Loading groups...</p>}
+        {error && <p>{error}</p>}
+      </div>
 
       {/* Group Display */}
       <div className="group-display">
