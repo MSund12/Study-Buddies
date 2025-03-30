@@ -21,7 +21,7 @@ const HomePage = () => {
   // Handle logout
   const handleSignOut = () => {
     dispatch(logout());
-    navigate('/starter');
+    navigate('/signin');
   };
 
   if (selectedGroup) {

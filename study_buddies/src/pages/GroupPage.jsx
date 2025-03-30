@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import GroupChatSidebar from './GroupChatSidebar';
 import Header from '../Header';
-import { logout } from '../features/authSlice';
 
 const GroupPage = ({ group, onBack, currentUser }) => {
   const [resources, setResources] = useState([]);
-  const navigate = useNavigate();
   const [resourceForm, setResourceForm] = useState({
     title: '',
     link: '',
@@ -25,74 +23,9 @@ const GroupPage = ({ group, onBack, currentUser }) => {
     setTimeout(() => setStatus(''), 3000);
   };
 
-  const handleSignOut = () => {
-      dispatch(logout());
-      navigate('/signin');
-    };
-
-    
-
   return (
     <div className="starter-container">
       <Header currentUser={currentUser} />
-
-      {currentUser && (
-        <div className="signout-container">
-          <button
-            className="signout-button"
-            onClick={handleSignOut}
-          >
-            Sign Out
-          </button>
-        </div>
-      )}
-
-      <nav className="buttons-container-home">
-        <a href="#" className="buttons">Courses</a>
-
-        <a
-          href="#"
-          className="buttons"
-          onClick={(e) => {
-            e.preventDefault();
-            navigate('/group-finder');
-          }}
-        >
-          Study Groups
-        </a>
-
-        <a
-          href="#"
-          className="buttons"
-          onClick={(e) => {
-            e.preventDefault();
-            navigate('/chat');
-          }}
-        >
-          Chats
-        </a>
-
-        <a
-          href="#"
-          className="buttons"
-          onClick={(e) => {
-            e.preventDefault();
-            navigate('/schedule');
-          }}
-        >
-          Schedules
-        </a>
-
-        <a 
-        href="#" 
-        className="buttons"
-        onClick={(e) => {e.preventDefault();
-            navigate('/book')
-        }}
-        >Book a Room</a>
-      </nav>
-
-
       <button onClick={onBack} className="back-button">
         Back
       </button>
