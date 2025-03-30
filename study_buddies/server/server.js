@@ -1,60 +1,53 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import cors from "cors"; // Make sure cors is installed: npm install cors
+import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
-import { StreamChat } from "stream-chat"; // Import StreamChat
+import { StreamChat } from "stream-chat";
 
 // Import Routes
 import userRoutes from "./routes/userRoutes.js";
 import courseRoutes from "./routes/courseRoutes.js";
 import groupRoutes from "./routes/groupRoutes.js";
+import bookingRoutes from "./routes/bookingRoutes.js";
 // import chatRoutes from "./routes/chatRoutes.js"; // Assuming chatRoutes might be added later
-
-// Import models - Assuming these are used by your routes, keep imports if needed
-// import Chat from "./models/Chat.js";
-// import User from "./models/User.js";
 
 dotenv.config();
 const app = express();
 app.use(express.json());
 
-// --- CORS Configuration Update ---
-// Define the origins allowed to access your backend
+// --- CORS Configuration ---
 const allowedOrigins = [
   process.env.VITE_CLIENT_URL, // Use environment variable if set
-  "http://localhost:5173", // Keep the previous default (just in case)
-  "http://localhost:5174", // Add your frontend origin <--- FIX
+  "http://localhost:5173",
+  "http://localhost:5174", // Ensure this matches your actual frontend dev port
   // Add your deployed frontend URL here when you deploy
 ];
 
 const corsOptions = {
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps, curl, Postman) OR origins in our allowed list
-    // During development, you might want to uncomment `!origin` to allow tools like Postman
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
-      console.error(`CORS Error: Origin ${origin} not allowed.`); // Log blocked origins
+      console.error(`CORS Error: Origin ${origin} not allowed.`);
       callback(new Error("Not allowed by CORS"));
     }
   },
-  methods: ["GET", "POST", "PUT", "DELETE"], // Methods your frontend will use
-  credentials: true, // Important if you need to send cookies or authorization headers
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
 };
 
-// Apply CORS middleware for Express
 app.use(cors(corsOptions));
-// --- End CORS Configuration Update ---
+// --- End CORS Configuration ---
 
 // Create HTTP server and attach Socket.io
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    // Apply similar CORS options to Socket.IO
+    // Re-use same CORS options for Socket.IO
     origin: function (origin, callback) {
-      // Allow requests with no origin OR origins in our allowed list
       if (!origin || allowedOrigins.indexOf(origin) !== -1) {
         callback(null, true);
       } else {
@@ -67,48 +60,57 @@ const io = new Server(server, {
 });
 
 // Use the routes
+// Ensure middleware like express.json() and cors() are defined BEFORE these routes
 app.use("/api/users", userRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/groups", groupRoutes);
+app.use("/api/bookings", bookingRoutes);
 // app.use("/api/chat", chatRoutes);
 
-// Stream Chat server initialization
+// --- Stream Chat Initialization & Token Endpoint (Merged) ---
+// Use conditional check for API keys and include token endpoint
+if (process.env.API_KEY && process.env.API_SECRET) {
+    const serverClient = StreamChat.getInstance(process.env.API_KEY, process.env.API_SECRET);
 
-const serverClient = StreamChat.getInstance(process.env.API_KEY, process.env.API_SECRET);
+    // Token endpoint: generates a token for a given user
+    app.get("/token", (req, res) => {
+      const { userId } = req.query;
+      if (!userId) {
+        return res.status(400).send("userId is required");
+      }
+      // IMPORTANT: Add validation/authentication here in a real app
+      // to ensure only authorized users can get tokens for specific user IDs.
+      try {
+        const token = serverClient.createToken(userId);
+        res.send({ token });
+      } catch (error) {
+        console.error("Error creating Stream token:", error);
+        res.status(500).send("Error generating token");
+      }
+    });
+} else {
+     // Warn if keys are missing, so Stream Chat features won't silently fail
+     console.warn("Stream Chat API Key or Secret not found in environment variables. Stream Chat features disabled.");
+}
+// --- End Stream Chat ---
 
-// Token endpoint: generates a token for a given user
-app.get("/token", (req, res) => {
-  const { userId } = req.query;
-  if (!userId) {
-    return res.status(400).send("userId is required");
-  }
-  // IMPORTANT: Add validation/authentication here in a real app
-  // to ensure only authorized users can get tokens for specific user IDs.
-  try {
-    const token = serverClient.createToken(userId);
-    res.send({ token });
-  } catch (error) {
-    console.error("Error creating Stream token:", error);
-    res.status(500).send("Error generating token");
-  }
-});
 
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI, {
-    // Removed deprecated options
+    // Add any newer recommended Mongoose options here if needed, otherwise leave empty
   })
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.error("MongoDB Connection Failed:", err));
 
-// (Optional) Socket.io connection handling
+// Optional: Basic Socket.io connection listener
 // io.on("connection", (socket) => {
-//   console.log("User connected:", socket.id);
-//   // Your socket logic here...
+//   console.log("User connected via Socket.IO:", socket.id);
 //   socket.on("disconnect", () => {
-//     console.log("User disconnected:", socket.id);
+//     console.log("User disconnected via Socket.IO:", socket.id);
 //   });
 // });
 
+// Define PORT and Start Server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

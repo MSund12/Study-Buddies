@@ -1,0 +1,212 @@
+/* src/pages/styles/BookRoom.css */
+
+/* Main container for the page */
+.book-room-container {
+    padding: 20px;
+    max-width: 900px; /* Slightly wider to accommodate sections */
+    margin: 20px auto;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Space between major sections */
+}
+
+/* Styling for the form area */
+.booking-form {
+    display: flex;
+    flex-direction: column; /* Default for smaller screens */
+    gap: 20px; /* Space between date picker and controls */
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fdfdfd;
+}
+
+/* Layout for form elements - can be adjusted */
+@media (min-width: 768px) {
+    .booking-form {
+        flex-direction: row; /* Date picker side-by-side with controls */
+        align-items: flex-start; /* Align items at the top */
+    }
+    .date-picker-group {
+         flex-shrink: 0; /* Prevent date picker from shrinking */
+         margin-right: 20px; /* Space between calendar and controls */
+    }
+     .form-controls {
+        flex-grow: 1; /* Allow controls to take remaining space */
+    }
+}
+
+/* Container for dropdowns and button */
+.form-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between dropdowns/button */
+}
+
+
+/* Styling for individual form groups (label + input/select) */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group select,
+.form-group .react-datepicker-wrapper input { /* Style date picker input if not inline */
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: #fff;
+}
+
+.form-group select:disabled {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}
+
+/* Ensure DatePicker calendar (inline) is styled reasonably */
+.date-picker-group .react-datepicker {
+    font-size: 0.9rem;
+    border: none; /* Remove default border if inline */
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+.react-datepicker__header {
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #ddd;
+}
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected,
+.react-datepicker__day--in-selecting-range,
+.react-datepicker__day--in-range {
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+}
+.react-datepicker__day--disabled {
+    color: #ccc;
+    cursor: not-allowed;
+}
+.react-datepicker__day:hover {
+    background-color: #e9ecef;
+     border-radius: 50%;
+}
+.react-datepicker__day--outside-month {
+    color: #aaa;
+}
+
+
+/* Button styling */
+.book-button {
+    padding: 12px 20px;
+    background-color: #28a745; /* Green */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: background-color 0.2s ease;
+    margin-top: 10px; /* Space above button */
+    text-align: center;
+}
+
+.book-button:hover {
+    background-color: #218838;
+}
+
+.book-button:disabled {
+    background-color: #a3a3a3;
+    cursor: not-allowed;
+}
+
+/* Message area styling */
+.message-area {
+    margin-top: -15px; /* Pull messages closer to header/title */
+    margin-bottom: 15px;
+}
+
+.error-message {
+    color: #721c24; /* Dark red */
+    background-color: #f8d7da; /* Light red */
+    padding: 12px;
+    border: 1px solid #f5c6cb; /* Reddish border */
+    border-radius: 4px;
+    margin-bottom: 15px; /* Space below message */
+}
+
+.success-message {
+    color: #155724; /* Dark green */
+    background-color: #d4edda; /* Light green */
+    padding: 12px;
+    border: 1px solid #c3e6cb; /* Greenish border */
+    border-radius: 4px;
+    margin-bottom: 15px; /* Space below message */
+}
+
+/* Helper text styling (e.g., "Ends at:") */
+.info-text {
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 5px;
+}
+
+
+/* Container for the availability and user booking sections */
+.display-sections {
+    display: grid;
+    grid-template-columns: 1fr; /* Stack on small screens */
+    gap: 20px; /* Space between sections */
+    margin-top: 20px;
+}
+
+@media (min-width: 768px) {
+    .display-sections {
+        grid-template-columns: 1fr 1fr; /* Side-by-side on larger screens */
+    }
+}
+
+/* Styling for availability and my-bookings lists */
+.availability-info,
+.my-bookings-list {
+    padding: 15px 20px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    background-color: #fafafa;
+}
+
+.availability-info h3,
+.my-bookings-list h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.availability-info ul,
+.my-bookings-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.availability-info li,
+.my-bookings-list li {
+    background-color: #f0f0f0;
+    margin-bottom: 8px;
+    padding: 10px 12px;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    color: #444;
+}
+
+.my-bookings-list li {
+    background-color: #e6f7ff; /* Slightly different background for user's bookings */
+}
