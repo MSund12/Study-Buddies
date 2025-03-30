@@ -82,7 +82,7 @@ const GroupChatSidebar = ({ currentUser, onSelectGroup }) => {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, []); 
 
   useEffect(() => {
     fetchGroups();
@@ -256,6 +256,17 @@ const GroupChatSidebar = ({ currentUser, onSelectGroup }) => {
               }}
               disabled={loadingCreate}
             />
+            <button
+              onClick={sendMessage}
+              disabled={!input.trim()}
+              className={`ml-2 px-3 rounded ${input.trim() ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-gray-300 text-gray-500 cursor-not-allowed"}`}
+            >
+              Send
+            </button>
+          </div>
+        </div>
+      </div>
+
             {error && <p className="error-message">{error}</p>}
             <div className="modal-actions">
               <button onClick={handleCreateGroup} disabled={loadingCreate}>
