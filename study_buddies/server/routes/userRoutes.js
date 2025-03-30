@@ -167,15 +167,35 @@ router.get('/profile', authenticateToken, async (req, res) => {
 
 // ---------- JWT Authentication Middleware ----------
 export function authenticateToken(req, res, next) {
-  const token = req.header("Authorization")?.split(" ")[1];
-  if (!token) return res.status(401).json({ message: "Access denied, no token provided" });
+  console.log(`>>> authenticateToken MIDDLEWARE executing for: ${req.method} ${req.originalUrl}`); // Log entry + URL
+  const authHeader = req.header("Authorization");
+  console.log(`>>> Auth Header present: ${!!authHeader}`); // Log if header exists
+
+  const token = authHeader?.split(" ")[1];
+
+  if (!token) {
+    console.log(">>> authenticateToken: No token found. Sending 401."); // Log exit
+    return res.status(401).json({ message: "Access denied, no token provided" });
+  }
 
   try {
+    console.log(">>> authenticateToken: Verifying token..."); // Log before verify
+    // Ensure JWT_SECRET is loaded correctly from .env
+    if (!process.env.JWT_SECRET) {
+         console.error("!!! FATAL: JWT_SECRET environment variable not set!");
+         return res.status(500).json({ message: "Internal server error: JWT configuration missing." });
+    }
     const verified = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = verified;
-    next();
+    console.log(">>> authenticateToken: Token verified. Payload:", verified); // Log success
+    req.user = verified; // Attach payload ({ userId: ... })
+    console.log(">>> authenticateToken: Calling next()..."); // Log before next()
+    next(); // Proceed to the next middleware/route handler
   } catch (err) {
-    return res.status(403).json({ message: "Invalid token" });
+    console.error("!!! authenticateToken: JWT Verification Error:", err.name, err.message); // Log specific error
+    console.log(">>> authenticateToken: Invalid token. Sending 403."); // Log exit
+    // Handle specific errors if needed (e.g., TokenExpiredError)
+    const message = err.name === 'TokenExpiredError' ? 'Token expired' : 'Invalid token';
+    return res.status(403).json({ message: message });
   }
 }
 

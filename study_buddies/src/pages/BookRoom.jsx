@@ -209,27 +209,97 @@ const BookRoom = () => {
     };
 
     // Inside BookRoom.jsx -> handleSubmit function
+// Inside BookRoom.jsx
 const handleSubmit = async (event) => {
   event.preventDefault();
   setError('');
   setSuccessMessage('');
 
-  // ***** ADD LOGS *****
-  console.log('--- handleSubmit ---');
-  console.log('Value of currentUser:', currentUser);
-  console.log('Value of token:', token);
-  // ***** END LOGS *****
+  console.log('[1] handleSubmit triggered'); // Log 1
+  console.log('[2] currentUser:', currentUser); // Log 2
+  console.log('[3] token:', token); // Log 3
 
   if (!currentUser || !token) {
-      console.error('!!! Frontend Auth Check Failed !!!'); // Add log here too
+      console.error('[!] Frontend Auth Check Failed'); // Log Error A
       setError('You must be logged in to book.');
       return;
   }
 
-  console.log('Frontend auth check passed. Proceeding to API call...'); // Log success
+  console.log('[4] Frontend auth check passed.'); // Log 4
 
+  // Add extra validation checks before using variables
+  if (!selectedStartTime || !isValid(selectedStartTime)) {
+       console.error('[!] Invalid selectedStartTime just before API call logic.'); // Log Error B
+       setError('Internal Error: Invalid start time selected. Please re-select.');
+       return;
+  }
+  if (typeof selectedDuration !== 'number' || selectedDuration <= 0) {
+       console.error('[!] Invalid selectedDuration just before API call logic.'); // Log Error C
+       setError('Internal Error: Invalid duration selected.');
+       return;
+  }
+  console.log('[5] StartTime and Duration seem valid before use.'); // Log 5
+
+  let finalEndTime;
+  try {
+      console.log('[6] Calculating finalEndTime...'); // Log 6
+      finalEndTime = addMinutes(selectedStartTime, selectedDuration);
+       console.log('[7] Calculated finalEndTime:', finalEndTime); // Log 7
+       if (!isValid(finalEndTime)){
+            console.error('[!] Calculated finalEndTime is invalid'); // Log Error D
+            setError('Internal Error: Calculated end time is invalid.');
+            return;
+       }
+       console.log('[8] finalEndTime calculation successful.'); // Log 8
+  } catch(dateError) {
+      console.error('[!] Error calculating finalEndTime:', dateError); // Log Error E
+      setError('Internal Error: Failed to calculate end time.');
+      return;
+  }
+
+
+  console.log('[9] Setting isSubmitting to true...'); // Log 9
   setIsSubmitting(true);
-  // ... rest of the function ...
+
+  try {
+       console.log('[10] Constructing payload...'); // Log 10
+       // Check dates again right before conversion
+       if (!isValid(selectedStartTime) || !isValid(finalEndTime)) {
+           console.error('[!] Invalid dates just before toISOString()'); // Log Error F
+           setIsSubmitting(false); // Reset submitting state
+           setError('Internal Error: Date became invalid before sending.');
+           return;
+       }
+       const payload = {
+           roomName: ROOM_NAME,
+           startTime: selectedStartTime.toISOString(), // Potential error point if not Date
+           endTime: finalEndTime.toISOString(), // Potential error point if not Date
+       };
+       console.log('[11] Payload constructed:', payload); // Log 11
+
+       console.log('[12] Attempting axios.post call...'); // Log 12
+       const response = await axios.post(`${API_BASE_URL}/bookings`, payload, {
+           headers: { Authorization: `Bearer ${token}` }
+       });
+       console.log('[13] axios.post call appears successful:', response); // Log 13 (May not show if backend hangs)
+
+      setSuccessMessage(`Room booked: ${format(selectedStartTime, 'p')} - ${format(finalEndTime, 'p')}`);
+      setSelectedStartTime(null); // Reset form
+
+      console.log('[14] Refreshing bookings...'); // Log 14
+      // Add await here if these are async, otherwise they might not finish before finally block
+      await fetchAllBookingsForDay(selectedDate);
+      await fetchMyBookings();
+      console.log('[15] Bookings refreshed.'); // Log 15
+
+  } catch (err) {
+      console.error('[!] Booking submission failed (axios catch block):', err.response?.data || err.message, err); // Log Error G
+      setError(err.response?.data?.message || 'Booking failed during API call.');
+  } finally {
+       console.log('[16] Setting isSubmitting to false.'); // Log 16
+       setIsSubmitting(false);
+  }
+  console.log('[17] handleSubmit finished.'); // Log 17
 };
 
     // --- Date Picker Filter ---
