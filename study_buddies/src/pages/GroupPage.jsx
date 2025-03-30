@@ -112,7 +112,6 @@ const GroupPage = ({ group, onBack, currentUser }) => {
               setResourceForm({ ...resourceForm, title: e.target.value })
             }
             required
-            className="w-full p-2 border rounded"
           />
           <input
             type="url"
