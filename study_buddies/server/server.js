@@ -10,6 +10,7 @@ import { StreamChat } from "stream-chat"; // Import StreamChat
 import userRoutes from "./routes/userRoutes.js";
 import courseRoutes from "./routes/courseRoutes.js";
 import groupRoutes from "./routes/groupRoutes.js";
+import bookingRoutes from "./routes/bookingRoutes.js";
 // import chatRoutes from "./routes/chatRoutes.js"; // Assuming chatRoutes might be added later
 
 // Import models - Assuming these are used by your routes, keep imports if needed
@@ -70,6 +71,14 @@ const io = new Server(server, {
 app.use("/api/users", userRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/groups", groupRoutes);
+
+// TEMPORARY DEBUGGING ROUTE
+app.get('/api/bookings/test', (req, res) => {
+  console.log('>>> /api/bookings/test route in server.js HIT!');
+  res.status(200).send('Test route in server.js OK');
+});
+
+app.use("/api/bookings", bookingRoutes);
 // app.use("/api/chat", chatRoutes);
 
 // Stream Chat server initialization

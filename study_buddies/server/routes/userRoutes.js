@@ -166,7 +166,7 @@ router.get('/profile', authenticateToken, async (req, res) => {
 });
 
 // ---------- JWT Authentication Middleware ----------
-function authenticateToken(req, res, next) {
+export function authenticateToken(req, res, next) {
   const token = req.header("Authorization")?.split(" ")[1];
   if (!token) return res.status(401).json({ message: "Access denied, no token provided" });
 

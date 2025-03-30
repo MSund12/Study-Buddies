@@ -1,7 +1,7 @@
 // src/pages/BookRoom.jsx
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
+import axios from 'axios'; // We'll keep using axios as it's already integrated
 import DatePicker from 'react-datepicker';
 import {
     format,
@@ -22,16 +22,19 @@ import {
 } from 'date-fns';
 
 import 'react-datepicker/dist/react-datepicker.css';
-import './styles/BookRoom.css'; // Updated CSS import path for consistency
+import './styles/BookRoom.css'; // Ensure this CSS file exists
 import Header from '../Header'; // Adjust path as needed
 
 // --- Configuration ---
-const API_BASE_URL = 'http://localhost:5000/api'; // Replace with your actual API base URL
-const ROOM_NAME = 'StudyRoomA'; // Default room or make selectable
+// ***** CHANGE THIS LINE to use the correct backend port *****
+const API_BASE_URL = 'http://localhost:5000/api'; // Corrected Port from 5001 to 5000
+// ***** END CHANGE *****
+
+const ROOM_NAME = 'StudyRoomA';
 const MIN_BOOKING_HOUR = 8;
 const MIN_BOOKING_MINUTE = 30;
-const MAX_BOOKING_HOUR = 17; // Bookings must END by 5:00 PM (17:00)
-const TIME_SLOT_INTERVAL = 30; // Generate potential start times every 30 mins
+const MAX_BOOKING_HOUR = 17;
+const TIME_SLOT_INTERVAL = 30;
 
 // --- Durations ---
 const DURATIONS = [
@@ -41,15 +44,14 @@ const DURATIONS = [
     { label: '2 hours', value: 120 },
 ];
 
-// Changed component name to BookRoom
 const BookRoom = () => {
     // --- State ---
-    const [selectedDate, setSelectedDate] = useState(startOfDay(new Date())); // Default to today, start of day
-    const [selectedStartTime, setSelectedStartTime] = useState(null); // Stores the chosen start time Date object
-    const [selectedDuration, setSelectedDuration] = useState(DURATIONS[0].value); // Default duration
-    const [availableSlots, setAvailableSlots] = useState([]); // Filtered, valid start time slots (Date objects)
-    const [allBookingsForDay, setAllBookingsForDay] = useState([]); // Bookings made by anyone on the selected date
-    const [myBookings, setMyBookings] = useState([]); // Logged-in user's bookings
+    const [selectedDate, setSelectedDate] = useState(startOfDay(new Date()));
+    const [selectedStartTime, setSelectedStartTime] = useState(null);
+    const [selectedDuration, setSelectedDuration] = useState(DURATIONS[0].value);
+    const [availableSlots, setAvailableSlots] = useState([]);
+    const [allBookingsForDay, setAllBookingsForDay] = useState([]);
+    const [myBookings, setMyBookings] = useState([]);
     const [loadingBookings, setLoadingBookings] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
@@ -57,17 +59,17 @@ const BookRoom = () => {
 
     // --- Redux State ---
     const currentUser = useSelector((state) => state.auth.currentUser);
-    const token = useSelector((state) => state.auth.token); // Adjust based on your store structure
+    const token = useSelector((state) => state.auth.token);
 
     // --- Memoized Values ---
     const bookingEndTimeLimit = useMemo(() => {
         const date = selectedDate || new Date();
-        return setMinutes(setHours(startOfDay(date), MAX_BOOKING_HOUR), 0); // 5:00 PM on selected date
+        return setMinutes(setHours(startOfDay(date), MAX_BOOKING_HOUR), 0);
     }, [selectedDate]);
 
     const bookingStartTimeLimit = useMemo(() => {
         const date = selectedDate || new Date();
-        return setMinutes(setHours(startOfDay(date), MIN_BOOKING_HOUR), MIN_BOOKING_MINUTE); // 8:30 AM on selected date
+        return setMinutes(setHours(startOfDay(date), MIN_BOOKING_HOUR), MIN_BOOKING_MINUTE);
     }, [selectedDate]);
 
     // --- Helper Functions ---
@@ -82,21 +84,14 @@ const BookRoom = () => {
 
     const isSlotOverlapping = useCallback((potentialStart, potentialEnd, existingBookings) => {
         for (const booking of existingBookings) {
-            // Ensure dates from backend are parsed correctly
             const existingStart = new Date(booking.startTime);
             const existingEnd = new Date(booking.endTime);
-
-            if (!isValid(existingStart) || !isValid(existingEnd)) {
-                 console.warn("Invalid booking date encountered:", booking);
-                 continue; // Skip invalid booking data
-            }
-
-            // Check for overlap: (StartA < EndB) and (EndA > StartB)
+            if (!isValid(existingStart) || !isValid(existingEnd)) continue;
             if (isBefore(potentialStart, existingEnd) && isAfter(potentialEnd, existingStart)) {
-                return true; // Found overlap
+                return true;
             }
         }
-        return false; // No overlap found
+        return false;
     }, []);
 
     // --- Fetching Logic ---
@@ -106,94 +101,83 @@ const BookRoom = () => {
         setError('');
         try {
             const dateString = format(date, 'yyyy-MM-dd');
+            // Uses the corrected API_BASE_URL
             const response = await axios.get(`${API_BASE_URL}/bookings?date=${dateString}`);
-            // Ensure response.data is an array before setting
             setAllBookingsForDay(Array.isArray(response.data) ? response.data : []);
         } catch (err) {
             console.error("Error fetching daily bookings:", err);
-            setError('Failed to load booking availability for the selected date.');
-            setAllBookingsForDay([]); // Clear possibly stale data
+            // Check if it's a connection error vs other server error
+             if (err.code === 'ERR_NETWORK' || err.message === 'Network Error') {
+                 setError('Connection failed. Ensure the backend server is running on port 5000.');
+             } else {
+                setError('Failed to load booking availability for the selected date.');
+             }
+            setAllBookingsForDay([]);
         } finally {
             setLoadingBookings(false);
         }
-    }, []); // No external dependencies needed here
+    }, []); // API_BASE_URL is a constant, no need to include
 
     const fetchMyBookings = useCallback(async () => {
         if (!token) return;
         try {
-            const response = await axios.get(`${API_BASE_URL}/bookings/my-bookings`, {
+             // Uses the corrected API_BASE_URL
+             const response = await axios.get(`${API_BASE_URL}/bookings/my-bookings`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-             // Ensure response.data is an array
              setMyBookings(Array.isArray(response.data) ? response.data : []);
         } catch (err) {
             console.error("Error fetching user bookings:", err);
-            setMyBookings([]); // Clear on error
+             if (err.code === 'ERR_NETWORK' || err.message === 'Network Error') {
+                 // Set error state only if it's not already set by fetchAllBookingsForDay
+                 setError(prev => prev || 'Connection failed. Ensure the backend server is running on port 5000.');
+             } else if (err.response?.status === 401 || err.response?.status === 403) {
+                  setError(prev => prev || 'Authentication error fetching your bookings. Please try logging in again.');
+             }
+            setMyBookings([]);
         }
-    }, [token]);
+    }, [token]); // API_BASE_URL is a constant, token is dependency
 
     // --- Effects ---
-
-    // Fetch all bookings when selectedDate changes
     useEffect(() => {
         fetchAllBookingsForDay(selectedDate);
     }, [selectedDate, fetchAllBookingsForDay]);
 
-    // Fetch user's bookings when component mounts or token changes
     useEffect(() => {
         fetchMyBookings();
-    }, [fetchMyBookings]); // Dependency array includes the memoized function
+    }, [fetchMyBookings]);
 
     // Calculate available start time slots
-    useEffect(() => {
-        const potentialSlots = [];
-        let currentTime = bookingStartTimeLimit;
-
-        // Ensure currentTime is valid before starting loop
+     useEffect(() => {
+         // This effect remains the same, it calculates slots based on fetched data
+         const potentialSlots = [];
+         let currentTime = bookingStartTimeLimit;
          if (!isValid(currentTime)) {
-             console.error("Booking start time limit is invalid");
-             setAvailableSlots([]);
-             return;
+             setAvailableSlots([]); return;
          }
-
-        while (isBefore(currentTime, bookingEndTimeLimit)) {
-            potentialSlots.push(new Date(currentTime));
-            currentTime = addMinutes(currentTime, TIME_SLOT_INTERVAL);
-             // Safety break if date becomes invalid (less likely with date-fns but good practice)
-            if (!isValid(currentTime)) break;
-        }
-
-        const validSlots = potentialSlots.filter(slot => {
-            const potentialStartTime = combineDateAndTime(selectedDate, slot);
-            if (!potentialStartTime) return false;
-
-            const potentialEndTime = addMinutes(potentialStartTime, selectedDuration);
-            if (!isValid(potentialEndTime)) return false;
-
-            if (isAfter(potentialEndTime, bookingEndTimeLimit)) {
-                return false;
-            }
-
-            if (isSlotOverlapping(potentialStartTime, potentialEndTime, allBookingsForDay)) {
-                return false;
-            }
-
-            return true;
-        });
-
-        setAvailableSlots(validSlots);
-
-        if (selectedStartTime) {
+         while (isBefore(currentTime, bookingEndTimeLimit)) {
+             potentialSlots.push(new Date(currentTime));
+             currentTime = addMinutes(currentTime, TIME_SLOT_INTERVAL);
+             if (!isValid(currentTime)) break;
+         }
+         const validSlots = potentialSlots.filter(slot => {
+             const potentialStartTime = combineDateAndTime(selectedDate, slot);
+             if (!potentialStartTime) return false;
+             const potentialEndTime = addMinutes(potentialStartTime, selectedDuration);
+             if (!isValid(potentialEndTime)) return false;
+             if (isAfter(potentialEndTime, bookingEndTimeLimit)) return false;
+             if (isSlotOverlapping(potentialStartTime, potentialEndTime, allBookingsForDay)) return false;
+             return true;
+         });
+         setAvailableSlots(validSlots);
+         if (selectedStartTime) {
              const currentSelectionStillValid = validSlots.some(slot => {
-                const combined = combineDateAndTime(selectedDate, slot);
-                return combined && isValid(combined) && isEqual(combined, selectedStartTime);
+                 const combined = combineDateAndTime(selectedDate, slot);
+                 return combined && isValid(combined) && isEqual(combined, selectedStartTime);
              });
-             if (!currentSelectionStillValid) {
-                 setSelectedStartTime(null);
-             }
-        }
-
-    }, [selectedDate, selectedDuration, allBookingsForDay, bookingStartTimeLimit, bookingEndTimeLimit, combineDateAndTime, isSlotOverlapping, selectedStartTime]);
+             if (!currentSelectionStillValid) setSelectedStartTime(null);
+         }
+     }, [selectedDate, selectedDuration, allBookingsForDay, bookingStartTimeLimit, bookingEndTimeLimit, combineDateAndTime, isSlotOverlapping, selectedStartTime]);
 
 
     // --- Event Handlers ---
@@ -201,37 +185,23 @@ const BookRoom = () => {
         if (isValid(date)) {
             setSelectedDate(startOfDay(date));
             setSelectedStartTime(null);
-            setError('');
+            setError(''); // Clear errors on date change
             setSuccessMessage('');
-        } else {
-             console.warn("Invalid date selected");
-             // Optionally set an error message for the user
         }
     };
 
     const handleStartTimeChange = (event) => {
         const timeString = event.target.value;
         if (timeString) {
-            // Try parsing the time string HH:mm
             const parsedTime = parse(timeString, 'HH:mm', new Date());
              if (isValid(parsedTime)) {
-                // Find the corresponding Date object from availableSlots to ensure it's a valid choice
                  const matchingSlot = availableSlots.find(slot =>
                      getHours(slot) === getHours(parsedTime) && getMinutes(slot) === getMinutes(parsedTime)
                  );
-                 if (matchingSlot) {
-                     setSelectedStartTime(combineDateAndTime(selectedDate, matchingSlot));
-                 } else {
-                     // This case should ideally not happen if dropdown is correctly populated
-                     console.warn("Selected time not found in available slots.");
-                     setSelectedStartTime(null);
-                 }
-             } else {
-                 setSelectedStartTime(null);
-             }
-        } else {
-            setSelectedStartTime(null);
-        }
+                 if (matchingSlot) setSelectedStartTime(combineDateAndTime(selectedDate, matchingSlot));
+                 else setSelectedStartTime(null);
+             } else setSelectedStartTime(null);
+        } else setSelectedStartTime(null);
     };
 
     const handleDurationChange = (event) => {
@@ -243,54 +213,42 @@ const BookRoom = () => {
         setError('');
         setSuccessMessage('');
 
-        if (!currentUser || !token) {
-            setError('You must be logged in to book.');
-            return;
-        }
-        if (!selectedStartTime || !isValid(selectedStartTime)) {
-            setError('Please select a valid start time.');
-            return;
-        }
-        if (!selectedDuration) {
-             setError('Please select a duration.');
-            return;
-        }
+        if (!currentUser || !token) { setError('You must be logged in to book.'); return; }
+        if (!selectedStartTime || !isValid(selectedStartTime)) { setError('Please select a valid start time.'); return; }
+        if (!selectedDuration) { setError('Please select a duration.'); return; }
 
         const finalEndTime = addMinutes(selectedStartTime, selectedDuration);
-        if (!isValid(finalEndTime)){
-            setError('Calculated end time is invalid. Please check selection.');
-            return;
-        }
-
-        if (isAfter(finalEndTime, bookingEndTimeLimit)) {
-            setError(`Booking must end by ${format(bookingEndTimeLimit, 'p')}.`);
-            return;
-        }
+        if (!isValid(finalEndTime)){ setError('Calculated end time is invalid.'); return; }
+        if (isAfter(finalEndTime, bookingEndTimeLimit)) { setError(`Booking must end by ${format(bookingEndTimeLimit, 'p')}.`); return; }
 
         setIsSubmitting(true);
         try {
-            // Ensure data sent is valid
             const payload = {
                  roomName: ROOM_NAME,
                  startTime: selectedStartTime.toISOString(),
                  endTime: finalEndTime.toISOString(),
             };
-
+            // Uses the corrected API_BASE_URL
             const response = await axios.post(`${API_BASE_URL}/bookings`, payload, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
             setSuccessMessage(`Room booked: ${format(selectedStartTime, 'PPP p')} - ${format(finalEndTime, 'p')}`);
-            setSelectedStartTime(null); // Reset selection
+            setSelectedStartTime(null);
 
-            // Refresh data after successful booking
-            // Use await to ensure fetches complete before proceeding if necessary
+            // Refresh data after successful booking using the correct base URL
             await fetchAllBookingsForDay(selectedDate);
             await fetchMyBookings();
 
         } catch (err) {
             console.error("Booking submission failed:", err.response?.data || err.message);
-            setError(err.response?.data?.message || 'Booking failed. Slot may be taken or daily limit exceeded.');
+             if (err.code === 'ERR_NETWORK' || err.message === 'Network Error') {
+                 setError('Connection failed. Ensure the backend server is running on port 5000.');
+             } else if (err.response?.status === 401 || err.response?.status === 403) {
+                 setError(err.response?.data?.message || 'Authentication failed. Please log in again.');
+             } else {
+                setError(err.response?.data?.message || 'Booking failed. Slot may be taken or daily limit exceeded.');
+             }
         } finally {
             setIsSubmitting(false);
         }
@@ -299,122 +257,78 @@ const BookRoom = () => {
     // --- Date Picker Filter ---
     const isWeekday = (date) => {
         const day = getDay(date);
-        return day !== 0 && day !== 6; // Exclude Sunday (0) and Saturday (6)
+        return day !== 0 && day !== 6;
     };
 
     // --- Render Logic ---
+    // The JSX part remains the same as before
     return (
-        // Changed class name for the container
         <div className="book-room-container">
             <Header currentUser={currentUser} />
             <h2>Book a Study Room</h2>
             <p>Select a date, time, and duration (Mon-Fri, 8:30 AM - 5:00 PM, max 2 hours/day).</p>
 
-            {/* Message Area */}
             <div className="message-area">
                 {error && <p className="error-message">{error}</p>}
                 {successMessage && <p className="success-message">{successMessage}</p>}
             </div>
 
             <form onSubmit={handleSubmit} className="booking-form">
+                {/* Date Picker */}
                 <div className="form-group date-picker-group">
-                    <label>Select Date:</label>
-                    <DatePicker
-                        selected={selectedDate}
-                        onChange={handleDateChange}
-                        filterDate={isWeekday}
-                        minDate={new Date()} // Prevent booking past dates
-                        dateFormat="PPP" // e.g., "Mar 30th, 2025"
-                        inline // Show calendar directly
-                    />
-                </div>
-
-                <div className="form-controls">
-                    <div className="form-group">
-                        <label htmlFor="duration-select">Duration:</label>
-                        <select
-                            id="duration-select"
-                            value={selectedDuration}
-                            onChange={handleDurationChange}
-                            disabled={isSubmitting}
-                        >
-                            {DURATIONS.map(d => (
-                                <option key={d.value} value={d.value}>
-                                    {d.label}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="start-time-select">Start Time:</label>
-                        <select
-                            id="start-time-select"
-                            value={selectedStartTime ? format(selectedStartTime, 'HH:mm') : ""}
-                            onChange={handleStartTimeChange}
-                            disabled={isSubmitting || loadingBookings || availableSlots.length === 0}
-                            required
-                        >
-                            <option value="">-- Select Available Time --</option>
-                            {loadingBookings ? (
-                                <option disabled>Loading times...</option>
-                            ) : availableSlots.length === 0 ? (
-                                 <option disabled>No available slots</option>
-                             ) : (
-                                availableSlots.map(slot => (
-                                    <option key={format(slot, 'HH:mm')} value={format(slot, 'HH:mm')}>
-                                        {format(slot, 'p')} {/* e.g., 8:30 AM */}
-                                    </option>
-                                ))
-                            )}
-                        </select>
-                         {selectedStartTime && isValid(selectedStartTime) && (
-                            <p className="info-text">
-                                Ends at: {format(addMinutes(selectedStartTime, selectedDuration), 'p')}
-                            </p>
-                         )}
-                    </div>
-
-                    <button type="submit" disabled={isSubmitting || !selectedStartTime || loadingBookings} className="book-button">
-                        {isSubmitting ? 'Booking...' : 'Confirm Booking'}
-                    </button>
-                </div>
+                     <label>Select Date:</label>
+                     <DatePicker
+                         selected={selectedDate}
+                         onChange={handleDateChange}
+                         filterDate={isWeekday}
+                         minDate={new Date()}
+                         dateFormat="PPP"
+                         inline
+                     />
+                 </div>
+                {/* Controls: Duration, Time, Button */}
+                 <div className="form-controls">
+                     {/* Duration Select */}
+                     <div className="form-group">
+                         <label htmlFor="duration-select">Duration:</label>
+                         <select id="duration-select" value={selectedDuration} onChange={handleDurationChange} disabled={isSubmitting}>
+                             {DURATIONS.map(d => <option key={d.value} value={d.value}>{d.label}</option>)}
+                         </select>
+                     </div>
+                     {/* Start Time Select */}
+                     <div className="form-group">
+                         <label htmlFor="start-time-select">Start Time:</label>
+                         <select id="start-time-select" value={selectedStartTime ? format(selectedStartTime, 'HH:mm') : ""} onChange={handleStartTimeChange} disabled={isSubmitting || loadingBookings || availableSlots.length === 0} required>
+                             <option value="">-- Select Available Time --</option>
+                             {loadingBookings ? <option disabled>Loading times...</option> :
+                              availableSlots.length === 0 ? <option disabled>No available slots</option> :
+                              availableSlots.map(slot => <option key={format(slot, 'HH:mm')} value={format(slot, 'HH:mm')}>{format(slot, 'p')}</option>)}
+                         </select>
+                         {selectedStartTime && isValid(selectedStartTime) && <p className="info-text">Ends at: {format(addMinutes(selectedStartTime, selectedDuration), 'p')}</p>}
+                     </div>
+                     {/* Submit Button */}
+                     <button type="submit" disabled={isSubmitting || !selectedStartTime || loadingBookings} className="book-button">
+                         {isSubmitting ? 'Booking...' : 'Confirm Booking'}
+                     </button>
+                 </div>
             </form>
 
+            {/* Display Sections */}
             <div className="display-sections">
-                 {/* Section to display general bookings for the selected day */}
+                {/* Daily Availability */}
                  <div className="availability-info">
                      <h3>Bookings for {isValid(selectedDate) ? format(selectedDate, 'PPP') : 'Invalid Date'}</h3>
                      {loadingBookings ? <p>Loading...</p> :
                          allBookingsForDay.length > 0 ? (
-                             <ul>
-                                 {allBookingsForDay
-                                    .filter(booking => isValid(new Date(booking.startTime)) && isValid(new Date(booking.endTime))) // Filter out invalid dates before mapping
-                                    .map(booking => (
-                                     <li key={booking._id}>
-                                         Booked: {format(new Date(booking.startTime), 'p')} - {format(new Date(booking.endTime), 'p')}
-                                     </li>
-                                 ))}
-                             </ul>
-                         ) : <p>No bookings found for this date.</p>
-                     }
+                             <ul>{allBookingsForDay.filter(b => isValid(new Date(b.startTime)) && isValid(new Date(b.endTime))).map(b => <li key={b._id}>Booked: {format(new Date(b.startTime), 'p')} - {format(new Date(b.endTime), 'p')}</li>)}</ul>
+                         ) : <p>No bookings found for this date.</p>}
                  </div>
-
-                 {/* Section to display user's specific bookings */}
+                {/* User's Bookings */}
                  {currentUser && (
                       <div className="my-bookings-list">
                          <h3>My Bookings</h3>
                           {myBookings.length > 0 ? (
-                             <ul>
-                                 {myBookings
-                                    .filter(booking => isValid(new Date(booking.startTime)) && isValid(new Date(booking.endTime))) // Filter out invalid dates
-                                    .map(booking => (
-                                     <li key={booking._id}>
-                                         {format(new Date(booking.startTime), 'PPP')}: {format(new Date(booking.startTime), 'p')} - {format(new Date(booking.endTime), 'p')} ({booking.roomName})
-                                         {/* Add cancel button/logic here if needed */}
-                                     </li>
-                                 ))}
-                             </ul>
+                             <ul>{myBookings.filter(b => isValid(new Date(b.startTime)) && isValid(new Date(b.endTime))).map(b => <li key={b._id}>{format(new Date(b.startTime), 'PPP')}: {format(new Date(b.startTime), 'p')} - {format(new Date(b.endTime), 'p')} ({b.roomName})</li>)}</ul>
                          ) : <p>You have no bookings.</p>}
                      </div>
                  )}
@@ -423,5 +337,4 @@ const BookRoom = () => {
     );
 };
 
-// Changed default export name
 export default BookRoom;
