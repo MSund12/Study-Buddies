@@ -6,19 +6,46 @@ import { authenticateToken } from './userRoutes.js';
 const router = express.Router();
 
 // --- Helper Function: getDayBounds (Revised) ---
-const getDayBounds = (dateString) => {
+const getDayBounds = (dateInput) => {
+    let targetDate; // This will hold the Date object representing midnight UTC
     try {
-        const startOfDayUTC = new Date(`${dateString}T00:00:00.000Z`);
-        if (isNaN(startOfDayUTC.getTime())) {
-             console.error("Invalid date string resulted in invalid Date object:", dateString);
-             return null;
+        // Check if input is a string like 'YYYY-MM-DD'
+        if (typeof dateInput === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateInput.trim())) {
+            // Parse string as UTC midnight
+            targetDate = new Date(`${dateInput.trim()}T00:00:00.000Z`);
+
+        // Check if input is a valid Date object
+        } else if (dateInput instanceof Date && !isNaN(dateInput.getTime())) {
+            // Input is a Date object. Get its UTC components to find UTC midnight.
+            const year = dateInput.getUTCFullYear();
+            const month = dateInput.getUTCMonth(); // 0-indexed (Jan=0)
+            const day = dateInput.getUTCDate();
+            // Construct new Date object representing midnight UTC of that day
+            targetDate = new Date(Date.UTC(year, month, day, 0, 0, 0, 0));
+
+        } else {
+             // Input is neither a valid 'YYYY-MM-DD' string nor a valid Date object
+             console.error("Invalid input type/format provided to getDayBounds:", dateInput);
+             return null; // Indicate failure
         }
-        const startOfNextDayUTC = new Date(startOfDayUTC);
-        startOfNextDayUTC.setUTCDate(startOfDayUTC.getUTCDate() + 1);
-        return { startOfDay: startOfDayUTC, endOfDay: startOfNextDayUTC };
+
+        // Double-check if targetDate became invalid during processing
+        if (isNaN(targetDate.getTime())) {
+             console.error("Processed date resulted in invalid Date object from input:", dateInput);
+             return null; // Indicate failure
+        }
+
+        // Calculate the start of the *next* day in UTC
+        const startOfNextDayUTC = new Date(targetDate);
+        startOfNextDayUTC.setUTCDate(targetDate.getUTCDate() + 1);
+
+        // Return the boundaries as Date objects representing UTC times
+        return { startOfDay: targetDate, endOfDay: startOfNextDayUTC };
+
     } catch (e) {
-       console.error("Error processing date string in getDayBounds:", dateString, e);
-       return null;
+         // Catch any unexpected errors during processing
+         console.error("Error processing date input in getDayBounds:", dateInput, e);
+         return null; // Indicate failure
     }
 };
 

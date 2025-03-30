@@ -22,9 +22,7 @@ const bookingSchema = new mongoose.Schema({
   },
   durationMinutes: {
     type: Number,
-    // Making this not strictly required by default, as the pre-validate hook calculates it.
-    // If the hook fails, the absence might signal an issue.
-    // required: true,
+    required: true,
   }
 }, { timestamps: true });
 
