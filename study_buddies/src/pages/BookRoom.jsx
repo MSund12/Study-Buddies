@@ -1,7 +1,7 @@
 // src/pages/BookRoom.jsx
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import axios from 'axios'; // We'll keep using axios as it's already integrated
+import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import {
     format,
@@ -26,10 +26,7 @@ import './styles/BookRoom.css'; // Ensure this CSS file exists
 import Header from '../Header'; // Adjust path as needed
 
 // --- Configuration ---
-// ***** CHANGE THIS LINE to use the correct backend port *****
-const API_BASE_URL = 'http://localhost:5000/api'; // Corrected Port from 5001 to 5000
-// ***** END CHANGE *****
-
+const API_BASE_URL = 'http://localhost:5000/api'; // Keep corrected Port
 const ROOM_NAME = 'StudyRoomA';
 const MIN_BOOKING_HOUR = 8;
 const MIN_BOOKING_MINUTE = 30;
@@ -95,48 +92,45 @@ const BookRoom = () => {
     }, []);
 
     // --- Fetching Logic ---
+    // Keep console.error in fetch functions for real errors
     const fetchAllBookingsForDay = useCallback(async (date) => {
         if (!date || !isValid(date)) return;
         setLoadingBookings(true);
         setError('');
         try {
             const dateString = format(date, 'yyyy-MM-dd');
-            // Uses the corrected API_BASE_URL
             const response = await axios.get(`${API_BASE_URL}/bookings?date=${dateString}`);
             setAllBookingsForDay(Array.isArray(response.data) ? response.data : []);
         } catch (err) {
-            console.error("Error fetching daily bookings:", err);
-            // Check if it's a connection error vs other server error
-             if (err.code === 'ERR_NETWORK' || err.message === 'Network Error') {
-                 setError('Connection failed. Ensure the backend server is running on port 5000.');
-             } else {
-                setError('Failed to load booking availability for the selected date.');
-             }
+            console.error("Error fetching daily bookings:", err); // Keep this error log
+            if (err.code === 'ERR_NETWORK' || err.message === 'Network Error') {
+                setError('Connection failed. Ensure the backend server is running on port 5000.');
+            } else {
+               setError('Failed to load booking availability for the selected date.');
+            }
             setAllBookingsForDay([]);
         } finally {
             setLoadingBookings(false);
         }
-    }, []); // API_BASE_URL is a constant, no need to include
+    }, []);
 
     const fetchMyBookings = useCallback(async () => {
         if (!token) return;
         try {
-             // Uses the corrected API_BASE_URL
              const response = await axios.get(`${API_BASE_URL}/bookings/my-bookings`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
              setMyBookings(Array.isArray(response.data) ? response.data : []);
         } catch (err) {
-            console.error("Error fetching user bookings:", err);
-             if (err.code === 'ERR_NETWORK' || err.message === 'Network Error') {
-                 // Set error state only if it's not already set by fetchAllBookingsForDay
-                 setError(prev => prev || 'Connection failed. Ensure the backend server is running on port 5000.');
-             } else if (err.response?.status === 401 || err.response?.status === 403) {
-                  setError(prev => prev || 'Authentication error fetching your bookings. Please try logging in again.');
-             }
+            console.error("Error fetching user bookings:", err); // Keep this error log
+            if (err.code === 'ERR_NETWORK' || err.message === 'Network Error') {
+                setError(prev => prev || 'Connection failed. Ensure the backend server is running on port 5000.');
+            } else if (err.response?.status === 401 || err.response?.status === 403) {
+                 setError(prev => prev || 'Authentication error fetching your bookings. Please try logging in again.');
+            }
             setMyBookings([]);
         }
-    }, [token]); // API_BASE_URL is a constant, token is dependency
+    }, [token]);
 
     // --- Effects ---
     useEffect(() => {
@@ -149,7 +143,6 @@ const BookRoom = () => {
 
     // Calculate available start time slots
      useEffect(() => {
-         // This effect remains the same, it calculates slots based on fetched data
          const potentialSlots = [];
          let currentTime = bookingStartTimeLimit;
          if (!isValid(currentTime)) {
@@ -185,7 +178,7 @@ const BookRoom = () => {
         if (isValid(date)) {
             setSelectedDate(startOfDay(date));
             setSelectedStartTime(null);
-            setError(''); // Clear errors on date change
+            setError('');
             setSuccessMessage('');
         }
     };
@@ -208,99 +201,81 @@ const BookRoom = () => {
         setSelectedDuration(parseInt(event.target.value, 10));
     };
 
-    // Inside BookRoom.jsx -> handleSubmit function
-// Inside BookRoom.jsx
-const handleSubmit = async (event) => {
-  event.preventDefault();
-  setError('');
-  setSuccessMessage('');
+    // Cleaned handleSubmit function
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        setError('');
+        setSuccessMessage('');
 
-  console.log('[1] handleSubmit triggered'); // Log 1
-  console.log('[2] currentUser:', currentUser); // Log 2
-  console.log('[3] token:', token); // Log 3
-
-  if (!currentUser || !token) {
-      console.error('[!] Frontend Auth Check Failed'); // Log Error A
-      setError('You must be logged in to book.');
-      return;
-  }
-
-  console.log('[4] Frontend auth check passed.'); // Log 4
-
-  // Add extra validation checks before using variables
-  if (!selectedStartTime || !isValid(selectedStartTime)) {
-       console.error('[!] Invalid selectedStartTime just before API call logic.'); // Log Error B
-       setError('Internal Error: Invalid start time selected. Please re-select.');
-       return;
-  }
-  if (typeof selectedDuration !== 'number' || selectedDuration <= 0) {
-       console.error('[!] Invalid selectedDuration just before API call logic.'); // Log Error C
-       setError('Internal Error: Invalid duration selected.');
-       return;
-  }
-  console.log('[5] StartTime and Duration seem valid before use.'); // Log 5
-
-  let finalEndTime;
-  try {
-      console.log('[6] Calculating finalEndTime...'); // Log 6
-      finalEndTime = addMinutes(selectedStartTime, selectedDuration);
-       console.log('[7] Calculated finalEndTime:', finalEndTime); // Log 7
-       if (!isValid(finalEndTime)){
-            console.error('[!] Calculated finalEndTime is invalid'); // Log Error D
-            setError('Internal Error: Calculated end time is invalid.');
+        // Essential check kept
+        if (!currentUser || !token) {
+            setError('You must be logged in to book.');
             return;
-       }
-       console.log('[8] finalEndTime calculation successful.'); // Log 8
-  } catch(dateError) {
-      console.error('[!] Error calculating finalEndTime:', dateError); // Log Error E
-      setError('Internal Error: Failed to calculate end time.');
-      return;
-  }
+        }
 
+        // Optional robustness checks (kept for now, remove if preferred)
+        if (!selectedStartTime || !isValid(selectedStartTime)) {
+             setError('Internal Error: Invalid start time selected. Please re-select.');
+             return;
+        }
+        if (typeof selectedDuration !== 'number' || selectedDuration <= 0) {
+             setError('Internal Error: Invalid duration selected.');
+             return;
+        }
 
-  console.log('[9] Setting isSubmitting to true...'); // Log 9
-  setIsSubmitting(true);
+        let finalEndTime;
+        try {
+            // Calculation kept
+            finalEndTime = addMinutes(selectedStartTime, selectedDuration);
+             if (!isValid(finalEndTime)){
+                  setError('Internal Error: Calculated end time is invalid.');
+                  return;
+             }
+        } catch(dateError) {
+             // Log actual errors during calculation
+             console.error('Error calculating finalEndTime:', dateError);
+             setError('Internal Error: Failed to calculate end time.');
+             return;
+        }
 
-  try {
-       console.log('[10] Constructing payload...'); // Log 10
-       // Check dates again right before conversion
-       if (!isValid(selectedStartTime) || !isValid(finalEndTime)) {
-           console.error('[!] Invalid dates just before toISOString()'); // Log Error F
-           setIsSubmitting(false); // Reset submitting state
-           setError('Internal Error: Date became invalid before sending.');
-           return;
-       }
-       const payload = {
-           roomName: ROOM_NAME,
-           startTime: selectedStartTime.toISOString(), // Potential error point if not Date
-           endTime: finalEndTime.toISOString(), // Potential error point if not Date
-       };
-       console.log('[11] Payload constructed:', payload); // Log 11
+        setIsSubmitting(true);
 
-       console.log('[12] Attempting axios.post call...'); // Log 12
-       const response = await axios.post(`${API_BASE_URL}/bookings`, payload, {
-           headers: { Authorization: `Bearer ${token}` }
-       });
-       console.log('[13] axios.post call appears successful:', response); // Log 13 (May not show if backend hangs)
+        try {
+             // Check dates again right before conversion (kept for robustness)
+             if (!isValid(selectedStartTime) || !isValid(finalEndTime)) {
+                 setError('Internal Error: Date became invalid before sending.');
+                 setIsSubmitting(false); // Reset submitting state
+                 return;
+             }
+             // Payload construction kept
+             const payload = {
+                 roomName: ROOM_NAME,
+                 startTime: selectedStartTime.toISOString(),
+                 endTime: finalEndTime.toISOString(),
+             };
 
-      setSuccessMessage(`Room booked: ${format(selectedStartTime, 'p')} - ${format(finalEndTime, 'p')}`);
-      setSelectedStartTime(null); // Reset form
+             // API call kept
+             const response = await axios.post(`${API_BASE_URL}/bookings`, payload, {
+                 headers: { Authorization: `Bearer ${token}` }
+             });
 
-      console.log('[14] Refreshing bookings...'); // Log 14
-      // Add await here if these are async, otherwise they might not finish before finally block
-      await fetchAllBookingsForDay(selectedDate);
-      await fetchMyBookings();
-      console.log('[15] Bookings refreshed.'); // Log 15
+            // Success handling kept
+            setSuccessMessage(`Room booked: ${format(selectedStartTime, 'p')} - ${format(finalEndTime, 'p')}`);
+            setSelectedStartTime(null); // Reset form
 
-  } catch (err) {
-      console.error('[!] Booking submission failed (axios catch block):', err.response?.data || err.message, err); // Log Error G
-      setError(err.response?.data?.message || 'Booking failed during API call.');
-  } finally {
-       console.log('[16] Setting isSubmitting to false.'); // Log 16
-       setIsSubmitting(false);
-  }
-  console.log('[17] handleSubmit finished.'); // Log 17
-};
+            // Refreshing data kept
+            await fetchAllBookingsForDay(selectedDate);
+            await fetchMyBookings();
+
+        } catch (err) {
+            // Essential error logging for API call failure kept
+            console.error('Booking submission failed:', err.response?.data || err.message, err);
+            setError(err.response?.data?.message || 'Booking failed during API call.');
+        } finally {
+             // Final state update kept
+             setIsSubmitting(false);
+        }
+    };
 
     // --- Date Picker Filter ---
     const isWeekday = (date) => {
@@ -309,7 +284,7 @@ const handleSubmit = async (event) => {
     };
 
     // --- Render Logic ---
-    // The JSX part remains the same as before
+    // JSX remains the same
     return (
         <div className="book-room-container">
             <Header currentUser={currentUser} />
