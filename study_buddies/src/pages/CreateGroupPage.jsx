@@ -1,54 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createGroup, clearMessages } from '../features/groupSlice';
-import { logout } from '../features/authSlice';
 import { useNavigate } from 'react-router-dom';
-import RedShape from './components/RedShape';
-import PinkShape from './components/PinkShape';
-import PurpleShape from './components/PurpleShape';
 import './styles/CreateGroupPage.css';
-import GroupFinderPage from './GroupFinderPage';
-import GroupPage from './GroupPage';
 import Header from '../Header';
 
 const CreateGroupPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const currentUser = useSelector((state) => state.auth.currentUser);
-  const [showGroupFinder, setShowGroupFinder] = useState(false);
-  const [selectedGroup, setSelectedGroup] = useState(null);
 
   const [groupData, setGroupData] = useState({
     course: '',
     groupName: '',
     maxMembers: ''
   });
-
-  // Handle logout
-  const handleSignOut = () => {
-    dispatch(logout());
-    navigate('/starter');
-  };
-
-  if (selectedGroup) {
-    return (
-      <GroupPage
-        group={selectedGroup}
-        onBack={() => setSelectedGroup(null)}
-        currentUser={currentUser}
-      />
-    );
-  }
-
-  if (showGroupFinder) {
-    return (
-      <GroupFinderPage
-        onBack={() => setShowGroupFinder(false)}
-        onSelectGroup={setSelectedGroup}
-      />
-    );
-  }
-
 
   const [courseSearch, setCourseSearch] = useState('');
   const [courseResults, setCourseResults] = useState([]);
@@ -108,66 +74,6 @@ const CreateGroupPage = () => {
   return (
     <div className="starter-container">
       <Header currentUser={currentUser} />
-
-      {currentUser && (
-        <div className="signout-container">
-          <button
-            className="signout-button"
-            onClick={handleSignOut}
-          >
-            Sign Out
-          </button>
-        </div>
-      )}
-
-      <RedShape color="#1EE1A8" />
-      <PinkShape />
-      <PurpleShape />
-
-      <nav className="buttons-container-home">
-        <a href="#" className="buttons">Courses</a>
-
-        <a
-          href="#"
-          className="buttons"
-          onClick={(e) => {
-            e.preventDefault();
-            navigate('/group-finder');
-          }}
-        >
-          Study Groups
-        </a>
-
-        <a
-          href="#"
-          className="buttons"
-          onClick={(e) => {
-            e.preventDefault();
-            navigate('/chat');
-          }}
-        >
-          Chats
-        </a>
-
-        <a
-          href="#"
-          className="buttons"
-          onClick={(e) => {
-            e.preventDefault();
-            navigate('/schedule');
-          }}
-        >
-          Schedules
-        </a>
-
-        <a 
-        href="#" 
-        className="buttons"
-        onClick={(e) => {e.preventDefault();
-            navigate('/book')
-        }}
-        >Book a Room</a>
-      </nav>
 
       <div className="create-group-container">
         <h2>Create a New Study Group</h2>

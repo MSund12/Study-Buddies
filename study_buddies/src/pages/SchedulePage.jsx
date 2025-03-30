@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCourseData, clearCourseData } from '../features/courseSlice';
 import { useNavigate } from 'react-router-dom';
-import { logout } from '../features/authSlice';
 import RedShape from './components/RedShape';
 import PurpleShape from './components/PurpleShape';
 import PinkShape from './components/PinkShape';
@@ -16,7 +15,6 @@ const SchedulePage = () => {
   const [term, setTerm] = useState('F'); // Term is either "F" or "W"
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { courseData, loading, error } = useSelector((state) => state.courses);
 
   const scheduleStartMinutes = 8 * 60 + 30;
@@ -26,11 +24,6 @@ const SchedulePage = () => {
     e.preventDefault();
     dispatch(fetchCourseData({ dept, courseId, term }));
   };
-
-  const handleSignOut = () => {
-      dispatch(logout());
-      navigate('/signin');
-    };
 
   const dayMap = {
     M: 'Monday',
@@ -79,17 +72,6 @@ const SchedulePage = () => {
       <RedShape color="#58C8D7" />
       <PurpleShape color="#E6487F"/>
       <PinkShape color="#F6960A"/>
-
-      {currentUser && (
-        <div className="signout-container">
-          <button
-            className="signout-button"
-            onClick={handleSignOut}
-          >
-            Sign Out
-          </button>
-        </div>
-      )}
 
       <nav className="buttons-container-home">
         <a href="#" className="buttons">Courses</a>
