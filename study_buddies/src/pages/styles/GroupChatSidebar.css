@@ -1,67 +1,64 @@
 /* src/pages/styles/GroupChatSidebar.css */
 
 /* Apply theme variables to the Stream Chat components */
-/* Target the root of Stream components or use a custom wrapper class */
-.str-chat-channel-list-react,
-.str-chat__theme-light,
-.chat-container /* Target your main wrapper if needed */ {
+.str-chat-channel-list-react, /* Target root of stream components */
+.str-chat__theme-light {
+  /* Or use a custom wrapper class around your <Chat> component */
 
   /* --- Font --- */
+  /* Using system fonts for a clean look similar to the image */
   --str-chat__font-family: system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
     sans-serif;
 
-  /* --- Color Palette --- */
-  /* Define your theme colors as CSS variables */
-  --theme-color-accent: #005fff; /* Example: Using a blue accent */
-  --theme-color-secondary-bg: #f0f2f5; /* Light grey */
-  --theme-color-background: #ffffff; /* White */
-  --theme-color-text-dark: #050505; /* Very dark grey/black */
-  --theme-color-text-light: #ffffff; /* White */
-  --theme-color-text-subtle: #65676b; /* Grey for meta text */
-  --theme-color-border: #e0e0e0; /* Light border */
-  --theme-color-error: #d93025; /* Red for errors */
-  --theme-color-hover-bg: #f5f5f5; /* Subtle hover background */
-  --theme-color-active-bg: #e7f3ff; /* Light blue for active item */
+  /* --- Color Palette (Based on image_89925a.jpg) --- */
+  --theme-color-accent: #ff3e6c; /* Pinkish-red */
+  --theme-color-secondary-bg: #f0f0f0; /* Light grey for other bubbles/input */
+  --theme-color-background: #ffffff; /* White background */
+  --theme-color-text-dark: #333333; /* Dark text */
+  --theme-color-text-light: #ffffff; /* Light text (on accent bg) */
+  --theme-color-text-subtle: #999999; /* Grey text (timestamps) */
+  --theme-color-border: #eeeeee; /* Light borders */
 
-
-  /* --- Apply Theme to Stream Variables --- */
-  --str-chat__primary-color: var(--theme-color-accent);
+  /* --- General Theme --- */
+  --str-chat__primary-color: var(
+    --theme-color-accent
+  ); /* Affects links, mentions, active highlights */
   --str-chat__bg-color: var(--theme-color-background);
   --str-chat__text-color: var(--theme-color-text-dark);
   --str-chat__border-color: var(--theme-color-border);
 
   /* --- Avatars --- */
-  --str-chat__avatar-border-radius: 50%;
+  --str-chat__avatar-border-radius: 50%; /* Circular avatars */
   --str-chat__avatar-size: 40px;
 
   /* --- Channel List --- */
   --str-chat__channel-list--background: var(--theme-color-background);
-  --str-chat__channel-list-header--padding: 10px 15px; /* Adjust padding */
+  --str-chat__channel-list-header--padding: 15px;
 
   /* --- Channel Preview (in list) --- */
   --str-chat__channel-preview--background: transparent;
-  --str-chat__channel-preview--border-bottom: 1px solid var(--theme-color-border);
-  --str-chat__channel-preview-title--font-weight: 500; /* Medium weight name */
+  --str-chat__channel-preview--border-bottom: 1px solid
+    var(--theme-color-border);
+  --str-chat__channel-preview-title--font-weight: 600; /* Bolder name */
   --str-chat__channel-preview-message--color: var(--theme-color-text-subtle);
-  --str-chat__channel-preview--active-border-color: transparent; /* Remove side border */
-  --str-chat__channel-preview--active-background: var(--theme-color-active-bg); /* Use active color */
-  --str-chat__channel-preview-messenger--padding: 10px 15px; /* Override stream default if needed */
+  --str-chat__channel-preview--active-border-color: transparent; /* Remove side border for active */
+  --str-chat__channel-preview--active-background: #fff5f7; /* Very subtle pink background for active */
 
   /* --- Chat Window Header --- */
   --str-chat__channel-header--background: var(--theme-color-background);
   --str-chat__channel-header--border-bottom: 1px solid var(--theme-color-border);
-  --str-chat__channel-header-title--font-weight: 600; /* Bolder title */
+  --str-chat__channel-header-title--font-weight: 600; /* Bolder header title */
 
   /* --- Message List --- */
   --str-chat__main-panel--background: var(--theme-color-background);
   --str-chat__main-panel--padding: 0;
-  --str-chat__message-list-padding: 15px 10px;
+  --str-chat__message-list-padding: 15px 10px; /* Add some padding */
 
   /* --- Message Bubbles --- */
-  --str-chat__message-bubble-border-radius: 18px; /* Slightly more rounded */
-  --str-chat__message-bubble--box-shadow: none;
-  --str-chat__message-padding: 8px 12px;
+  --str-chat__message-bubble-border-radius: 16px; /* Rounded corners */
+  --str-chat__message-bubble--box-shadow: none; /* Cleaner look */
+  --str-chat__message-padding: 8px 12px; /* Adjust padding inside bubble */
 
   /* User's own messages */
   --str-chat__message-bubble-color--mine: var(--theme-color-accent);
@@ -74,47 +71,63 @@
   /* Message Text & Meta */
   --str-chat__message-text--font-size: 0.9rem;
   --str-chat__message-meta--color: var(--theme-color-text-subtle);
-  --str-chat__message-meta--font-size: 0.75rem;
+  --str-chat__message-meta--font-size: 0.7rem;
 
   /* --- Message Input --- */
-  --str-chat__message-input-container--border-top: 1px solid var(--theme-color-border);
-  --str-chat__message-input-container--background: var(--theme-color-background);
-  --str-chat__message-input--background: var(--theme-color-secondary-bg);
-  --str-chat__message-input--border-radius: 20px;
-  --str-chat__message-input--border: 1px solid transparent;
-  --str-chat__message-input-textarea--padding: 10px 15px;
-  --str-chat__message-input-textarea--box-shadow-focus: none;
+  --str-chat__message-input-container--border-top: 1px solid
+    var(--theme-color-border);
+  --str-chat__message-input-container--background: var(
+    --theme-color-background
+  ); /* White background behind input */
+  --str-chat__message-input--background: var(
+    --theme-color-secondary-bg
+  ); /* Grey input field */
+  --str-chat__message-input--border-radius: 20px; /* Rounded input field */
+  --str-chat__message-input--border: 1px solid transparent; /* Remove default border */
+  --str-chat__message-input-textarea--padding: 10px 15px; /* Input text padding */
+  --str-chat__message-input-textarea--box-shadow-focus: none; /* Remove focus outline */
   --str-chat__message-input-textarea--border-color-focus: transparent;
 
   /* --- Send Button --- */
   --str-chat__message-send-button--background-color: var(--theme-color-accent);
-  --str-chat__message-send-button--border-radius: 50%;
+  --str-chat__message-send-button--border-radius: 50%; /* Circular */
   --str-chat__message-send-button--width: 36px;
   --str-chat__message-send-button--height: 36px;
-  --str-chat__message-send-button-icon--color: var(--theme-color-text-light);
-  /* --- End Stream Variables --- */
+  --str-chat__message-send-button-icon--color: var(
+    --theme-color-text-light
+  ); /* White icon */
+  /* Remove default hover effect if desired */
+  /* --str-chat__message-send-button--background-color-hover: var(--theme-color-accent); */
 }
 
 /* --- Custom Styles for Your Specific JSX Elements --- */
 
-.chat-container {
+.chat-layout-wrapper {
   display: flex;
-  /* height set via inline style in JSX, adjust if needed */
+  height: calc(100vh - 50px); /* Adjust based on your app's header */
   font-family: var(--str-chat__font-family, sans-serif);
-  background-color: var(--str-chat__bg-color, white);
 }
 
-.sidebar-column {
-  /* Structure defined via inline styles in JSX, add specific styling here */
+.group-chat-sidebar-column {
+  width: 320px;
+  border-right: 1px solid var(--theme-color-border, #eee);
+  display: flex;
+  flex-direction: column;
+  background-color: var(--theme-color-background, white);
 }
 
 .sidebar-header {
-  /* Structure defined via inline styles in JSX, add specific styling here */
+  padding: var(--str-chat__channel-list-header--padding, 15px);
+  border-bottom: 1px solid var(--theme-color-border, #eee);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--theme-color-background, white);
 }
 
 .sidebar-header h2 {
   margin: 0;
-  font-size: 1.1em; /* Adjusted size */
+  font-size: 1.2em;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -122,25 +135,21 @@
   color: var(--str-chat__text-color, #333);
 }
 
-.new-group-button { /* Style the button itself */
+.sidebar-header button {
   background-color: transparent;
-  color: var(--str-chat__primary-color, #005fff);
-  border: 1px solid var(--str-chat__primary-color, #005fff);
+  color: var(--str-chat__primary-color, #ff3e6c); /* Use accent color */
+  border: none;
   border-radius: 4px;
-  padding: 6px 12px;
+  padding: 5px 8px;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
-  font-size: 0.9em;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  transition: background-color 0.2s ease;
+  font-size: 1.1em;
 }
-.new-group-button:hover {
-  background-color: var(--theme-color-active-bg, #e7f3ff);
-}
-.new-group-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+.sidebar-header button:hover {
+  background-color: var(
+    --theme-color-secondary-bg,
+    #f0f0f0
+  ); /* Light grey hover */
 }
 
 .channel-list-container {
@@ -152,69 +161,61 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: var(--str-chat__main-panel--background, white);
+  background-color: var(--theme-color-background, white);
 }
 
 /* --- Custom Channel Preview Specific Styles --- */
-.channel-preview__container {
-   /* Base styles in JSX, add hover etc here */
-   transition: background-color 0.15s ease-in-out;
+/* Use Stream's classes for easier targeting */
+.str-chat__channel-preview-messenger {
+  padding: 10px 15px !important; /* Override default padding slightly */
+  border-bottom: 1px solid var(--theme-color-border, #eee) !important;
 }
-.channel-preview__container:hover {
-   background-color: var(--theme-color-hover-bg, #f5f5f5);
+.str-chat__channel-preview-messenger--name {
+  font-weight: 600 !important;
+  color: var(--str-chat__text-color, #333) !important;
+  margin-bottom: 3px;
 }
-.channel-preview__title {
-   font-weight: 500; /* Match variable */
-   color: var(--str-chat__text-color, #333);
-   margin-bottom: 3px;
-   white-space: nowrap;
-   overflow: hidden;
-   text-overflow: ellipsis;
+.str-chat__channel-preview-messenger--message {
+  font-size: 0.85em !important;
+  color: var(--theme-color-text-subtle, #999) !important;
 }
-.channel-preview__message {
-   font-size: 0.85em;
-   color: var(--theme-color-text-subtle, #65676b);
-   white-space: nowrap;
-   overflow: hidden;
-   text-overflow: ellipsis;
+.str-chat__channel-preview-messenger--active {
+  background-color: #fff5f7 !important; /* Keep subtle pink active background */
 }
-.channel-preview__delete-button {
+/* Style the delete button within the preview */
+.channel-preview__container button {
+  /* If you keep the container div */
   background: none;
   border: none;
   color: #aaa; /* Subtle grey */
   cursor: pointer;
   padding: 5px;
-  visibility: hidden; /* Hide by default */
-  opacity: 0;
-  transition: opacity 0.2s ease;
 }
-.channel-preview__container:hover .channel-preview__delete-button {
-  visibility: visible; /* Show on hover */
-  opacity: 1;
+.channel-preview__container button:hover {
+  color: #777; /* Darker grey on hover */
 }
-.channel-preview__delete-button:hover {
-  color: var(--theme-color-error, #d93025); /* Red on hover */
-}
-
 
 /* --- Modal Styles --- */
 .create-group-modal-backdrop {
   position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* Darker backdrop */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1050; /* Ensure it's above other content */
+  z-index: 1000;
 }
 .create-group-modal {
   background: white;
   color: var(--theme-color-text-dark, #333);
-  padding: 25px 30px;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 450px; /* Adjust max width */
-  max-height: 90vh;
+  padding: 25px;
+  border-radius: 12px;
+  min-width: 400px;
+  max-width: 500px;
+  max-height: 85vh;
   display: flex;
   flex-direction: column;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
@@ -222,182 +223,131 @@
 }
 .create-group-modal h3 {
   margin-top: 0;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   font-weight: 600;
   text-align: center;
-  color: #1c1e21; /* Darker heading */
-}
-.create-group-modal .form-group {
-    margin-bottom: 18px;
-}
-.create-group-modal label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 500;
-    font-size: 0.9em;
-    color: #606770; /* Grey label */
 }
 .create-group-modal input[type="text"] {
   display: block;
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #ccd0d5; /* Softer border */
+  width: calc(100% - 22px);
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
   border-radius: 6px;
   font-family: inherit;
-  font-size: 0.95rem;
-  box-sizing: border-box; /* Include padding in width */
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-size: 0.9rem;
 }
-.create-group-modal input[type="text"]:focus {
-    border-color: var(--theme-color-accent, #005fff);
-    box-shadow: 0 0 0 1px var(--theme-color-accent, #005fff);
-    outline: none;
-}
-
 /* Search results list */
-.search-results-list {
+.create-group-modal ul {
   list-style: none;
   padding: 0;
   margin: 5px 0 15px 0;
-  max-height: 150px; /* Limit height */
+  max-height: 150px;
   overflow-y: auto;
-  border: 1px solid var(--theme-color-border, #e0e0e0);
+  border: 1px solid var(--theme-color-border, #eee);
   border-radius: 6px;
-  background-color: #fff;
 }
-.search-results-list li {
+.create-group-modal ul li {
   padding: 8px 12px;
   cursor: pointer;
   border-bottom: 1px solid var(--theme-color-border, #eee);
   font-size: 0.9rem;
-  transition: background-color 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px; /* For potential avatar */
 }
-.search-results-list li:last-child { border-bottom: none; }
-.search-results-list li:hover { background-color: var(--theme-color-hover-bg, #f5f5f5); }
-
-.no-results-message {
-    font-size: 0.85em;
-    color: var(--theme-color-text-subtle, #65676b);
-    margin: 5px 0 15px 0;
-    padding-left: 5px;
+.create-group-modal ul li:last-child {
+  border-bottom: none;
 }
-
+.create-group-modal ul li:hover {
+  background-color: #f9f9f9;
+}
 /* Selected users area */
-.selected-users-list {
+.create-group-modal .selected-users-container {
   margin-bottom: 15px;
-  border: 1px solid var(--theme-color-border, #e0e0e0);
-  padding: 10px;
-  max-height: 100px; /* Limit height */
+  border: 1px solid var(--theme-color-border, #eee);
+  padding: 8px;
+  max-height: 100px;
   overflow-y: auto;
   border-radius: 6px;
-  background-color: #f7f7f7; /* Slightly different background */
 }
-.selected-users-list p {
+.create-group-modal .selected-users-container p {
   margin: 0 0 8px 0;
   font-size: 0.9em;
   font-weight: 600;
-  color: #4b4f56; /* Darker grey heading */
 }
-.selected-users-list ul {
-  list-style: none;
-  padding: 0;
+.create-group-modal .selected-users-container ul {
+  border: none;
+  max-height: none;
   margin: 0;
 }
-.selected-users-list li {
+.create-group-modal .selected-users-container li {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.9em;
-  padding: 5px 8px;
-  background: #e4e6eb; /* Grey pill background */
-  margin-bottom: 5px;
+  font-size: 0.85em;
+  padding: 4px 8px;
+  background: var(--theme-color-secondary-bg, #f0f0f0);
+  margin-bottom: 4px;
   border-radius: 4px;
+  border: none;
 }
-.selected-users-list li span {
-    flex-grow: 1;
-    margin-right: 5px;
-}
-.selected-users-list button { /* Remove button */
+.create-group-modal .selected-users-container button {
+  /* Remove button */
   background: none;
   border: none;
-  color: var(--theme-color-text-subtle, #65676b);
+  color: var(--theme-color-accent, #ff3e6c);
   cursor: pointer;
-  padding: 0 3px;
-  font-size: 0.9em; /* Make button smaller */
-  line-height: 1;
+  padding: 0 5px;
+  font-size: 1em;
 }
-.selected-users-list button:hover {
-    color: var(--theme-color-error, #d93025);
-}
-
 /* Modal action buttons */
 .modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  margin-top: 20px; /* Ensure space above buttons */
-  padding-top: 15px; /* Add padding if border needed */
-  border-top: 1px solid var(--theme-color-border, #eee); /* Separator line */
+  margin-top: auto;
 }
 .modal-actions button {
-  padding: 8px 18px; /* Adjust padding */
+  padding: 10px 20px;
   border-radius: 6px;
-  border: 1px solid transparent;
+  border: none;
   cursor: pointer;
   font-weight: 600;
-  font-size: 0.95rem;
   font-family: inherit;
-  transition: background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
 }
-.modal-actions button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-.modal-actions button:first-of-type { /* Create */
-  background-color: var(--theme-color-accent, #005fff);
+.modal-actions button:first-of-type {
+  /* Create */
+  background-color: var(--theme-color-accent, #ff3e6c);
   color: var(--theme-color-text-light, white);
 }
-.modal-actions button:first-of-type:not(:disabled):hover {
-  opacity: 0.85;
+.modal-actions button:first-of-type:hover {
+  opacity: 0.9;
 }
-.modal-actions button:last-of-type { /* Cancel */
-  background-color: #e4e6eb; /* Grey button */
-  color: var(--theme-color-text-dark, #050505);
-  border-color: #ced0d4; /* Add border for definition */
+.modal-actions button:last-of-type {
+  /* Cancel */
+  background-color: #eee;
+  color: var(--theme-color-text-dark, #333);
+  border: 1px solid #ccc;
 }
-.modal-actions button:last-of-type:not(:disabled):hover {
-  background-color: #d8dadf; /* Darker grey hover */
+.modal-actions button:last-of-type:hover {
+  background-color: #ddd;
 }
-
 .modal-error {
-  color: var(--theme-color-error, #d93025);
-  margin-bottom: 15px;
+  color: var(--theme-color-accent, #ff3e6c);
+  margin-bottom: 10px;
   font-size: 0.9rem;
-  text-align: center; /* Center error */
 }
 
 /* Loading spinner animation */
 .spin {
   animation: spin 1s linear infinite;
-  display: inline-block; /* Needed for animation */
 }
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* State specific styles */
-.chat-loading-state,
-.chat-error-state,
-.chat-logged-out-state {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    padding: 20px;
-    text-align: center;
-    color: #65676b;
-}
-.chat-error-state {
-    color: var(--theme-color-error, #d93025);
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
