@@ -1,369 +1,436 @@
-import React, { useState, useEffect } from "react";
-import { FaPlus, FaUsers, FaSpinner } from "react-icons/fa";
+import React, { useState, useEffect, useCallback } from "react";
+import { FaPlus, FaUsers, FaSpinner, FaTimes, FaTrash } from "react-icons/fa";
 import {
   Chat,
   ChannelList,
-  // --- Import necessary components ---
   Channel,
   Window,
   ChannelHeader,
   MessageList,
   MessageInput,
-  // Thread, // Optional: Import if you want thread support
-  // LoadingIndicator, // Optional: Import if you want custom loading indicators
+  useChatContext,
 } from "stream-chat-react";
-import "@stream-io/stream-chat-css/dist/v2/css/index.css"; // Ensure CSS is imported
+import "@stream-io/stream-chat-css/dist/v2/css/index.css";
 import { StreamChat } from "stream-chat";
+import { debounce } from "lodash";
+import "./styles/GroupChatSidebar.css";
 
-const API_KEY = "dmfpd2h898h5"; // Public API key - Ensure this is intended to be public
+const API_KEY = "dmfpd2h898h5";
 
-// Create a singleton instance manager for StreamChat
-// This ensures we have only one client instance across the app
+// --- StreamChatInstance Singleton (Keep As Is) ---
 const StreamChatInstance = (() => {
   let instance = null;
-  let currentUserId = null; // Track the ID of the fully connected user
-
-  // --- Track connection in progress ---
+  let currentUserId = null;
   let connectionPromise = null;
-  let pendingUserId = null; // Track the ID for which connection is in progress
-
+  let pendingUserId = null;
   return {
     getInstance: () => {
-      // Get or create the single StreamChat SDK instance
       if (!instance) {
         console.log("Creating new StreamChat SDK instance");
         instance = StreamChat.getInstance(API_KEY);
       }
       return instance;
     },
-
     getClient: async (user, tokenFn) => {
-      // Get the singleton SDK instance
       const client = StreamChatInstance.getInstance();
-      const requestedUserId = user.id; // Store requested ID for clarity
-
+      if (!user || !user.id) {
+        console.error("getClient called with invalid user:", user);
+        throw new Error("Invalid user provided to getClient");
+      }
+      const requestedUserId = user.id;
       console.log(
-        `getClient called for user: ${requestedUserId}, current SDK user ID: ${client.userID}, manager's tracked connected user ID: ${currentUserId}, pending user ID: ${pendingUserId}`
+        `getClient called for user: ${requestedUserId}, SDK user ID: ${client.userID}, tracked ID: ${currentUserId}, pending ID: ${pendingUserId}`
       );
-
-      // --- Check 1: Already connected as the requested user? ---
       if (
         client.userID === requestedUserId &&
         currentUserId === requestedUserId
       ) {
-        console.log(
-          `Already fully connected as user ${requestedUserId}. Returning existing client.`
-        );
-        // Ensure we clear any stale pending state if somehow it exists
+        console.log(`Already connected...`);
         pendingUserId = null;
         connectionPromise = null;
         return client;
       }
-
-      // --- Check 2: Connection already IN PROGRESS for the requested user? ---
       if (pendingUserId === requestedUserId && connectionPromise) {
-        console.log(
-          `Connection attempt already in progress for user ${requestedUserId}. Returning existing promise.`
-        );
-        // Return the promise of the ongoing connection attempt
+        console.log(`Connection attempt already in progress...`);
         return connectionPromise;
       }
-
-      // --- Check 3: User Switching - Is a different user connected? ---
-      // Disconnect ONLY if a different user is fully connected OR if a connection for a different user is pending
       if (
         (client.userID && client.userID !== requestedUserId) ||
         (pendingUserId && pendingUserId !== requestedUserId)
       ) {
-        console.log(
-          `Switching user. Disconnecting previous user/cancelling pending connection for ${
-            client.userID || pendingUserId
-          }.`
-        );
-        // If a connection was pending for someone else, we effectively cancel it here
-        // by replacing the promise below. We still need to disconnect the client if it connected.
+        console.log(`Switching user. Disconnecting previous...`);
         pendingUserId = null;
-        connectionPromise = null; // Clear previous pending state
+        connectionPromise = null;
         if (client.userID) {
-          await client.disconnectUser(); // Disconnect the currently connected user
-          currentUserId = null; // Clear tracked connected user ID
+          await client.disconnectUser();
+          currentUserId = null;
         }
       }
-
-      // --- Start New Connection Attempt ---
       console.log(
         `Starting new connection attempt for user ${requestedUserId}...`
       );
-      pendingUserId = requestedUserId; // Mark this user as having a connection attempt pending
-
-      // Create the promise for this connection attempt.
-      // Use an IIFE (Immediately Invoked Function Expression) to manage the async logic
-      // and ensure the promise is stored immediately.
+      pendingUserId = requestedUserId;
       connectionPromise = (async () => {
         try {
-          // --- FIXED TYPO HERE ---
           console.log(
             `Workspaceing token for pending user ${requestedUserId}...`
-          );
+          ); // Fixed typo
           const token = await tokenFn(requestedUserId);
           if (!token) {
             throw new Error(`Failed to get token for user ${requestedUserId}`);
           }
-
-          // Make sure we are still trying to connect the user we started with.
-          // If pendingUserId changed while fetching token (e.g., another request for a different user came in), abort.
           if (pendingUserId !== requestedUserId) {
             throw new Error(
-              `Connection attempt for ${requestedUserId} was cancelled by a newer request.`
+              `Connection attempt for ${requestedUserId} was cancelled.`
             );
           }
-
           console.log(
             `Connecting pending user ${requestedUserId}... (Calling connectUser)`
           );
           await client.connectUser(
-            {
-              id: requestedUserId,
-              name: `${user.firstName} ${user.lastName}`, // Ensure currentUser prop has these!
-            },
+            { id: requestedUserId, name: `${user.firstName} ${user.lastName}` },
             token
           );
           console.log(`Successfully connected user ${requestedUserId}`);
-
-          // --- Success ---
-          currentUserId = requestedUserId; // Update the fully connected user ID
-          return client; // Resolve the promise with the client
+          currentUserId = requestedUserId;
+          return client;
         } catch (error) {
           console.error(
             `Connection failed for user ${requestedUserId}:`,
             error
           );
-          throw error; // Re-throw the error so the caller knows it failed
+          throw error;
         } finally {
-          // --- Cleanup for this attempt ---
-          // Clear the pending status *only if* this specific user's attempt is the one finishing
-          // and hasn't been superseded by another request.
           if (pendingUserId === requestedUserId) {
             pendingUserId = null;
             connectionPromise = null;
           }
         }
-      })(); // End of IIFE
-
-      return connectionPromise; // Return the promise of the connection attempt
+      })();
+      return connectionPromise;
     },
   };
 })();
 // --- End StreamChatInstance ---
 
-// --- React Component ---
+// --- Custom Channel Preview Component (Keep As Is) ---
+const CustomChannelPreview = (props) => {
+  const { channel, setActiveChannel, latestMessage } = props;
+  const { client } = useChatContext();
+
+  const handleDeleteChannel = async (e) => {
+    e.stopPropagation();
+    if (window.confirm(`Delete group "${channel.data?.name || channel.id}"?`)) {
+      try {
+        console.log(`Deleting channel: ${channel.id}`);
+        await channel.delete(); // Soft delete by default
+        console.log(`Channel ${channel.id} deleted.`);
+      } catch (error) {
+        console.error(`Failed to delete channel ${channel.id}:`, error);
+        alert(`Failed to delete channel: ${error.message || "Unknown error"}`);
+      }
+    }
+  };
+
+  const channelName =
+    channel.data?.name ||
+    channel.data?.id ||
+    Object.values(channel.state.members)
+      .filter((member) => member.user_id !== client.userID)
+      .map((member) => member.user?.name || member.user_id)
+      .join(", ") ||
+    "Unnamed Channel";
+
+  return (
+    <div
+      onClick={() => setActiveChannel(channel)}
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "10px",
+        borderBottom: "1px solid #eee",
+        cursor: "pointer",
+      }}
+      className="channel-preview__container"
+    >
+      <div className="channel-preview__content">
+        <div
+          className="channel-preview__title"
+          style={{ fontWeight: "bold", marginBottom: "3px" }}
+        >
+          {" "}
+          {channelName}{" "}
+        </div>
+        <div
+          className="channel-preview__message"
+          style={{ fontSize: "0.85em", color: "#555" }}
+        >
+          {" "}
+          {latestMessage || "No messages yet"}{" "}
+        </div>
+      </div>
+      <button
+        onClick={handleDeleteChannel}
+        style={{
+          background: "none",
+          border: "none",
+          color: "#aaa",
+          cursor: "pointer",
+          padding: "5px",
+        }}
+        title="Delete Channel"
+        aria-label="Delete Channel"
+      >
+        <FaTrash />
+      </button>
+    </div>
+  );
+};
+// --- End Custom Channel Preview ---
+
+// --- Main GroupChatSidebar Component ---
 const GroupChatSidebar = ({ currentUser }) => {
   const [chatClient, setChatClient] = useState(null);
-  // Renamed initialization state variables
   const [initializing, setInitializing] = useState(true);
   const [initError, setInitError] = useState("");
-  // State for create group modal and form
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newGroupName, setNewGroupName] = useState("");
-  // Specific state for create channel action
   const [isCreatingChannel, setIsCreatingChannel] = useState(false);
   const [createError, setCreateError] = useState("");
+  const [userSearchTerm, setUserSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [isSearchingUsers, setIsSearchingUsers] = useState(false);
 
-  // Function to fetch token from your backend
+  // --- fetchUserToken (Keep As Is) ---
   const fetchUserToken = async (userId) => {
-    // --- FIXED TYPO HERE ---
-    console.log(`Workspaceing token for userId: ${userId}`);
+    console.log(`Workspaceing token for userId: ${userId}`); // Fixed typo
     try {
-      // Make sure your backend URL is correct and accessible
       const response = await fetch(
         `http://localhost:5000/token?userId=${userId}`
       );
       if (!response.ok) {
-        throw new Error(`Token fetch failed with status: ${response.status}`);
+        throw new Error(`Token fetch failed: ${response.status}`);
       }
       const data = await response.json();
       if (!data.token) {
-        throw new Error("Token not found in backend response");
+        throw new Error("Token not found in response");
       }
       console.log(`Token fetched successfully for userId: ${userId}`);
       return data.token;
     } catch (err) {
       console.error("Token fetch error:", err);
-      throw err; // Let the calling function handle the error state
+      throw err;
     }
   };
+  // --- End fetchUserToken ---
 
-  // Initialize Stream Chat when currentUser changes
+  // --- useEffect for Initialization (Keep As Is) ---
   useEffect(() => {
     console.log(
       "GroupChatSidebar useEffect triggered. currentUser:",
       currentUser?.id
     );
-
-    // If no user is provided, reset state and don't attempt connection
     if (!currentUser || !currentUser.id) {
-      console.log("No current user, skipping chat initialization.");
-      setInitializing(false); // Use renamed state
-      setChatClient(null); // Ensure client is cleared if user logs out
-      setInitError(""); // Use renamed state
+      console.log("No current user...");
+      setInitializing(false);
+      setChatClient(null);
+      setInitError("");
       return;
     }
-
-    // Flag to prevent state updates if the component unmounts during async operations
     let isMounted = true;
-    setInitializing(true); // Use renamed state
-    setInitError(""); // Use renamed state & Clear previous errors
-
+    setInitializing(true);
+    setInitError("");
     const initializeChat = async () => {
       try {
-        console.log(
-          `Attempting to initialize chat for user: ${currentUser.id}`
-        );
-        // Use the singleton manager to get/configure the client
+        console.log(`Attempting initialize chat for user: ${currentUser.id}`);
         const client = await StreamChatInstance.getClient(
           currentUser,
-          fetchUserToken // Pass the token fetching function
+          fetchUserToken
         );
-
-        // Only update state if the component is still mounted
         if (isMounted) {
-          console.log("Chat initialization successful, setting client state.");
+          console.log("Chat initialization successful.");
           setChatClient(client);
         }
       } catch (err) {
         console.error("Chat initialization error:", err);
         if (isMounted) {
-          setInitError(`Failed to initialize chat: ${err.message}`); // Use renamed state
-          setChatClient(null); // Ensure client is null on error
+          setInitError(`Failed init chat: ${err.message}`);
+          setChatClient(null);
         }
       } finally {
-        // Ensure loading state is turned off even if unmounted
         if (isMounted) {
-          setInitializing(false); // Use renamed state
+          setInitializing(false);
         }
       }
     };
-
     initializeChat();
-
-    // Cleanup function: runs when component unmounts or BEFORE effect re-runs
     return () => {
-      console.log(
-        "GroupChatSidebar cleanup function running for user:",
-        currentUser?.id
-      );
+      console.log("GroupChatSidebar cleanup:", currentUser?.id);
       isMounted = false;
-      // Note: Singleton manages disconnects based on user changes, so no disconnect here.
     };
-  }, [currentUser]); // Dependency array is correct
+  }, [currentUser]);
+  // --- End useEffect ---
 
-  // Create new channel (group)
+  // --- User Search Logic (Keep As Is) ---
+  const fetchUsers = async (searchTerm) => {
+    if (!searchTerm.trim()) {
+      setSearchResults([]);
+      return;
+    }
+    setIsSearchingUsers(true);
+    setCreateError("");
+    console.log(`Searching users with term: ${searchTerm}`);
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("No auth token found...");
+      setCreateError("Auth error.");
+      setIsSearchingUsers(false);
+      setSearchResults([]);
+      return;
+    }
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/users/search?query=${encodeURIComponent(
+          searchTerm
+        )}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+          setCreateError("Auth failed.");
+        } else {
+          throw new Error(`User search failed: ${response.status}`);
+        }
+        setSearchResults([]);
+      } else {
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          const filteredResults = data.filter(
+            (user) =>
+              user.id !== currentUser.id &&
+              !selectedUsers.some((selected) => selected.id === user.id)
+          );
+          setSearchResults(filteredResults);
+        } else {
+          console.error("User search API bad data:", data);
+          setSearchResults([]);
+        }
+      }
+    } catch (err) {
+      console.error("User search fetch error:", err);
+      if (!createError) {
+        setCreateError("Failed to search users.");
+      }
+      setSearchResults([]);
+    } finally {
+      setIsSearchingUsers(false);
+    }
+  };
+  const debouncedFetchUsers = useCallback(debounce(fetchUsers, 300), [
+    currentUser,
+    selectedUsers,
+  ]);
+  useEffect(() => {
+    debouncedFetchUsers(userSearchTerm);
+    return () => debouncedFetchUsers.cancel();
+  }, [userSearchTerm, debouncedFetchUsers]);
+  const handleUserSearchChange = (e) => {
+    setUserSearchTerm(e.target.value);
+  };
+  const handleSelectUser = (user) => {
+    if (!selectedUsers.some((selected) => selected.id === user.id)) {
+      setSelectedUsers([...selectedUsers, user]);
+    }
+    setUserSearchTerm("");
+    setSearchResults([]);
+  };
+  const handleRemoveUser = (userId) => {
+    setSelectedUsers(selectedUsers.filter((user) => user.id !== userId));
+  };
+  // --- End User Search Logic ---
+
+  // --- Create Channel Logic (Keep As Is) ---
   const createChannel = async () => {
-    setCreateError(""); // Clear previous create errors
-
+    setCreateError("");
     if (!newGroupName.trim()) {
-      setCreateError("Group name cannot be empty.");
+      setCreateError("Group name empty.");
       return;
     }
     if (!chatClient) {
-      setCreateError("Chat client is not available.");
+      setCreateError("Chat client unavailable.");
       return;
     }
     if (!currentUser || !currentUser.id) {
-      setCreateError("Current user is not available.");
+      setCreateError("Current user unavailable.");
       return;
     }
-
-    // ** IMPORTANT: Replace 'userB_real_id' with the actual ID of your second test user **
-    const otherTestUserId = "userB_real_id"; // <-- PUT THE *OTHER* VALID, EXISTING USER'S ID HERE
-
-    if (currentUser.id === otherTestUserId) {
-      setCreateError(
-        "Cannot create a group with only yourself. Check the hardcoded otherTestUserId."
-      );
-      console.error(
-        "Attempting to create channel where currentUser.id is the same as the hardcoded otherTestUserId"
-      );
+    if (selectedUsers.length === 0) {
+      setCreateError("Select members.");
       return;
     }
-    const members = [currentUser.id, otherTestUserId];
-    // ** -------------------------------------------------------------------------------- **
-
-    setIsCreatingChannel(true); // Set specific loading state for creation
-    setCreateError("");
-
+    const memberIds = [currentUser.id, ...selectedUsers.map((user) => user.id)];
+    const uniqueMemberIds = [...new Set(memberIds)];
+    if (uniqueMemberIds.length < 2) {
+      setCreateError("Cannot create group with self.");
+      return;
+    }
+    setIsCreatingChannel(true);
     try {
-      console.log(`Creating channel "${newGroupName}" with members:`, members);
-      const channel = chatClient.channel(
-        "messaging",
-        /* You can provide a specific channel ID here if you want */
-        {
-          name: newGroupName,
-          members: members,
-          // created_by_id: currentUser.id // Optional: track creator
-        }
+      console.log(
+        `Creating channel "${newGroupName}" members:`,
+        uniqueMemberIds
       );
-
-      // Create the channel
+      const channel = chatClient.channel("messaging", {
+        name: newGroupName,
+        members: uniqueMemberIds,
+        created_by_id: currentUser.id,
+      });
       await channel.create();
-      // await channel.watch(); // Watch is usually handled implicitly by Channel/ChannelList
-
-      console.log("Channel created successfully.");
-      setNewGroupName(""); // Clear input
-      setShowCreateModal(false); // Close modal
+      console.log("Channel created.");
+      setNewGroupName("");
+      setShowCreateModal(false);
+      setSelectedUsers([]);
+      setUserSearchTerm("");
+      setSearchResults([]);
     } catch (err) {
-      setCreateError(`Failed to create group: ${err.message}`); // Set specific error state
+      setCreateError(`Failed: ${err.message}`);
       console.error("Create channel error:", err);
     } finally {
-      setIsCreatingChannel(false); // Clear specific loading state
+      setIsCreatingChannel(false);
     }
   };
+  // --- End Create Channel Logic ---
 
   // --- Render Logic ---
-
   if (initializing) {
     return (
-      <div className="sidebar-loading" style={{ padding: "20px" }}>
+      <div style={{ padding: "20px" }}>
         {" "}
-        {/* Added basic style */}
-        <FaSpinner className="spin" aria-hidden="true" /> Loading Chat...
+        <FaSpinner className="spin" /> Loading Chat...{" "}
       </div>
     );
   }
-
   if (initError) {
     return (
-      <div className="sidebar-error" style={{ padding: "20px", color: "red" }}>
-        Error: {initError}
-      </div>
-    ); // Added basic style
-  }
-
-  // If no user is logged in (currentUser is null/undefined after check in useEffect)
-  if (!currentUser) {
-    // This case might be handled by routing in App.jsx, but added as safety
-    return (
-      <div className="sidebar-info" style={{ padding: "20px" }}>
-        Please log in to use chat.
-      </div>
+      <div style={{ padding: "20px", color: "red" }}>Error: {initError}</div>
     );
   }
-
-  // If user is logged in but client failed to initialize for some reason
+  if (!currentUser) {
+    return <div style={{ padding: "20px" }}>Please log in.</div>;
+  }
   if (!chatClient) {
     return (
-      <div className="sidebar-error" style={{ padding: "20px", color: "red" }}>
-        Chat client unavailable. Check logs. {initError}
+      <div style={{ padding: "20px", color: "red" }}>
+        {" "}
+        Chat client unavailable. {initError}{" "}
       </div>
     );
   }
 
-  // --- Render Main Chat UI ---
   return (
-    // Wrapper div for Flexbox layout
     <div style={{ display: "flex", height: "calc(100vh - 50px)" }}>
-      {" "}
-      {/* Adjust height as needed */}
       <Chat client={chatClient}>
         {/* === Left Sidebar Section === */}
         <div
@@ -375,8 +442,6 @@ const GroupChatSidebar = ({ currentUser }) => {
             flexDirection: "column",
           }}
         >
-          {" "}
-          {/* Example Width & Style */}
           <div
             className="sidebar-header"
             style={{
@@ -388,21 +453,23 @@ const GroupChatSidebar = ({ currentUser }) => {
             }}
           >
             <h2 style={{ margin: 0, fontSize: "1.1em" }}>
-              <FaUsers aria-hidden="true" style={{ marginRight: "8px" }} />{" "}
-              Group Chats
+              {" "}
+              <FaUsers style={{ marginRight: "8px" }} /> Group Chats{" "}
             </h2>
             <button
-              style={{ padding: "5px 10px" }} // Basic style
+              style={{ padding: "5px 10px" }}
               onClick={() => {
                 setShowCreateModal(true);
-                setCreateError(""); // Clear create errors when opening modal
+                setCreateError("");
+                setSelectedUsers([]);
+                setUserSearchTerm("");
+                setSearchResults([]);
               }}
               disabled={isCreatingChannel}
             >
-              <FaPlus aria-hidden="true" /> New
+              <FaPlus /> New
             </button>
           </div>
-          {/* Channel List takes remaining space in sidebar */}
           <div style={{ flex: 1, overflowY: "auto" }}>
             <ChannelList
               filters={{
@@ -411,9 +478,11 @@ const GroupChatSidebar = ({ currentUser }) => {
               }}
               sort={{ last_message_at: -1 }}
               options={{ state: true, watch: true, presence: true }}
+              Preview={CustomChannelPreview}
             />
           </div>
-          {/* Modal for creating a new group */}
+
+          {/* === Create Group Modal === */}
           {showCreateModal && (
             <div
               className="create-group-modal-backdrop"
@@ -434,9 +503,14 @@ const GroupChatSidebar = ({ currentUser }) => {
                 className="create-group-modal"
                 style={{
                   background: "white",
+                  color: "black",
                   padding: "20px",
                   borderRadius: "8px",
-                  minWidth: "300px",
+                  minWidth: "400px",
+                  maxWidth: "90%",
+                  maxHeight: "80vh",
+                  display: "flex",
+                  flexDirection: "column",
                 }}
               >
                 <h3>Create New Group</h3>
@@ -450,36 +524,139 @@ const GroupChatSidebar = ({ currentUser }) => {
                     display: "block",
                     width: "calc(100% - 16px)",
                     padding: "8px",
-                    marginBottom: "10px",
-                  }} // Basic style
-                />
-                <p
-                  style={{
-                    fontSize: "0.8em",
-                    color: "grey",
-                    marginTop: 0,
                     marginBottom: "15px",
                   }}
-                >
-                  Note: Adds one predefined test member.
-                </p>
-
-                {/* Display create errors */}
+                />
+                <input
+                  type="text"
+                  placeholder="Search users to add..."
+                  value={userSearchTerm}
+                  onChange={handleUserSearchChange}
+                  aria-label="Search users"
+                  style={{
+                    display: "block",
+                    width: "calc(100% - 16px)",
+                    padding: "8px",
+                    marginBottom: "5px",
+                  }}
+                />
+                {isSearchingUsers && (
+                  <FaSpinner className="spin" style={{ margin: "5px 0" }} />
+                )}
+                {searchResults.length > 0 && (
+                  <ul
+                    style={{
+                      listStyle: "none",
+                      padding: "0",
+                      margin: "5px 0 15px 0",
+                      maxHeight: "150px",
+                      overflowY: "auto",
+                      border: "1px solid #ccc",
+                    }}
+                  >
+                    {searchResults.map((user) => (
+                      <li
+                        key={user.id}
+                        onClick={() => handleSelectUser(user)}
+                        style={{
+                          padding: "5px 10px",
+                          cursor: "pointer",
+                          borderBottom: "1px solid #eee",
+                        }}
+                      >
+                        {/* --- REVERTED LINE - ID REMOVED --- */}
+                        {user.name || `${user.firstName} ${user.lastName}`}
+                        {/* --- END REVERTED LINE --- */}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {!isSearchingUsers &&
+                  userSearchTerm &&
+                  searchResults.length === 0 && (
+                    <p
+                      style={{
+                        fontSize: "0.8em",
+                        color: "grey",
+                        margin: "5px 0 15px 0",
+                      }}
+                    >
+                      No matching users found.
+                    </p>
+                  )}
+                {selectedUsers.length > 0 && (
+                  <div
+                    style={{
+                      marginBottom: "15px",
+                      border: "1px solid #ccc",
+                      padding: "5px",
+                      maxHeight: "100px",
+                      overflowY: "auto",
+                    }}
+                  >
+                    <p
+                      style={{
+                        margin: "0 0 5px 0",
+                        fontSize: "0.9em",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Selected:
+                    </p>
+                    <ul
+                      style={{ listStyle: "none", padding: "0", margin: "0" }}
+                    >
+                      {selectedUsers.map((user) => (
+                        <li
+                          key={user.id}
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            fontSize: "0.85em",
+                            padding: "2px 5px",
+                            background: "#eee",
+                            marginBottom: "3px",
+                            borderRadius: "3px",
+                          }}
+                        >
+                          {" "}
+                          {user.name ||
+                            `${user.firstName} ${user.lastName}`}{" "}
+                          <button
+                            onClick={() => handleRemoveUser(user.id)}
+                            style={{
+                              background: "none",
+                              border: "none",
+                              color: "red",
+                              cursor: "pointer",
+                              padding: "0 5px",
+                            }}
+                          >
+                            {" "}
+                            <FaTimes />{" "}
+                          </button>{" "}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
                 {createError && (
                   <div
                     className="modal-error"
                     style={{ color: "red", marginBottom: "10px" }}
                   >
-                    {createError}
+                    {" "}
+                    {createError}{" "}
                   </div>
                 )}
-
                 <div
                   className="modal-actions"
                   style={{
                     display: "flex",
                     justifyContent: "flex-end",
                     gap: "10px",
+                    marginTop: "auto",
                   }}
                 >
                   <button
@@ -487,44 +664,45 @@ const GroupChatSidebar = ({ currentUser }) => {
                     disabled={isCreatingChannel}
                     style={{ padding: "8px 15px" }}
                   >
+                    {" "}
                     {isCreatingChannel ? (
                       <FaSpinner className="spin" />
                     ) : (
                       "Create"
-                    )}
+                    )}{" "}
                   </button>
                   <button
-                    onClick={() => setShowCreateModal(false)}
+                    onClick={() => {
+                      setShowCreateModal(false);
+                      setSelectedUsers([]);
+                      setUserSearchTerm("");
+                      setSearchResults([]);
+                    }}
                     disabled={isCreatingChannel}
                     style={{ padding: "8px 15px" }}
                   >
-                    Cancel
+                    {" "}
+                    Cancel{" "}
                   </button>
                 </div>
               </div>
             </div>
           )}
+          {/* === End Create Group Modal === */}
         </div>{" "}
         {/* === End Left Sidebar Section === */}
-        {/* === Right Chat Window Section === */}
+        {/* === Right Chat Window Section (Keep As Is) === */}
         <div
           className="chat-window-area"
           style={{ flex: 1, display: "flex", flexDirection: "column" }}
         >
           <Channel>
-            {" "}
-            {/* This component renders its children when a channel is active */}
             <Window>
-              {" "}
-              {/* Provides context for the components below */}
-              <ChannelHeader /> {/* Displays header for the active channel */}
-              {/* MessageList takes available space */}
+              <ChannelHeader />
               <MessageList />
-              <MessageInput />{" "}
-              {/* Displays the input box for the active channel */}
+              <MessageInput />
             </Window>
-            {/* <Thread /> */}{" "}
-            {/* Optional: Uncomment to add thread functionality */}
+            {/* <Thread /> */}
           </Channel>
         </div>{" "}
         {/* === End Right Chat Window Section === */}

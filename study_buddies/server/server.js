@@ -73,9 +73,8 @@ app.use("/api/groups", groupRoutes);
 // app.use("/api/chat", chatRoutes);
 
 // Stream Chat server initialization
-const API_KEY = "dmfpd2h898h5"; // Consider moving to .env
-const API_SECRET =
-  "t9vv26a8fyvzvu7t9bkfp92yu3m3a3tf8ceg96ymg7yrsbr38dzwzd27qrkc4frp"; // MOVE THIS TO .env IMMEDIATELY!
+const API_KEY = process.env.API_KEY;
+const API_SECRET = process.env.API_SECRET;
 const serverClient = StreamChat.getInstance(API_KEY, API_SECRET);
 
 // Token endpoint: generates a token for a given user
@@ -97,7 +96,7 @@ app.get("/token", (req, res) => {
 
 // Connect to MongoDB
 mongoose
-  .connect(process.env.MONGODB_URI, {
+  .connect(process.env.MONGO_URI, {
     // Removed deprecated options
   })
   .then(() => console.log("MongoDB Connected"))
@@ -114,20 +113,3 @@ mongoose
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-// --- Security Warning ---
-// Your Stream API Secret is exposed directly in the code.
-// You MUST move API_SECRET to your .env file and access it via process.env.STREAM_API_SECRET
-// Example .env file:
-// STREAM_API_SECRET=t9vv26a8fyvzvu7t9bkfp92yu3m3a3tf8ceg96ymg7yrsbr38dzwzd27qrkc4frp
-// Then access it like: const API_SECRET = process.env.STREAM_API_SECRET;
-if (
-  API_SECRET ===
-  "t9vv26a8fyvzvu7t9bkfp92yu3m3a3tf8ceg96ymg7yrsbr38dzwzd27qrkc4frp"
-) {
-  console.warn("\n*** SECURITY WARNING ***");
-  console.warn(
-    "Your Stream API Secret is hardcoded! Move it to a .env file immediately.\n"
-  );
-}
-// ------------------------
