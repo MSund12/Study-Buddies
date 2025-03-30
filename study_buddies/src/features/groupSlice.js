@@ -24,12 +24,12 @@ export const createGroup = createAsyncThunk(
   }
 );
 
-// 🔹 Async Thunk for Fetching Groups
+// 🔹 Async Thunk for Fetching Groups with Search
 export const fetchGroups = createAsyncThunk(
   'groups/fetchGroups',
-  async (_, { rejectWithValue }) => {
+  async (searchQuery = '', { rejectWithValue }) => {
     try {
-      const response = await fetch('http://localhost:5000/api/groups');
+      const response = await fetch(`http://localhost:5000/api/groups?search=${searchQuery}`);
       const data = await response.json();
 
       if (!response.ok) {
@@ -42,6 +42,7 @@ export const fetchGroups = createAsyncThunk(
     }
   }
 );
+
 
 const groupSlice = createSlice({
   name: 'groups',
