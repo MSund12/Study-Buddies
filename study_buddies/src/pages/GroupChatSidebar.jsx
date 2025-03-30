@@ -18,7 +18,7 @@ import { useSelector } from 'react-redux'; // Import useSelector to get token an
 
 // --- Configuration ---
 // It's best practice to use environment variables for API keys
-const API_KEY = process.env.REACT_APP_STREAM_API_KEY || "dmfpd2h898h5"; // Replace with your actual key or env var
+const API_KEY = "dmfpd2h898h5"; // Replace with your actual key or env var
 
 // --- StreamChatInstance Singleton ---
 // Manages a single SDK instance and connection state to prevent issues
