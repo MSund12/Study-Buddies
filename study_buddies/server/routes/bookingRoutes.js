@@ -7,27 +7,32 @@ const router = express.Router();
 
 // --- Helper Function to get start and end of a given date ---
 // (Keep this helper function as it was)
-const getDayBounds = (date) => {
-    // Ensure input is a Date object
-    const validDate = date instanceof Date ? date : new Date(date);
-    if (isNaN(validDate.getTime())) {
-        // Handle invalid date input if necessary, maybe return null or throw error
-        console.error("Invalid date passed to getDayBounds:", date);
-        // Returning bounds for 'now' might be unsafe, adjust as needed
-        const now = new Date();
-        const start = new Date(now);
-        start.setHours(0, 0, 0, 0);
-        const end = new Date(now);
-        end.setHours(23, 59, 59, 999);
-        return { startOfDay: start, endOfDay: end };
+// routes/bookingRoutes.js (Revised getDayBounds)
+
+const getDayBounds = (dateString) => {
+    // Expect input like 'YYYY-MM-DD' from req.query.date
+    try {
+        // Create Date object representing midnight UTC at the start of the target day
+        // Appending 'T00:00:00.000Z' forces interpretation as UTC midnight
+        const startOfDayUTC = new Date(`${dateString}T00:00:00.000Z`);
+
+        // Check if the resulting date is valid
+        if (isNaN(startOfDayUTC.getTime())) {
+             console.error("Invalid date string resulted in invalid Date object:", dateString);
+             return null; // Indicate error: invalid date input
+        }
+
+        // Create Date object for the start of the *next* day in UTC
+        const startOfNextDayUTC = new Date(startOfDayUTC);
+        startOfNextDayUTC.setUTCDate(startOfDayUTC.getUTCDate() + 1); // Add 1 day (UTC-safe)
+
+        // Return the boundaries
+        return { startOfDay: startOfDayUTC, endOfDay: startOfNextDayUTC };
+    } catch (e) {
+         // Catch potential errors during date manipulation
+         console.error("Error processing date string in getDayBounds:", dateString, e);
+         return null; // Indicate error
     }
-
-    const start = new Date(validDate);
-    start.setHours(0, 0, 0, 0); // Set to beginning of the day
-
-    const end = new Date(validDate);
-    end.setHours(23, 59, 59, 999); // Set to end of the day
-    return { startOfDay: start, endOfDay: end };
 };
 
 
@@ -122,32 +127,49 @@ router.get('/my-bookings', authenticateToken, async (req, res) => {
 });
 
 // --- Route to Get All Bookings (or Filtered by Date) ---
-// Keeping the SIMPLIFIED version for now to confirm routing works first.
-// You can replace this with your full logic later.
-router.get('/', (req, res) => {
-    console.log('>>> GET /api/bookings route hit successfully! (ESM Version)'); // Log confirmation
-    // To test actual data fetching later, replace the line below with:
-    // try {
-    //    let query = {};
-    //    if (req.query.date) {
-    //       const date = new Date(req.query.date);
-    //       if (!isNaN(date.getTime())) {
-    //           const { startOfDay, endOfDay } = getDayBounds(date);
-    //           query.startTime = { $gte: startOfDay, $lt: endOfDay };
-    //       } else {
-    //         // Optional: return bad request if date format is invalid
-    //         // return res.status(400).json({ message: "Invalid date format."});
-    //       }
-    //    }
-    //    const bookings = await Booking.find(query);
-    //    res.status(200).json(bookings);
-    // } catch (error) {
-    //    console.error("Error fetching all bookings:", error);
-    //    res.status(500).json({ message: "Server error fetching bookings." });
-    // }
 
-    // Simplified response for initial testing:
-    res.status(200).json([{ tempId: 1, message: 'Simplified route reached OK (ESM)' }]);
+router.get('/', async (req, res) => {
+    console.log(`>>> GET /api/bookings route hit. Query:`, req.query);
+    try {
+        let query = {}; // Mongoose query object
+        let bounds = null; // Initialize bounds
+
+        // Check if a date query parameter exists and is a non-empty string
+        if (req.query.date && typeof req.query.date === 'string' && req.query.date.trim() !== '') {
+            // Use the revised getDayBounds with the date string
+            bounds = getDayBounds(req.query.date);
+
+            if (bounds) {
+                // Use the UTC start/end times for the query
+                // Find bookings STARTING >= UTC midnight of target day AND < UTC midnight of NEXT day
+                query.startTime = { $gte: bounds.startOfDay, $lt: bounds.endOfDay };
+                console.log(`[${new Date().toISOString()}] Querying UTC range: ${bounds.startOfDay.toISOString()} to ${bounds.endOfDay.toISOString()}`);
+            } else {
+                // getDayBounds returned null due to invalid date format
+                console.warn(`[<span class="math-inline">\{new Date\(\)\.toISOString\(\)\}\] Invalid date format received\: '</span>{req.query.date}'. Cannot filter by date.`);
+                // Return 400 for invalid date format request
+                return res.status(400).json({ message: "Invalid date format. Use YYYY-MM-DD." });
+            }
+        } else {
+             console.log(`[${new Date().toISOString()}] No date query provided. Fetching all bookings (consider adding default filters).`);
+             // WARNING: Fetching ALL bookings might be too much data. Add default filters if needed.
+             // Example: query.startTime = { $gte: new Date() }; // Only future bookings
+        }
+
+        // Execute the query using the defined 'query' object
+        const bookings = await Booking.find(query)
+                                      .populate('user', 'firstName lastName email')
+                                      .sort({ startTime: 1 });
+
+        console.log(`[${new Date().toISOString()}] Found ${bookings.length} bookings matching query.`);
+
+        // Send the found bookings (will be an empty array if none found)
+        res.status(200).json(bookings);
+
+    } catch (error) {
+        console.error(`[${new Date().toISOString()}] !!! ERROR in GET /api/bookings:`, error);
+        res.status(500).json({ message: "Server error fetching bookings." });
+    }
 });
 
 // Use ESM export default
