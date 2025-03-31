@@ -27,7 +27,7 @@ const CreateGroupPage = () => {
 
   const handleSignOut = () => {
       dispatch(logout());
-      navigate('/signin');
+      navigate('/starter');
     };
 
   // Effect to pre-fill course from URL query parameter

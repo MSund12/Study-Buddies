@@ -50,7 +50,7 @@ body {
     opacity: 0.6;
   }
 
-  .search-container{
+  .search-group{
     position: relative; /* Keep relative positioning */
     /* top: 12vh; */ /* Adjust top position if needed or use margin */
     margin-top: 4vh;
@@ -59,9 +59,11 @@ body {
     width: 70%; /* Example width */
     max-width: 800px; /* Max width for search */
     z-index: 10;
+    display: flex;
+    flex-direction: column;
   }
 
-  .search-bar{
+  .search-group input{
     width: 100%; /* Make search bar fill its container */
     height: 3.5vh;
     min-height: 30px; /* Minimum height */
