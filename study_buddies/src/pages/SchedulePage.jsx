@@ -75,7 +75,6 @@ const SchedulePage = () => {
       <PinkShape color="#F6960A"/>
 
       <nav className="buttons-container-home">
-        <a href="#" className="buttons">Courses</a>
 
         <a
           href="#"
