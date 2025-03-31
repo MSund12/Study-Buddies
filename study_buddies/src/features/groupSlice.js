@@ -46,62 +46,48 @@ export const fetchGroups = createAsyncThunk(
 const groupSlice = createSlice({
   name: 'groups',
   initialState: {
-    groups: [], // Ensure initial state is an array
+    groups: [],
     loading: false,
     error: null,
     successMessage: null,
-    // Add pagination state if you plan to use it
-    // totalGroups: 0,
-    // totalPages: 0,
-    // currentPage: 1,
+    // Ensure these are defined in initial state
+    totalGroups: 0,
+    totalPages: 0,
+    currentPage: 1,
   },
   reducers: {
-    clearMessages: (state) => {
-      state.error = null;
-      state.successMessage = null;
-    }
+     // ... clearMessages ...
   },
   extraReducers: (builder) => {
     builder
-      // Create Group Cases (ensure push safety)
-      .addCase(createGroup.pending, (state) => {
-        state.loading = true; state.error = null; state.successMessage = null;
-      })
-      .addCase(createGroup.fulfilled, (state, action) => {
-        state.loading = false;
-        state.successMessage = action.payload?.message;
-        // Safety check: Ensure state.groups is an array before pushing
-        if (Array.isArray(state.groups) && action.payload?.group) {
-            state.groups.push(action.payload.group);
-        } else {
-            // Handle unexpected state - maybe replace state or log error
-             console.error("Could not push group, state.groups is not an array or group missing:", state.groups, action.payload);
-             // Fallback: If groups isn't an array, maybe initialize it with the new group
-             // state.groups = action.payload?.group ? [action.payload.group] : [];
-        }
-      })
-      .addCase(createGroup.rejected, (state, action) => {
-        state.loading = false; state.error = action.payload;
-      })
+      // ... createGroup cases ...
 
       // Fetch Groups Cases
       .addCase(fetchGroups.pending, (state) => {
         state.loading = true; state.error = null;
       })
       .addCase(fetchGroups.fulfilled, (state, action) => {
-        state.loading = false;
-        // --- CORRECTED REDUCER ---
-        // Assign ONLY the groups array from the payload to state.groups
-        state.groups = action.payload?.groups || []; // Use optional chaining and default to empty array
-        // --- END CORRECTION ---
+        // ***** ADD LOGS *****
+        console.log('--- fetchGroups Fulfilled Reducer ---');
+        // Log the entire payload received from the thunk
+        console.log('Received action.payload:', JSON.stringify(action.payload, null, 2));
+        // Log state *before* changes
+        console.log('State BEFORE update:', JSON.stringify(state));
+        // ***** END LOGS *****
 
-        // Optionally store pagination info from payload
-        // state.totalGroups = action.payload?.totalGroups || 0;
-        // state.totalPages = action.payload?.totalPages || 0;
-        // state.currentPage = action.payload?.currentPage || 1;
+        state.loading = false;
+        state.groups = action.payload?.groups || [];
+        state.totalGroups = action.payload?.totalGroups || 0;
+        state.totalPages = action.payload?.totalPages || 0; // Assign totalPages
+        state.currentPage = action.payload?.currentPage || 1; // Assign currentPage
+
+        // ***** ADD LOG *****
+        // Log state *after* changes
+        console.log('State AFTER update:', JSON.stringify(state));
+        // ***** END LOG *****
       })
       .addCase(fetchGroups.rejected, (state, action) => {
-        state.loading = false; state.error = action.payload;
+        // ... (error handling) ...
       });
   },
 });

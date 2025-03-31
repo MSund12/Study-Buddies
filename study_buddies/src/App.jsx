@@ -48,9 +48,6 @@ const App = () => {
         <Route path="/book" element={<BookRoom currentUser={currentUser}/>}/>
 
         <Route path="/courses/:courseSlug" element={<CoursePage />} />
-        {/* The ':courseSlug' part makes it dynamic. It will match /courses/EECS-2311, /courses/MATH-2930, etc. */}
-        {/* The value matched ("EECS-2311") will be available inside CoursePage via useParams(). */}
-        {/* --- END ADDED ROUTE --- */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </div>

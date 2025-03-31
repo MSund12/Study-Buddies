@@ -8,69 +8,65 @@ import Header from '../Header';
 import RedShape from './components/RedShape';
 import PinkShape from './components/PinkShape';
 import PurpleShape from './components/PurpleShape';
-import './styles/HomePage.css'; // Keep common styles
-import './styles/CoursePage.css'; // Import specific styles for this page
+import './styles/CoursePage.css'; // <-- Import the new specific CSS file
 
 const CoursePage = () => {
+  // ... (hooks, state, functions remain the same) ...
   const { courseSlug } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const { currentUser } = useSelector((state) => state.auth);
   const { groups, loading: isLoading, error, totalPages } = useSelector((state) => state.groups);
-
   const [currentPage, setCurrentPage] = useState(1);
   const courseTitle = courseSlug ? courseSlug.replace(/-/g, ' ') : 'Course';
 
-  // Fetch Groups Effect (remains the same)
   useEffect(() => {
     if (courseSlug) {
        dispatch(fetchGroups({ course: courseTitle, page: currentPage, limit: 9 }));
     }
   }, [dispatch, courseSlug, courseTitle, currentPage]);
 
-  // Group Click Handler (remains the same)
   const handleGroupClick = (groupId, groupName) => {
      alert(`Maps to group: ${groupName} (ID: ${groupId}) - Page not implemented yet.`);
      // navigate(`/groups/${groupId}`);
   };
 
-  // Pagination Handlers (remain the same)
-  const handlePrevPage = () => {
-      setCurrentPage((prev) => Math.max(prev - 1, 1));
-  };
-  const handleNextPage = () => {
-      setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-  };
+  const handlePrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+  const handleNextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+
+  // Log pagination state just before render
+  console.log('Pagination check:', { currentPage, totalPages, isLoading });
 
   return (
-    // Reuse layout structure from HomePage
-    <div className="starter-container course-page-container"> {/* Added course-page-container */}
+    // Keep starter-container if it provides useful base styles, or use course-page-container
+    <div className="starter-container course-page-container">
       <Header currentUser={currentUser} />
 
-      <RedShape color="#1EE1A8" />
-      <PinkShape />
-      <PurpleShape />
+      {/* ... Shapes ... */}
+       <RedShape color="#1EE1A8" />
+       <PinkShape />
+       <PurpleShape />
+
 
       <div className="course-page-header">
          <h1>Study Groups for {courseTitle}</h1>
          <Link to="/home" className="back-link">Back to Courses</Link>
       </div>
 
-      {/* Group Display Area */}
+      {/* Group Display Area - uses placeholder-container for layout */}
       <div className="placeholder-container">
         {isLoading ? ( <p className="loading-message">Loading groups...</p> )
          : error ? ( <p className="error-message">{error}</p> )
          : groups.length > 0 ? (
             groups.map((group) => (
-              // --- CHANGED from button to div ---
+              // --- Use only 'group-box' class now ---
               <div
                 key={group._id}
-                className="placeholder-box group-box" // Keep classes for styling
-                onClick={() => handleGroupClick(group._id, group.groupName)} // Keep onClick
-                role="button" // Add role for accessibility
-                tabIndex={0} // Make it focusable
-                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleGroupClick(group._id, group.groupName)} // Allow activation with Enter/Space
+                className="group-box" // <-- CHANGED CLASS NAME
+                onClick={() => handleGroupClick(group._id, group.groupName)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleGroupClick(group._id, group.groupName)}
                 title={`View group: ${group.groupName}`}
               >
                 <div className="group-box-content">
@@ -99,12 +95,12 @@ const CoursePage = () => {
 
        {/* Create Group Button */}
        <button
-         className="circular-button"
-         style={{ backgroundColor: '#1E90FF', bottom: '30px', right: '30px' }} // Ensure position is set
+         className="circular-button" // Keep this class if style is defined globally or in HomePage.css
+         style={{ backgroundColor: '#1E90FF', bottom: '30px', right: '30px' }}
          title={`Create a new group for ${courseTitle}`}
          onClick={() => navigate(`/create-group?course=${encodeURIComponent(courseTitle)}`)}
        >
-         Create Group {/* Text shortened for clarity */}
+         Create Group
        </button>
 
     </div>
