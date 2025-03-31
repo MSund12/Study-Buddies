@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../features/authSlice';
 import { createGroup, clearMessages } from '../features/groupSlice';
 import { useNavigate, useLocation } from 'react-router-dom';
+import RedShape from './components/RedShape';
+import PinkShape from './components/PinkShape';
+import PurpleShape from './components/PurpleShape';
 import './styles/CreateGroupPage.css';
 import Header from '../Header';
 
@@ -20,6 +24,11 @@ const CreateGroupPage = () => {
   const [courseResults, setCourseResults] = useState([]);
 
   const { loading, error, successMessage } = useSelector((state) => state.groups);
+
+  const handleSignOut = () => {
+      dispatch(logout());
+      navigate('/signin');
+    };
 
   // Effect to pre-fill course from URL query parameter
   useEffect(() => {
@@ -114,6 +123,29 @@ const CreateGroupPage = () => {
   return (
     <div className="starter-container">
       <Header currentUser={currentUser} />
+
+      {/* Sign Out Button */}
+      {currentUser && (
+        <div className="signout-container">
+          <button className="signout-button" onClick={handleSignOut}>
+            Sign Out
+          </button>
+        </div>
+      )}
+
+      {/* Decorative Shapes */}
+      <RedShape color="#1EE1A8" />
+      <PinkShape />
+      <PurpleShape />
+
+      {/* Navigation Buttons */}
+      <nav className="buttons-container-home">
+         <a href="#" className="buttons">Courses</a>
+         <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/group-finder'); }}>Study Groups</a>
+         <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/chat'); }}>Chats</a>
+         <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/schedule'); }}>Schedules</a>
+         <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/book'); }}>Book a Room</a>
+      </nav>
 
       <div className="create-group-container">
         <h2>Create a New Study Group</h2>

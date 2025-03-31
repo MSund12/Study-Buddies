@@ -1,6 +1,10 @@
 // src/pages/GroupFinderPage.jsx
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../features/authSlice';
+import RedShape from './components/RedShape';
+import PinkShape from './components/PinkShape';
+import PurpleShape from './components/PurpleShape';
 import { fetchGroups } from '../features/groupSlice'; // Assuming fetchGroups fetches ALL groups when no filter passed
 import { useNavigate } from 'react-router-dom'; // Added useNavigate for potential future use
 import "./styles/GroupFinderPage.css"; // Import specific CSS
@@ -10,6 +14,12 @@ const GroupFinderPage = ({ onBack, onSelectGroup }) => {
   const currentUser = useSelector((state) => state.auth.currentUser);
   const dispatch = useDispatch();
   const navigate = useNavigate(); // Initialize navigate
+
+  // Handle logout (remains the same)
+    const handleSignOut = () => {
+      dispatch(logout());
+      navigate('/signin');
+    };
 
   // Read state from Redux, provide defaults
   const {
@@ -62,8 +72,31 @@ const GroupFinderPage = ({ onBack, onSelectGroup }) => {
 
   return (
     // Use starter-container for consistent base layout
-    <div className="starter-container group-finder-container"> {/* Added specific class */}
+    <div className="starter-container"> {/* Added specific class */}
       <Header currentUser={currentUser} />
+
+      {/* Sign Out Button */}
+      {currentUser && (
+        <div className="signout-container">
+          <button className="signout-button" onClick={handleSignOut}>
+            Sign Out
+          </button>
+        </div>
+      )}
+
+      {/* Decorative Shapes */}
+      <RedShape color="#1EE1A8" />
+      <PinkShape />
+      <PurpleShape />
+
+      {/* Navigation Buttons */}
+      <nav className="buttons-container-home">
+         <a href="#" className="buttons">Courses</a>
+         <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/group-finder'); }}>Study Groups</a>
+         <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/chat'); }}>Chats</a>
+         <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/schedule'); }}>Schedules</a>
+         <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/book'); }}>Book a Room</a>
+      </nav>
 
        {/* Add a back button if this page isn't the root */}
        {onBack && <button onClick={onBack} className="back-button"> &lt; Back</button>}
