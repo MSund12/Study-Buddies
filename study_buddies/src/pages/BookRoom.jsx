@@ -321,7 +321,6 @@ const BookRoom = () => {
             
                   {/* Navigation Buttons */}
                   <nav className="buttons-container-home">
-                     <a href="#" className="buttons">Courses</a>
                      <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/group-finder'); }}>Study Groups</a>
                      <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/chat'); }}>Chats</a>
                      <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/schedule'); }}>Schedules</a>
