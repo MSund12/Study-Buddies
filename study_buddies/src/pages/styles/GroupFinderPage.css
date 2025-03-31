@@ -1,37 +1,157 @@
-body {
-  background: #FFFFFF;
-  font-family: 'Potta One', cursive;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
+.group-finder-container {
+  padding-bottom: 50px;
 }
 
-/* Container to keep layout responsive */
-.starter-container {
-  position: relative;
-  width: 100%;
-  height: 100%; /* Full screen height */
+/* --- Page Title & Back Button --- */
+.page-title {
+    text-align: center;
+    margin: 20px 0 30px 0;
+    font-size: 2em;
+    color: #333;
+}
+
+.back-button {
+    position: absolute;
+    top: 80px; /* Adjust as needed based on header height */
+    left: 20px;
+    padding: 8px 15px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 10;
+}
+.back-button:hover {
+    background-color: #e0e0e0;
+}
+
+
+/* --- Sorting Controls --- */
+.sorting-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    padding: 10px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    width: fit-content; /* Size to content */
+    margin-left: auto;
+    margin-right: auto; /* Center block */
+}
+.sorting-controls label {
+    font-weight: 500;
+}
+.sorting-controls select {
+    padding: 5px 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+
+/* --- Group Container (Copied from .placeholder-container) --- */
+.placeholder-container {
+  margin-top: 2vh; /* Adjusted margin */
+  padding: 0 5%;
+  gap: 25px;
+  width: 90%;
+  max-width: 1200px;
+  justify-content: center; /* Center items horizontally */
+  display: flex;
+  flex-wrap: wrap;
+  z-index: 5;
+  min-height: 150px;
+}
+
+/* --- Group Box Styling (Copied from CoursePage red theme) --- */
+.group-box {
+  flex: 1 1 220px; /* Adjust flex-basis slightly if needed */
+  max-width: 280px; /* Adjust max-width */
+  min-width: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 160px; /* Adjust height */
+  padding: 15px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  overflow: hidden;
+
+  /* Red Theme */
+  background-color: #DE3838;
+  color: white;
+  border: none;
+  font-family: 'Potta One', cursive; /* Homepage font */
+
+  /* Make it look clickable */
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.group-box:hover {
+  transform: translateY(-3px);
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.15);
+  background-color: #C93030; /* Darker red */
+}
+
+.group-box:focus {
+  outline: 2px solid blue;
+  outline-offset: 2px;
+}
+
+/* --- Content Inside Group Box --- */
+.group-box-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 8px;
+  width: 100%;
 }
 
-  .sorting-controls{
-    position: relative;
-    top: 10vh;
-  }
+.group-name {
+  font-size: 1.1em;
+  font-weight: bold;
+  word-break: break-word;
+  line-height: 1.2;
+  color: white;
+}
 
-  .error-message{
-    color: black;
-  }
+.group-course { /* Added style for course name */
+    font-size: 0.8em;
+    font-style: italic;
+    opacity: 0.9;
+    color: white;
+    margin-top: -5px; /* Adjust spacing */
+    margin-bottom: 5px;
+}
 
-  .group-display{
-    position: absolute;
-    top: 25vh;
-    color: black;
-  }
+.group-members {
+  font-size: 0.85em;
+  font-weight: normal;
+  opacity: 0.9;
+  color: white;
+}
+
+/* --- Loading / Error / No Groups Messages (Reuse from CoursePage) --- */
+.loading-message, .no-groups-message {
+    width: 100%;
+    text-align: center;
+    font-size: 1.1em;
+    color: #555;
+    padding: 40px 20px;
+}
+.error-message { /* Ensure this is defined if not globally */
+  color: #D8000C;
+  background-color: #FFD2D2;
+  border: 1px solid #D8000C;
+  padding: 15px;
+  margin: 20px auto;
+  border-radius: 4px;
+  text-align: center;
+  width: 80%;
+  max-width: 600px;
+}
