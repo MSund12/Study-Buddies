@@ -1,345 +1,512 @@
-/* src/pages/styles/GroupChatSidebar.css */
+/* styles/GroupChatSidebar.css */
 
-/* Apply theme variables to the Stream Chat components */
-.str-chat-channel-list-react, /* Target root of stream components */
-.str-chat__theme-light {
-  /* Or use a custom wrapper class around your <Chat> component */
-
-  /* --- Font --- */
-  /* Using system fonts for a clean look similar to the image */
-  --str-chat__font-family: system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
-    sans-serif;
-
-  /* --- Color Palette (Based on image_89925a.jpg) --- */
-  --theme-color-accent: #ff3e6c; /* Pinkish-red */
-  --theme-color-secondary-bg: #f0f0f0; /* Light grey for other bubbles/input */
-  --theme-color-background: #ffffff; /* White background */
-  --theme-color-text-dark: #333333; /* Dark text */
-  --theme-color-text-light: #ffffff; /* Light text (on accent bg) */
-  --theme-color-text-subtle: #999999; /* Grey text (timestamps) */
-  --theme-color-border: #eeeeee; /* Light borders */
-
-  /* --- General Theme --- */
-  --str-chat__primary-color: var(
-    --theme-color-accent
-  ); /* Affects links, mentions, active highlights */
-  --str-chat__bg-color: var(--theme-color-background);
-  --str-chat__text-color: var(--theme-color-text-dark);
-  --str-chat__border-color: var(--theme-color-border);
-
-  /* --- Avatars --- */
-  --str-chat__avatar-border-radius: 50%; /* Circular avatars */
-  --str-chat__avatar-size: 40px;
-
-  /* --- Channel List --- */
-  --str-chat__channel-list--background: var(--theme-color-background);
-  --str-chat__channel-list-header--padding: 15px;
-
-  /* --- Channel Preview (in list) --- */
-  --str-chat__channel-preview--background: transparent;
-  --str-chat__channel-preview--border-bottom: 1px solid
-    var(--theme-color-border);
-  --str-chat__channel-preview-title--font-weight: 600; /* Bolder name */
-  --str-chat__channel-preview-message--color: var(--theme-color-text-subtle);
-  --str-chat__channel-preview--active-border-color: transparent; /* Remove side border for active */
-  --str-chat__channel-preview--active-background: #fff5f7; /* Very subtle pink background for active */
-
-  /* --- Chat Window Header --- */
-  --str-chat__channel-header--background: var(--theme-color-background);
-  --str-chat__channel-header--border-bottom: 1px solid var(--theme-color-border);
-  --str-chat__channel-header-title--font-weight: 600; /* Bolder header title */
-
-  /* --- Message List --- */
-  --str-chat__main-panel--background: var(--theme-color-background);
-  --str-chat__main-panel--padding: 0;
-  --str-chat__message-list-padding: 15px 10px; /* Add some padding */
-
-  /* --- Message Bubbles --- */
-  --str-chat__message-bubble-border-radius: 16px; /* Rounded corners */
-  --str-chat__message-bubble--box-shadow: none; /* Cleaner look */
-  --str-chat__message-padding: 8px 12px; /* Adjust padding inside bubble */
-
-  /* User's own messages */
-  --str-chat__message-bubble-color--mine: var(--theme-color-accent);
-  --str-chat__message-text-color--mine: var(--theme-color-text-light);
-
-  /* Other users' messages */
-  --str-chat__message-bubble-color--theirs: var(--theme-color-secondary-bg);
-  --str-chat__message-text-color--theirs: var(--theme-color-text-dark);
-
-  /* Message Text & Meta */
-  --str-chat__message-text--font-size: 0.9rem;
-  --str-chat__message-meta--color: var(--theme-color-text-subtle);
-  --str-chat__message-meta--font-size: 0.7rem;
-
-  /* --- Message Input --- */
-  --str-chat__message-input-container--border-top: 1px solid
-    var(--theme-color-border);
-  --str-chat__message-input-container--background: var(
-    --theme-color-background
-  ); /* White background behind input */
-  --str-chat__message-input--background: var(
-    --theme-color-secondary-bg
-  ); /* Grey input field */
-  --str-chat__message-input--border-radius: 20px; /* Rounded input field */
-  --str-chat__message-input--border: 1px solid transparent; /* Remove default border */
-  --str-chat__message-input-textarea--padding: 10px 15px; /* Input text padding */
-  --str-chat__message-input-textarea--box-shadow-focus: none; /* Remove focus outline */
-  --str-chat__message-input-textarea--border-color-focus: transparent;
-
-  /* --- Send Button --- */
-  --str-chat__message-send-button--background-color: var(--theme-color-accent);
-  --str-chat__message-send-button--border-radius: 50%; /* Circular */
-  --str-chat__message-send-button--width: 36px;
-  --str-chat__message-send-button--height: 36px;
-  --str-chat__message-send-button-icon--color: var(
-    --theme-color-text-light
-  ); /* White icon */
-  /* Remove default hover effect if desired */
-  /* --str-chat__message-send-button--background-color-hover: var(--theme-color-accent); */
-}
-
-/* --- Custom Styles for Your Specific JSX Elements --- */
-
+/* --- General Layout --- */
 .chat-layout-wrapper {
   display: flex;
-  height: calc(100vh - 50px); /* Adjust based on your app's header */
-  font-family: var(--str-chat__font-family, sans-serif);
+  height: 100vh; /* Or adjust to fit your container */
+  width: 100%;
+  background-color: #f8f9fa; /* Light background */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
 }
 
 .group-chat-sidebar-column {
-  width: 320px;
-  border-right: 1px solid var(--theme-color-border, #eee);
   display: flex;
   flex-direction: column;
-  background-color: var(--theme-color-background, white);
+  width: 280px; /* Adjust width as needed */
+  border-right: 1px solid #e0e0e0;
+  background-color: #fff;
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
+.chat-window-area {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  /* Stream's Chat component will fill this */
+}
+
+/* --- Loading/Error States --- */
+.chat-loading-container,
+.chat-error-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 20px;
+  text-align: center;
+  color: #555;
+}
+.chat-error-container h2 {
+  color: #d9534f; /* Reddish color for errors */
+  margin-bottom: 10px;
+}
+.chat-error-container .error-message {
+  color: #d9534f;
+  font-weight: bold;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  max-width: 400px; /* Limit width for readability */
+}
+
+/* --- Sidebar Header --- */
 .sidebar-header {
-  padding: var(--str-chat__channel-list-header--padding, 15px);
-  border-bottom: 1px solid var(--theme-color-border, #eee);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--theme-color-background, white);
+  padding: 12px 15px;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #f8f9fa; /* Slightly different background */
 }
 
 .sidebar-header h2 {
   margin: 0;
-  font-size: 1.2em;
+  font-size: 1.1em;
   font-weight: 600;
+  color: #333;
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: var(--str-chat__text-color, #333);
+  gap: 8px; /* Space between icon and text */
 }
 
-.sidebar-header button {
-  background-color: transparent;
-  color: var(--str-chat__primary-color, #ff3e6c); /* Use accent color */
-  border: none;
-  border-radius: 4px;
-  padding: 5px 8px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  font-size: 1.1em;
-}
-.sidebar-header button:hover {
-  background-color: var(
-    --theme-color-secondary-bg,
-    #f0f0f0
-  ); /* Light grey hover */
-}
-
-.channel-list-container {
-  flex: 1;
-  overflow-y: auto;
-}
-
-.chat-window-area {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--theme-color-background, white);
-}
-
-/* --- Custom Channel Preview Specific Styles --- */
-/* Use Stream's classes for easier targeting */
-.str-chat__channel-preview-messenger {
-  padding: 10px 15px !important; /* Override default padding slightly */
-  border-bottom: 1px solid var(--theme-color-border, #eee) !important;
-}
-.str-chat__channel-preview-messenger--name {
-  font-weight: 600 !important;
-  color: var(--str-chat__text-color, #333) !important;
-  margin-bottom: 3px;
-}
-.str-chat__channel-preview-messenger--message {
-  font-size: 0.85em !important;
-  color: var(--theme-color-text-subtle, #999) !important;
-}
-.str-chat__channel-preview-messenger--active {
-  background-color: #fff5f7 !important; /* Keep subtle pink active background */
-}
-/* Style the delete button within the preview */
-.channel-preview__container button {
-  /* If you keep the container div */
+.create-group-button {
   background: none;
   border: none;
-  color: #aaa; /* Subtle grey */
+  color: #007bff; /* Primary action color */
   cursor: pointer;
   padding: 5px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
 }
-.channel-preview__container button:hover {
-  color: #777; /* Darker grey on hover */
+.create-group-button:hover {
+  background-color: #e9ecef; /* Light hover effect */
+}
+.create-group-button:disabled {
+  color: #adb5bd; /* Muted color when disabled */
+  cursor: not-allowed;
 }
 
-/* --- Modal Styles --- */
-.create-group-modal-backdrop {
+/* --- Channel List --- */
+.channel-list-container {
+  flex-grow: 1;
+  overflow-y: auto; /* Allow scrolling */
+  /* Stream's ChannelList component renders here */
+}
+/* Stream's default list styles are targeted via .str-chat__channel-list-messenger */
+.str-chat__channel-list-messenger {
+  padding: 0 !important; /* Override Stream padding if needed */
+}
+
+/* --- Custom Channel Preview --- */
+.channel-preview__container {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  border-bottom: 1px solid #f1f1f1; /* Lighter separator */
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  position: relative; /* For positioning the delete button */
+}
+.channel-preview__container:hover {
+  background-color: #f8f9fa;
+}
+/* Style for the currently active channel preview */
+.str-chat__channel-preview-messenger--active {
+  background-color: #e7f1ff !important; /* Highlight active channel */
+}
+
+.channel-preview__content {
+  flex-grow: 1;
+  overflow: hidden; /* Prevent text overflow */
+  margin-right: 30px; /* Space for delete button */
+}
+
+.channel-preview__title {
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Add ... for long names */
+  font-size: 0.95em;
+  margin-bottom: 3px;
+}
+
+.channel-preview__message {
+  font-size: 0.85em;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Add ... for long messages */
+}
+
+.channel-preview-delete-button {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #adb5bd; /* Muted color */
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0; /* Hidden by default */
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+.channel-preview__container:hover .channel-preview-delete-button {
+  opacity: 1; /* Show on hover */
+}
+.channel-preview-delete-button:hover {
+  color: #dc3545; /* Red on hover */
+  background-color: #f8d7da; /* Light red background */
+}
+
+/* --- Custom Channel Header --- */
+.custom-channel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px !important; /* Override Stream padding */
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #fff;
+  min-height: 55px; /* Ensure consistent height */
+}
+
+.custom-channel-header-info {
+  flex-grow: 1;
+  overflow: hidden; /* Prevent title overflow */
+}
+
+.str-chat__channel-header--title {
+  /* Target Stream's class */
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 10px; /* Space before member count/actions */
+}
+
+.custom-channel-header-member-count {
+  font-size: 0.85em;
+  color: #6c757d;
+  margin-left: 8px;
+  font-weight: 400;
+}
+
+.custom-channel-header-actions {
+  position: relative; /* For positioning revealed actions if needed */
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between More button and revealed actions */
+}
+
+.custom-channel-header-more-button {
+  background: none;
+  border: 1px solid #ced4da;
+  color: #495057;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.custom-channel-header-more-button:hover {
+  background-color: #e9ecef;
+  border-color: #adb5bd;
+}
+
+.custom-channel-header-revealed-actions {
+  display: flex;
+  gap: 8px; /* Space between action buttons */
+  /* Optional: Absolutely position below 'More' button */
+  /* position: absolute; */
+  /* top: 100%; */
+  /* right: 0; */
+  /* background-color: white; */
+  /* border: 1px solid #ccc; */
+  /* border-radius: 4px; */
+  /* padding: 5px; */
+  /* box-shadow: 0 2px 5px rgba(0,0,0,0.1); */
+  /* z-index: 10; */
+}
+
+.custom-channel-header-revealed-actions button {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9em;
+  transition: background-color 0.2s ease;
+}
+.custom-channel-header-revealed-actions button:hover {
+  background-color: #e7f1ff;
+}
+
+/* --- Modals --- */
+.modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6); /* Darker backdrop */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 1050; /* Ensure it's above other content */
+  padding: 20px; /* Padding for smaller screens */
+  box-sizing: border-box;
 }
-.create-group-modal {
+
+.modal-content {
   background: white;
-  color: var(--theme-color-text-dark, #333);
-  padding: 25px;
-  border-radius: 12px;
-  min-width: 400px;
-  max-width: 500px;
-  max-height: 85vh;
+  padding: 25px 30px;
+  border-radius: 8px;
+  min-width: 320px;
+  max-width: 500px; /* Max width */
+  width: 90%; /* Responsive width */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  font-family: var(--str-chat__font-family, sans-serif);
+  gap: 15px; /* Spacing between elements */
+  max-height: 90vh; /* Prevent modal being too tall */
+  overflow-y: auto; /* Allow scrolling within modal if needed */
 }
-.create-group-modal h3 {
+
+.modal-content h3 {
   margin-top: 0;
-  margin-bottom: 20px;
-  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 1.3em;
+  color: #333;
   text-align: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
 }
-.create-group-modal input[type="text"] {
-  display: block;
-  width: calc(100% - 22px);
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-family: inherit;
-  font-size: 0.9rem;
+
+.modal-content label {
+  font-weight: 500;
+  font-size: 0.9em;
+  color: #555;
+  margin-bottom: -10px; /* Pull closer to input */
 }
-/* Search results list */
-.create-group-modal ul {
-  list-style: none;
-  padding: 0;
-  margin: 5px 0 15px 0;
-  max-height: 150px;
+
+.modal-content input[type="text"] {
+  padding: 10px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1em;
+  width: 100%;
+  box-sizing: border-box;
+}
+.modal-content input[type="text"]:focus {
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.user-search-results-container {
+  border: 1px solid #eee;
+  border-radius: 4px;
+  max-height: 150px; /* Limit height */
   overflow-y: auto;
-  border: 1px solid var(--theme-color-border, #eee);
-  border-radius: 6px;
+  margin-top: -5px; /* Adjust spacing */
+  background-color: #fff;
 }
-.create-group-modal ul li {
-  padding: 8px 12px;
-  cursor: pointer;
-  border-bottom: 1px solid var(--theme-color-border, #eee);
-  font-size: 0.9rem;
+.modal-loading {
+  padding: 10px;
+  text-align: center;
+  color: #666;
+  font-size: 0.9em;
   display: flex;
   align-items: center;
-  gap: 8px; /* For potential avatar */
+  justify-content: center;
+  gap: 8px;
 }
-.create-group-modal ul li:last-child {
-  border-bottom: none;
-}
-.create-group-modal ul li:hover {
-  background-color: #f9f9f9;
-}
-/* Selected users area */
-.create-group-modal .selected-users-container {
-  margin-bottom: 15px;
-  border: 1px solid var(--theme-color-border, #eee);
-  padding: 8px;
-  max-height: 100px;
-  overflow-y: auto;
-  border-radius: 6px;
-}
-.create-group-modal .selected-users-container p {
-  margin: 0 0 8px 0;
-  font-size: 0.9em;
-  font-weight: 600;
-}
-.create-group-modal .selected-users-container ul {
-  border: none;
-  max-height: none;
+
+.user-search-results-list {
+  list-style: none;
+  padding: 0;
   margin: 0;
 }
-.create-group-modal .selected-users-container li {
+.user-search-results-list li {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #f1f1f1;
+  font-size: 0.95em;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.85em;
-  padding: 4px 8px;
-  background: var(--theme-color-secondary-bg, #f0f0f0);
-  margin-bottom: 4px;
-  border-radius: 4px;
-  border: none;
 }
-.create-group-modal .selected-users-container button {
-  /* Remove button */
+.user-search-results-list li:last-child {
+  border-bottom: none;
+}
+.user-search-results-list li:hover {
+  background-color: #f8f9fa;
+}
+.user-select-hint {
+  font-size: 0.8em;
+  color: #aaa;
+}
+
+.selected-users-container {
+  margin-top: 5px;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+.selected-users-container p {
+  margin: 0 0 5px 0;
+  font-weight: 500;
+  font-size: 0.9em;
+  color: #555;
+}
+.selected-users-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.selected-users-list li {
+  background-color: #e9ecef;
+  padding: 4px 8px;
+  border-radius: 12px; /* Pill shape */
+  font-size: 0.85em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #495057;
+}
+.selected-users-list button {
   background: none;
   border: none;
-  color: var(--theme-color-accent, #ff3e6c);
+  color: #6c757d;
   cursor: pointer;
-  padding: 0 5px;
-  font-size: 1em;
+  padding: 0;
+  margin-left: 2px;
+  display: flex;
+  align-items: center;
 }
-/* Modal action buttons */
+.selected-users-list button:hover {
+  color: #dc3545;
+}
+
+.view-members-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.view-members-list li {
+  padding: 8px 5px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.95em;
+}
+.view-members-list li:last-child {
+  border-bottom: none;
+}
+.member-name {
+  font-weight: 500;
+}
+.you-tag {
+  font-size: 0.8em;
+  color: #6c757d;
+  margin-left: 5px;
+}
+
+.modal-info-text {
+  font-size: 0.9em;
+  color: #6c757d;
+  text-align: center;
+  padding: 10px;
+}
+
+.modal-error {
+  color: #dc3545; /* Bootstrap danger red */
+  font-size: 0.9em;
+  background-color: #f8d7da; /* Light red background */
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-top: 5px;
+}
+
 .modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  margin-top: auto;
-}
-.modal-actions button {
-  padding: 10px 20px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  font-family: inherit;
-}
-.modal-actions button:first-of-type {
-  /* Create */
-  background-color: var(--theme-color-accent, #ff3e6c);
-  color: var(--theme-color-text-light, white);
-}
-.modal-actions button:first-of-type:hover {
-  opacity: 0.9;
-}
-.modal-actions button:last-of-type {
-  /* Cancel */
-  background-color: #eee;
-  color: var(--theme-color-text-dark, #333);
-  border: 1px solid #ccc;
-}
-.modal-actions button:last-of-type:hover {
-  background-color: #ddd;
-}
-.modal-error {
-  color: var(--theme-color-accent, #ff3e6c);
-  margin-bottom: 10px;
-  font-size: 0.9rem;
+  margin-top: 15px; /* More space before actions */
+  padding-top: 15px;
+  border-top: 1px solid #eee;
 }
 
-/* Loading spinner animation */
+/* General Button Styles (used in modals) */
+.modal-actions button {
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.95em;
+  font-weight: 500;
+  border: 1px solid transparent;
+  transition: background-color 0.2s ease, border-color 0.2s ease,
+    color 0.2s ease;
+  display: flex; /* For aligning icon and text */
+  align-items: center;
+  gap: 6px; /* Space between icon and text */
+}
+.modal-actions button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.button-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: white;
+}
+.button-primary:hover:not(:disabled) {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.button-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: white;
+}
+.button-secondary:hover:not(:disabled) {
+  background-color: #5a6268;
+  border-color: #545b62;
+}
+/* Cancel button might look better as outlined/ghost */
+/* .button-secondary {
+    background-color: transparent;
+    border-color: #6c757d;
+    color: #6c757d;
+}
+.button-secondary:hover:not(:disabled) {
+    background-color: #f8f9fa;
+} */
+
+/* --- Spinner Animation --- */
 .spin {
   animation: spin 1s linear infinite;
 }
@@ -350,4 +517,350 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* styles/GroupChatSidebar.css */
+
+/* --- Avatar Placeholder --- */
+.avatar-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: white;
+  font-weight: 500;
+  flex-shrink: 0; /* Prevent shrinking in flex containers */
+  line-height: 1; /* Ensure text is vertically centered */
+  overflow: hidden; /* Hide overflowing text */
+  text-align: center; /* Center single initial */
+}
+
+/* --- Custom Channel Header Actions --- */
+.custom-channel-header {
+  /* Existing styles... */
+  position: relative; /* Needed if positioning revealed actions absolutely */
+}
+.custom-channel-header-actions-wrapper {
+  position: relative; /* Container for button and revealed actions */
+  display: flex; /* Aligns button and potential revealed actions */
+  align-items: center;
+}
+
+.more-actions-btn {
+  background-color: #f8f9fa; /* Light background */
+  border: 1px solid #dee2e6; /* Subtle border */
+  color: #495057;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-weight: 500;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  margin-left: 10px; /* Space from channel info */
+}
+.more-actions-btn:hover {
+  background-color: #e9ecef;
+  border-color: #ced4da;
+}
+
+.revealed-actions-container {
+  position: absolute;
+  top: 100%; /* Position below the 'More' button */
+  right: 0;
+  margin-top: 5px; /* Small gap */
+  background-color: white;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10; /* Ensure it's above other content */
+  display: flex;
+  flex-direction: column; /* Stack buttons vertically */
+  padding: 5px;
+  min-width: 150px; /* Minimum width */
+}
+
+.revealed-actions-container button {
+  background: none;
+  border: none;
+  color: #333; /* Standard text color */
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Space between icon and text */
+  font-size: 0.9em;
+  text-align: left; /* Align text left */
+  width: 100%; /* Make buttons fill container */
+  transition: background-color 0.2s ease;
+}
+.revealed-actions-container button:hover {
+  background-color: #f1f3f5; /* Light hover */
+  color: #0056b3; /* Optional: color change on hover */
+}
+
+/* --- Modal User Selection UI --- */
+
+/* Selected User Pills */
+.selected-users-display {
+  margin-top: 10px;
+  margin-bottom: 5px; /* Space before search results */
+  /* Optional: border-bottom: 1px solid #eee; */
+  /* padding-bottom: 10px; */
+}
+.selected-users-pills {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px; /* Spacing between pills */
+}
+.user-pill {
+  display: inline-flex; /* Align items inline */
+  align-items: center;
+  background-color: #e9ecef; /* Light background for pill */
+  border-radius: 16px; /* Rounded pill shape */
+  padding: 4px 6px 4px 4px; /* Adjust padding, more space before remove btn */
+  font-size: 0.9em;
+  color: #495057;
+  gap: 6px; /* Space between avatar and name */
+  max-width: 180px; /* Prevent pills from getting too wide */
+}
+.pill-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-grow: 1; /* Allow name to take space */
+}
+.remove-pill-btn {
+  background: none;
+  border: none;
+  color: #6c757d; /* Muted color */
+  cursor: pointer;
+  padding: 2px;
+  margin-left: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+.remove-pill-btn:hover {
+  color: #dc3545; /* Red on hover */
+  background-color: #f8d7da; /* Light red background */
+}
+
+/* User Search Results List */
+.user-search-results {
+  margin-top: 15px; /* Space above the results */
+  border: 1px solid #eee;
+  border-radius: 4px;
+  max-height: 200px; /* Limit height */
+  overflow-y: auto;
+  background-color: #fff;
+}
+.user-results-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.user-result-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #f1f1f1;
+  gap: 10px; /* Space between avatar and info */
+  transition: background-color 0.15s ease-in-out;
+}
+.user-result-item:last-child {
+  border-bottom: none;
+}
+.user-result-item:hover {
+  background-color: #f8f9fa; /* Hover effect */
+}
+.user-info {
+  display: flex;
+  flex-direction: column; /* Stack name and detail */
+  flex-grow: 1; /* Take remaining space */
+  overflow: hidden; /* Prevent overflow */
+}
+.user-name {
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.user-detail {
+  font-size: 0.85em;
+  color: #6c757d;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* View Members Modal List */
+.members-list-view {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+  max-height: 350px;
+  overflow-y: auto;
+}
+.member-list-item-view {
+  display: flex;
+  align-items: center;
+  padding: 10px 5px;
+  border-bottom: 1px solid #eee;
+  gap: 12px; /* Space between avatar and name */
+}
+.member-list-item-view:last-child {
+  border-bottom: none;
+}
+.member-list-item-view .member-name {
+  /* Reuse .member-name from view modal */
+  font-weight: 500;
+  flex-grow: 1; /* Allow name to take space */
+}
+.member-list-item-view .you-tag {
+  /* Reuse .you-tag */
+  font-size: 0.8em;
+  color: #6c757d;
+  margin-left: auto; /* Push tag to the right */
+  padding-left: 10px;
+  flex-shrink: 0;
+}
+
+/* Loading indicator inside modals */
+.loading-indicator {
+  padding: 15px;
+  text-align: center;
+  color: #666;
+  font-size: 0.9em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Ensure modal content allows scrolling if needed */
+.modal-content {
+  /* Existing styles... */
+  max-height: 85vh; /* Adjust as needed */
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.user-search-results {
+  /* Allow search results to take up available space */
+  flex-grow: 1;
+  min-height: 50px; /* Ensure it has some minimum height */
+}
+
+/* styles/GroupChatSidebar.css */
+
+/* Make the selected channel preview have a red background */
+.str-chat__channel-preview-messenger--active {
+  background-color: #ffebee !important; /* Light red background */
+  border-left: 4px solid #d32f2f !important; /* Add a strong red indicator */
+  border-bottom-color: #ffcdd2 !important; /* Match border */
+}
+
+.str-chat__channel-preview-messenger--active:hover {
+  background-color: #ffcdd2 !important; /* Slightly darker red on hover */
+}
+
+/* Adjust text color if needed for contrast */
+.str-chat__channel-preview-messenger--active .channel-preview__title {
+  color: #c62828 !important; /* Darker red text */
+  font-weight: 600; /* Make active title bolder */
+}
+.str-chat__channel-preview-messenger--active .channel-preview__message {
+  color: #e57373 !important; /* Medium red text */
+}
+
+/* styles/GroupChatSidebar.css */
+
+.sidebar-header {
+  background-color: #fce4ec; /* Very light pink/red */
+  border-bottom-color: #f48fb1; /* Pinkish-red border */
+}
+
+.sidebar-header h2 {
+  color: #d81b60; /* Strong pink/red text */
+}
+.sidebar-header h2 svg {
+  /* Target the icon */
+  fill: #d81b60; /* Match icon color */
+}
+
+.sidebar-header .create-group-btn {
+  color: #d81b60; /* Match create button color */
+}
+
+/* styles/GroupChatSidebar.css */
+
+/* Target primary action buttons */
+.modal-actions .button-primary {
+  background-color: #d32f2f; /* Main red */
+  border-color: #d32f2f;
+  color: white;
+}
+
+.modal-actions .button-primary:hover:not(:disabled) {
+  background-color: #b71c1c; /* Darker red on hover */
+  border-color: #b71c1c;
+}
+
+/* Keep secondary buttons distinct (e.g., grey or outlined) */
+.modal-actions .button-secondary {
+  /* background-color: #6c757d; */ /* Keep default grey */
+  /* border-color: #6c757d; */
+  /* color: white; */
+
+  /* OR make it outlined red */
+  background-color: transparent;
+  border: 1px solid #d32f2f;
+  color: #d32f2f;
+}
+.modal-actions .button-secondary:hover:not(:disabled) {
+  /* background-color: #5a6268; */ /* Grey hover */
+  /* border-color: #545b62; */
+
+  /* Outlined red hover */
+  background-color: #ffebee;
+  border-color: #b71c1c;
+  color: #b71c1c;
+}
+
+/* styles/GroupChatSidebar.css */
+
+/* Consolidated styles for the Create Group Button (+) */
+.sidebar-header .create-group-btn {
+  background: none; /* Ensure no background */
+  border: none; /* Explicitly remove border */
+  outline: none; /* Explicitly remove focus outline */
+  color: #d81b60; /* Keep the red icon color (from previous theme change) */
+  cursor: pointer;
+  padding: 5px; /* Maintain padding */
+  border-radius: 4px; /* Maintain rounded corners */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease; /* Keep transition for hover */
+}
+
+/* Define hover state (remove background or use a non-red one) */
+.sidebar-header .create-group-btn:hover {
+  background-color: #f1f3f5; /* Very light grey hover, adjust as needed */
+  /* Or leave empty if you want no background change on hover */
+}
+
+/* Style for disabled state */
+.sidebar-header .create-group-btn:disabled {
+  color: #adb5bd; /* Muted color */
+  cursor: not-allowed;
+  opacity: 0.6; /* Optional: Make it slightly transparent */
 }
