@@ -188,36 +188,6 @@ const HomePage = () => {
          <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/book'); }}>Book a Room</a>
       </nav>
 
-      <div className="search-group">
-            <input
-              type="text"
-              id="courseSearch"
-              name="courseSearch"
-              placeholder="Type Dept or Course ID (e.g., EECS 2311)"
-              value={courseSearch}
-              // Use the dedicated handler now
-              onChange={handleCourseSearchChange}
-              autoComplete="off"
-            />
-            {/* Search Results Dropdown */}
-            {courseResults.length > 0 && (
-              <ul className="course-results">
-                {courseResults.map((course) => (
-                  <li
-                    key={course._id}
-                    onClick={() => handleSelectCourse(course.Dept, course['Course ID'])}
-                    className="course-item"
-                  >
-                    {course.Dept} {course['Course ID']} - {course['Course Name']}
-                  </li>
-                ))}
-              </ul>
-            )}
-            {/* No Results Message */}
-            {courseResults.length === 0 && courseSearch && courseSearch !== groupData.course && (
-              <p className="no-results">No matching courses found.</p>
-            )}
-          </div>
 
       {/* Course Display Area - uses updated handleCourseClick */}
       <div className="placeholder-container">
