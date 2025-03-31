@@ -150,7 +150,6 @@ const GroupFinderPage = ({ onBack, onSelectGroup }) => {
           <div
             key={group._id}
             className="group-box"
-            onClick={() => handleGroupClick(group)}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleGroupClick(group)}
