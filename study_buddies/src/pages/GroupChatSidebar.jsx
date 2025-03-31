@@ -1,23 +1,37 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { FaPlus, FaUsers, FaSpinner, FaTimes, FaTrash } from "react-icons/fa";
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { useNavigate } from "react-router-dom"; // <-- Import useNavigate
+import {
+  FaPlus,
+  FaUsers,
+  FaSpinner,
+  FaTimes,
+  FaTrash,
+  // FaLink, // Removed
+  FaUserPlus,
+  // FaEllipsisV, // Removed
+  FaUserFriends,
+} from "react-icons/fa";
 import {
   Chat,
   ChannelList,
   Channel,
   Window,
-  ChannelHeader,
   MessageList,
   MessageInput,
   useChatContext,
+  useChannelStateContext,
 } from "stream-chat-react";
 import "@stream-io/stream-chat-css/dist/v2/css/index.css";
 import { StreamChat } from "stream-chat";
 import { debounce } from "lodash";
-import "./styles/GroupChatSidebar.css";
+import { v4 as uuidv4 } from "uuid";
 
-const API_KEY = "dmfpd2h898h5";
+// Import styles
+import "./styles/GroupChatSidebar.css"; // Make sure this CSS file is updated
 
-// --- StreamChatInstance Singleton (Keep As Is) ---
+const API_KEY = "dmfpd2h898h5"; // Replace with your API key
+
+// --- StreamChatInstance Singleton (No changes needed) ---
 const StreamChatInstance = (() => {
   let instance = null;
   let currentUserId = null;
@@ -45,24 +59,34 @@ const StreamChatInstance = (() => {
         client.userID === requestedUserId &&
         currentUserId === requestedUserId
       ) {
-        console.log(`Already connected...`);
+        console.log(`Already connected as ${requestedUserId}.`);
         pendingUserId = null;
         connectionPromise = null;
         return client;
       }
       if (pendingUserId === requestedUserId && connectionPromise) {
-        console.log(`Connection attempt already in progress...`);
+        console.log(
+          `Connection attempt for ${requestedUserId} already in progress.`
+        );
         return connectionPromise;
       }
       if (
         (client.userID && client.userID !== requestedUserId) ||
         (pendingUserId && pendingUserId !== requestedUserId)
       ) {
-        console.log(`Switching user. Disconnecting previous...`);
+        console.log(
+          `Switching user. Disconnecting previous: ${
+            client.userID || pendingUserId
+          }`
+        );
         pendingUserId = null;
         connectionPromise = null;
         if (client.userID) {
-          await client.disconnectUser();
+          try {
+            await client.disconnectUser();
+          } catch (disconnectError) {
+            console.warn("Error during disconnect:", disconnectError);
+          }
           currentUserId = null;
         }
       }
@@ -74,14 +98,14 @@ const StreamChatInstance = (() => {
         try {
           console.log(
             `Workspaceing token for pending user ${requestedUserId}...`
-          ); // Fixed typo
+          );
           const token = await tokenFn(requestedUserId);
           if (!token) {
             throw new Error(`Failed to get token for user ${requestedUserId}`);
           }
           if (pendingUserId !== requestedUserId) {
             throw new Error(
-              `Connection attempt for ${requestedUserId} was cancelled.`
+              `Connection attempt for ${requestedUserId} was cancelled by a new request.`
             );
           }
           console.log(
@@ -113,7 +137,46 @@ const StreamChatInstance = (() => {
 })();
 // --- End StreamChatInstance ---
 
-// --- Custom Channel Preview Component (Keep As Is) ---
+// --- Helper Function for Avatar Placeholder ---
+const UserAvatar = ({ name, size = 32 }) => {
+  const getInitials = (name) => {
+    if (!name) return "?";
+    const names = name.split(" ");
+    let initials = names[0].substring(0, 1).toUpperCase();
+    if (names.length > 1) {
+      initials += names[names.length - 1].substring(0, 1).toUpperCase();
+    }
+    return initials;
+  };
+  const hashCode = (str) => {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return hash;
+  };
+  const intToRGB = (i) => {
+    const c = (i & 0x00ffffff).toString(16).toUpperCase();
+    return "00000".substring(0, 6 - c.length) + c;
+  };
+  const bgColor = `#${intToRGB(hashCode(name || ""))}`;
+
+  return (
+    <div
+      className="avatar-placeholder"
+      style={{
+        width: `${size}px`,
+        height: `${size}px`,
+        backgroundColor: bgColor,
+        fontSize: `${size * 0.45}px`,
+      }}
+    >
+      {getInitials(name)}
+    </div>
+  );
+};
+
+// --- Custom Channel Preview Component ---
 const CustomChannelPreview = (props) => {
   const { channel, setActiveChannel, latestMessage } = props;
   const { client } = useChatContext();
@@ -122,96 +185,169 @@ const CustomChannelPreview = (props) => {
     e.stopPropagation();
     if (window.confirm(`Delete group "${channel.data?.name || channel.id}"?`)) {
       try {
-        console.log(`Deleting channel: ${channel.id}`);
-        await channel.delete(); // Soft delete by default
+        await channel.delete();
         console.log(`Channel ${channel.id} deleted.`);
       } catch (error) {
         console.error(`Failed to delete channel ${channel.id}:`, error);
-        alert(`Failed to delete channel: ${error.message || "Unknown error"}`);
+        alert(`Failed: ${error.message || "Check permissions"}`);
       }
     }
   };
 
   const channelName =
     channel.data?.name ||
-    channel.data?.id ||
     Object.values(channel.state.members)
-      .filter((member) => member.user_id !== client.userID)
-      .map((member) => member.user?.name || member.user_id)
+      .filter((m) => m.user_id !== client.userID)
+      .map((m) => m.user?.name || m.user_id)
       .join(", ") ||
+    channel.id ||
     "Unnamed Channel";
+
+  const lastMessageText =
+    latestMessage?.text ||
+    channel.state.messages?.[channel.state.messages.length - 1]?.text ||
+    "No messages yet";
+  const truncatedMessage =
+    lastMessageText.length > 40
+      ? `${lastMessageText.substring(0, 40)}...`
+      : lastMessageText;
 
   return (
     <div
       onClick={() => setActiveChannel(channel)}
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "10px",
-        borderBottom: "1px solid #eee",
-        cursor: "pointer",
-      }}
-      className="channel-preview__container"
+      className="channel-preview__container str-chat__channel-preview-messenger"
     >
       <div className="channel-preview__content">
-        <div
-          className="channel-preview__title"
-          style={{ fontWeight: "bold", marginBottom: "3px" }}
-        >
-          {" "}
-          {channelName}{" "}
-        </div>
-        <div
-          className="channel-preview__message"
-          style={{ fontSize: "0.85em", color: "#555" }}
-        >
-          {" "}
-          {latestMessage || "No messages yet"}{" "}
-        </div>
+        <div className="channel-preview__title">{channelName}</div>
+        <div className="channel-preview__message">{truncatedMessage}</div>
       </div>
       <button
+        className="channel-preview-delete-button"
         onClick={handleDeleteChannel}
-        style={{
-          background: "none",
-          border: "none",
-          color: "#aaa",
-          cursor: "pointer",
-          padding: "5px",
-        }}
-        title="Delete Channel"
-        aria-label="Delete Channel"
+        title={`Delete Channel "${channelName}"`}
+        aria-label={`Delete Channel "${channelName}"`}
       >
-        <FaTrash />
+        <FaTrash size="0.9em" />
       </button>
     </div>
   );
 };
 // --- End Custom Channel Preview ---
 
+// --- Custom Channel Header with Inline Actions ---
+const CustomChannelHeader = ({ onOpenViewMembers, onOpenAddMembers }) => {
+  const { channel } = useChannelStateContext();
+  const [showExtraActions, setShowExtraActions] = useState(false);
+
+  const channelName = channel?.data?.name || channel?.id || "Channel";
+  const memberCount = Object.keys(channel?.state?.members || {}).length;
+
+  if (!channel) {
+    return (
+      <div className="custom-channel-header str-chat__channel-header">
+        <div className="custom-channel-header-info">
+          <div className="str-chat__channel-header--title">Loading...</div>
+        </div>
+      </div>
+    );
+  }
+
+  const handleToggleActions = (e) => {
+    e.stopPropagation();
+    setShowExtraActions((prev) => !prev);
+  };
+
+  const handleActionClick = (actionCallback) => {
+    actionCallback(channel);
+    setShowExtraActions(false);
+  };
+
+  return (
+    <div className="custom-channel-header str-chat__channel-header">
+      <div className="custom-channel-header-info">
+        <div className="str-chat__channel-header--title">
+          {channelName}
+          {memberCount > 0 && (
+            <span className="custom-channel-header-member-count">
+              ({memberCount} {memberCount === 1 ? "member" : "members"})
+            </span>
+          )}
+        </div>
+      </div>
+      <div className="custom-channel-header-actions-wrapper">
+        <button
+          onClick={handleToggleActions}
+          className="more-actions-btn"
+          aria-label="More channel actions"
+          title="More actions"
+          aria-expanded={showExtraActions}
+        >
+          More
+        </button>
+        {showExtraActions && (
+          <div className="revealed-actions-container">
+            <button
+              onClick={() => handleActionClick(onOpenViewMembers)}
+              title="View group members"
+            >
+              <FaUserFriends /> View Members
+            </button>
+            <button
+              onClick={() => handleActionClick(onOpenAddMembers)}
+              title="Add members to this group"
+            >
+              <FaUserPlus /> Add Members
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+// --- End Custom Channel Header ---
+
 // --- Main GroupChatSidebar Component ---
 const GroupChatSidebar = ({ currentUser }) => {
+  const navigate = useNavigate(); // <-- Add hook for navigation
   const [chatClient, setChatClient] = useState(null);
   const [initializing, setInitializing] = useState(true);
   const [initError, setInitError] = useState("");
+  // Modal States
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showAddMembersModal, setShowAddMembersModal] = useState(false);
+  const [showViewMembersModal, setShowViewMembersModal] = useState(false);
+  const [modalChannel, setModalChannel] = useState(null);
+  // Modal Input States
   const [newGroupName, setNewGroupName] = useState("");
-  const [isCreatingChannel, setIsCreatingChannel] = useState(false);
-  const [createError, setCreateError] = useState("");
   const [userSearchTerm, setUserSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
+  // Loading/Error States for Modals
+  const [isCreatingChannel, setIsCreatingChannel] = useState(false);
+  const [isAddingMembers, setIsAddingMembers] = useState(false);
   const [isSearchingUsers, setIsSearchingUsers] = useState(false);
+  const [createError, setCreateError] = useState("");
+  const [addMembersError, setAddMembersError] = useState("");
+  // Ref for modal content
+  const modalRef = useRef(null);
 
-  // --- fetchUserToken (Keep As Is) ---
+  // --- Navigation Handler ---
+  const handleGoHome = () => {
+    navigate("/"); // Navigate to the root route (adjust if your home route is different)
+  };
+
+  // --- fetchUserToken ---
   const fetchUserToken = async (userId) => {
-    console.log(`Workspaceing token for userId: ${userId}`); // Fixed typo
+    console.log(`Workspaceing token for userId: ${userId}`);
     try {
       const response = await fetch(
-        `http://localhost:5000/token?userId=${userId}`
+        `http://localhost:5000/token?userId=${userId}` // Ensure your backend endpoint is correct
       );
       if (!response.ok) {
-        throw new Error(`Token fetch failed: ${response.status}`);
+        const errorText = await response.text();
+        throw new Error(
+          `Token fetch failed: ${response.status} ${response.statusText} - ${errorText}`
+        );
       }
       const data = await response.json();
       if (!data.token) {
@@ -221,12 +357,12 @@ const GroupChatSidebar = ({ currentUser }) => {
       return data.token;
     } catch (err) {
       console.error("Token fetch error:", err);
+      setInitError(`Token Error: ${err.message}`);
       throw err;
     }
   };
-  // --- End fetchUserToken ---
 
-  // --- useEffect for Initialization (Keep As Is) ---
+  // --- useEffect for Initialization ---
   useEffect(() => {
     console.log(
       "GroupChatSidebar useEffect triggered. currentUser:",
@@ -256,7 +392,7 @@ const GroupChatSidebar = ({ currentUser }) => {
       } catch (err) {
         console.error("Chat initialization error:", err);
         if (isMounted) {
-          setInitError(`Failed init chat: ${err.message}`);
+          setInitError(initError || `Failed init chat: ${err.message}`);
           setChatClient(null);
         }
       } finally {
@@ -271,443 +407,606 @@ const GroupChatSidebar = ({ currentUser }) => {
       isMounted = false;
     };
   }, [currentUser]);
-  // --- End useEffect ---
 
-  // --- User Search Logic (Keep As Is) ---
-  const fetchUsers = async (searchTerm) => {
-    if (!searchTerm.trim()) {
-      setSearchResults([]);
+  // --- User Search Logic (Using Stream client - CORRECTED) ---
+  const fetchUsersStream = async (searchTerm, channelContext = null) => {
+    if (!chatClient || !currentUser || !currentUser.id) {
+      console.warn("User search skipped: client or user not ready.");
       return;
     }
+    if (!searchTerm || searchTerm.trim().length < 1) {
+      setSearchResults([]);
+      setIsSearchingUsers(false);
+      return;
+    }
+
     setIsSearchingUsers(true);
     setCreateError("");
-    console.log(`Searching users with term: ${searchTerm}`);
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("No auth token found...");
-      setCreateError("Auth error.");
-      setIsSearchingUsers(false);
-      setSearchResults([]);
-      return;
-    }
+    setAddMembersError("");
+
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/users/search?query=${encodeURIComponent(
-          searchTerm
-        )}`,
-        { headers: { Authorization: `Bearer ${token}` } }
+      // Build conditions using $and
+      const andConditions = [];
+
+      // 1. Exclude self
+      andConditions.push({ id: { $ne: currentUser.id } });
+
+      // 2. Exclude selected users and existing members (if applicable)
+      const selectedUserIds = selectedUsers.map((u) => u.id);
+      let existingMemberIds = [];
+      if (channelContext) {
+        existingMemberIds = Object.keys(channelContext.state.members);
+      }
+      const combinedExcludedIds = [
+        ...new Set([...selectedUserIds, ...existingMemberIds]),
+      ];
+      if (combinedExcludedIds.length > 0) {
+        andConditions.push({ id: { $nin: combinedExcludedIds } });
+      }
+
+      // 3. Filter by name autocomplete
+      andConditions.push({ name: { $autocomplete: searchTerm } });
+
+      // Final filter object
+      const filters = { $and: andConditions };
+
+      console.log("Querying users with filters:", JSON.stringify(filters));
+
+      const response = await chatClient.queryUsers(
+        filters,
+        { name: 1 }, // Sort by name
+        { limit: 10, presence: false }
       );
-      if (!response.ok) {
-        if (response.status === 401 || response.status === 403) {
-          setCreateError("Auth failed.");
-        } else {
-          throw new Error(`User search failed: ${response.status}`);
-        }
-        setSearchResults([]);
-      } else {
-        const data = await response.json();
-        if (Array.isArray(data)) {
-          const filteredResults = data.filter(
-            (user) =>
-              user.id !== currentUser.id &&
-              !selectedUsers.some((selected) => selected.id === user.id)
-          );
-          setSearchResults(filteredResults);
-        } else {
-          console.error("User search API bad data:", data);
-          setSearchResults([]);
-        }
-      }
+
+      console.log(`Found ${response.users.length} users via Stream.`);
+      setSearchResults(response.users);
     } catch (err) {
-      console.error("User search fetch error:", err);
-      if (!createError) {
-        setCreateError("Failed to search users.");
+      console.error("Stream User search error:", err);
+      if (err.response) {
+        console.error("Stream API Error Response:", err.response);
       }
+      const errorMessage = `User search failed: ${
+        err.message || "Unknown error"
+      }`;
       setSearchResults([]);
+      if (showCreateModal) setCreateError(errorMessage);
+      if (showAddMembersModal) setAddMembersError(errorMessage);
     } finally {
       setIsSearchingUsers(false);
     }
   };
-  const debouncedFetchUsers = useCallback(debounce(fetchUsers, 300), [
+
+  // Debounced search function
+  const debouncedFetchUsers = useCallback(debounce(fetchUsersStream, 350), [
+    chatClient,
     currentUser,
     selectedUsers,
+    modalChannel,
+    showAddMembersModal,
   ]);
+
+  // Effect to trigger search
   useEffect(() => {
-    debouncedFetchUsers(userSearchTerm);
+    const currentChannelContext = showAddMembersModal ? modalChannel : null;
+    if ((showCreateModal || showAddMembersModal) && userSearchTerm.trim()) {
+      debouncedFetchUsers(userSearchTerm, currentChannelContext);
+    } else {
+      setSearchResults([]);
+    }
     return () => debouncedFetchUsers.cancel();
-  }, [userSearchTerm, debouncedFetchUsers]);
+  }, [
+    userSearchTerm,
+    showCreateModal,
+    showAddMembersModal,
+    debouncedFetchUsers,
+  ]);
+
   const handleUserSearchChange = (e) => {
     setUserSearchTerm(e.target.value);
   };
-  const handleSelectUser = (user) => {
-    if (!selectedUsers.some((selected) => selected.id === user.id)) {
-      setSelectedUsers([...selectedUsers, user]);
+
+  const handleSelectUser = (userToAdd) => {
+    if (!selectedUsers.some((user) => user.id === userToAdd.id)) {
+      setSelectedUsers([...selectedUsers, userToAdd]);
     }
-    setUserSearchTerm("");
-    setSearchResults([]);
   };
-  const handleRemoveUser = (userId) => {
-    setSelectedUsers(selectedUsers.filter((user) => user.id !== userId));
+
+  const handleRemoveUser = (userIdToRemove) => {
+    setSelectedUsers(
+      selectedUsers.filter((user) => user.id !== userIdToRemove)
+    );
   };
   // --- End User Search Logic ---
 
-  // --- Create Channel Logic (Keep As Is) ---
+  // --- Channel Action Handlers ---
   const createChannel = async () => {
     setCreateError("");
-    if (!newGroupName.trim()) {
-      setCreateError("Group name empty.");
-      return;
-    }
     if (!chatClient) {
-      setCreateError("Chat client unavailable.");
+      setCreateError("Chat client not initialized.");
       return;
     }
-    if (!currentUser || !currentUser.id) {
-      setCreateError("Current user unavailable.");
+    if (!newGroupName.trim()) {
+      setCreateError("Group name cannot be empty.");
       return;
     }
     if (selectedUsers.length === 0) {
-      setCreateError("Select members.");
+      setCreateError("Please select at least one member.");
       return;
     }
+
     const memberIds = [currentUser.id, ...selectedUsers.map((user) => user.id)];
     const uniqueMemberIds = [...new Set(memberIds)];
-    if (uniqueMemberIds.length < 2) {
-      setCreateError("Cannot create group with self.");
-      return;
-    }
     setIsCreatingChannel(true);
+
     try {
+      const newChannelId = uuidv4();
       console.log(
-        `Creating channel "${newGroupName}" members:`,
+        `Creating channel "${newGroupName}" (ID: ${newChannelId}) members:`,
         uniqueMemberIds
       );
-      const channel = chatClient.channel("messaging", {
-        name: newGroupName,
+      const channel = chatClient.channel("messaging", newChannelId, {
+        name: newGroupName.trim(),
         members: uniqueMemberIds,
         created_by_id: currentUser.id,
+        isGroupChat: true,
       });
       await channel.create();
-      console.log("Channel created.");
-      setNewGroupName("");
-      setShowCreateModal(false);
-      setSelectedUsers([]);
-      setUserSearchTerm("");
-      setSearchResults([]);
+      console.log("Channel created successfully:", channel.cid);
+      closeModal();
     } catch (err) {
-      setCreateError(`Failed: ${err.message}`);
+      setCreateError(`Failed to create group: ${err.message}`);
       console.error("Create channel error:", err);
     } finally {
       setIsCreatingChannel(false);
     }
   };
-  // --- End Create Channel Logic ---
+
+  const handleAddMembers = async () => {
+    if (!modalChannel) {
+      setAddMembersError("Channel context lost.");
+      return;
+    }
+    if (selectedUsers.length === 0) {
+      setAddMembersError("No users selected to add.");
+      return;
+    }
+
+    const memberIdsToAdd = selectedUsers.map((user) => user.id);
+    setAddMembersError("");
+    setIsAddingMembers(true);
+
+    try {
+      console.log(
+        `Adding members [${memberIdsToAdd.join(", ")}] to channel ${
+          modalChannel.id
+        }`
+      );
+
+      // --- Construct actor's name reliably (FIXED) ---
+      const actorName =
+        currentUser.firstName && currentUser.lastName
+          ? `${currentUser.firstName} ${currentUser.lastName}`
+          : currentUser.name || currentUser.id;
+
+      const response = await modalChannel.addMembers(memberIdsToAdd, {
+        text: `${actorName} added ${selectedUsers
+          .map((u) => u.name || u.id)
+          .join(", ")}.`, // Use corrected actorName
+      });
+      console.log("Members added successfully.", response);
+      closeModal();
+    } catch (error) {
+      console.error(`Failed add members to ${modalChannel.id}:`, error);
+      setAddMembersError(`Failed: ${error.message}. Check permissions.`);
+    } finally {
+      setIsAddingMembers(false);
+    }
+  };
+  // --- End Channel Action Handlers ---
+
+  // --- Modal Trigger Functions & Close ---
+  const resetModalFields = () => {
+    setNewGroupName("");
+    setCreateError("");
+    setAddMembersError("");
+    setUserSearchTerm("");
+    setSelectedUsers([]);
+    setSearchResults([]);
+    setIsCreatingChannel(false);
+    setIsAddingMembers(false);
+    setIsSearchingUsers(false);
+  };
+
+  const openCreateModal = () => {
+    resetModalFields();
+    setModalChannel(null);
+    setShowCreateModal(true);
+  };
+
+  const openAddMembersModal = (channel) => {
+    if (!channel) return;
+    resetModalFields();
+    setModalChannel(channel);
+    setShowAddMembersModal(true);
+  };
+
+  const openViewMembersModal = (channel) => {
+    if (!channel) return;
+    setModalChannel(channel);
+    setShowViewMembersModal(true);
+  };
+
+  const closeModal = () => {
+    setShowCreateModal(false);
+    setShowAddMembersModal(false);
+    setShowViewMembersModal(false);
+    resetModalFields(); // Reset fields on any close
+    setModalChannel(null);
+  };
+
+  // Optional: Close modal on Escape key press
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        closeModal();
+      }
+    };
+    if (showCreateModal || showAddMembersModal || showViewMembersModal) {
+      document.addEventListener("keydown", handleKeyDown);
+    } else {
+      document.removeEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [showCreateModal, showAddMembersModal, showViewMembersModal]);
 
   // --- Render Logic ---
   if (initializing) {
     return (
-      <div style={{ padding: "20px" }}>
-        {" "}
-        <FaSpinner className="spin" /> Loading Chat...{" "}
+      <div className="loading-overlay">
+        <FaSpinner className="spin" size="2em" />
+        <span>Loading Chat...</span>
       </div>
     );
   }
   if (initError) {
     return (
-      <div style={{ padding: "20px", color: "red" }}>Error: {initError}</div>
+      <div className="error-container">
+        <h3>Chat Initialization Error</h3>
+        <p>Could not connect to the chat service.</p>
+        <p className="error-details">Details: {initError}</p>
+        <p>Please check your internet connection or try again later.</p>
+      </div>
     );
   }
   if (!currentUser) {
-    return <div style={{ padding: "20px" }}>Please log in.</div>;
+    return <div className="info-container">Please log in to access chat.</div>;
   }
   if (!chatClient) {
     return (
-      <div style={{ padding: "20px", color: "red" }}>
-        {" "}
-        Chat client unavailable. {initError}{" "}
+      <div className="warning-container">
+        Chat client is not available. Please refresh the page. {initError}
       </div>
     );
   }
 
+  // --- Main component render ---
   return (
-    <div style={{ display: "flex", height: "calc(100vh - 50px)" }}>
-      <Chat client={chatClient}>
+    <div className="chat-layout-wrapper">
+      <Chat client={chatClient} theme="str-chat__theme-light">
         {/* === Left Sidebar Section === */}
-        <div
-          className="group-chat-sidebar-column"
-          style={{
-            width: "320px",
-            borderRight: "1px solid #eee",
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <div
-            className="sidebar-header"
-            style={{
-              padding: "10px",
-              borderBottom: "1px solid #eee",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <h2 style={{ margin: 0, fontSize: "1.1em" }}>
-              {" "}
-              <FaUsers style={{ marginRight: "8px" }} /> Group Chats{" "}
+        <div className="group-chat-sidebar-column">
+          <div className="sidebar-header">
+            {/* Make the h2 clickable to go home */}
+            <h2
+              onClick={handleGoHome}
+              style={{ cursor: "pointer" }}
+              title="Go to Home"
+            >
+              <FaUsers style={{ color: "red" }} /> Group Study Finder
             </h2>
             <button
-              style={{ padding: "5px 10px" }}
-              onClick={() => {
-                setShowCreateModal(true);
-                setCreateError("");
-                setSelectedUsers([]);
-                setUserSearchTerm("");
-                setSearchResults([]);
-              }}
+              onClick={openCreateModal}
+              title="Create New Group"
               disabled={isCreatingChannel}
+              className="create-group-btn"
             >
-              <FaPlus /> New
+              <FaPlus />
             </button>
           </div>
-          <div style={{ flex: 1, overflowY: "auto" }}>
+          <div className="channel-list-container">
             <ChannelList
               filters={{
                 type: "messaging",
                 members: { $in: [currentUser.id] },
               }}
               sort={{ last_message_at: -1 }}
-              options={{ state: true, watch: true, presence: true }}
+              options={{ state: true, watch: true, presence: true, limit: 20 }}
               Preview={CustomChannelPreview}
             />
           </div>
+        </div>
 
-          {/* === Create Group Modal === */}
-          {showCreateModal && (
+        {/* === Right Chat Window Section === */}
+        <div className="chat-window-area">
+          <Channel>
+            <Window>
+              <CustomChannelHeader
+                onOpenViewMembers={openViewMembersModal}
+                onOpenAddMembers={openAddMembersModal}
+              />
+              <MessageList />
+              <MessageInput focus />
+            </Window>
+          </Channel>
+        </div>
+
+        {/* === Modals Section === */}
+        {/* Create Group Modal */}
+        {showCreateModal && (
+          <div className="modal-backdrop">
             <div
-              className="create-group-modal-backdrop"
-              style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                backgroundColor: "rgba(0,0,0,0.5)",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                zIndex: 1000,
-              }}
+              className="modal-content create-group-modal"
+              ref={modalRef}
+              onClick={(e) => e.stopPropagation()}
             >
-              <div
-                className="create-group-modal"
-                style={{
-                  background: "white",
-                  color: "black",
-                  padding: "20px",
-                  borderRadius: "8px",
-                  minWidth: "400px",
-                  maxWidth: "90%",
-                  maxHeight: "80vh",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <h3>Create New Group</h3>
-                <input
-                  type="text"
-                  placeholder="Enter group name"
-                  value={newGroupName}
-                  onChange={(e) => setNewGroupName(e.target.value)}
-                  aria-label="Group name"
-                  style={{
-                    display: "block",
-                    width: "calc(100% - 16px)",
-                    padding: "8px",
-                    marginBottom: "15px",
-                  }}
-                />
-                <input
-                  type="text"
-                  placeholder="Search users to add..."
-                  value={userSearchTerm}
-                  onChange={handleUserSearchChange}
-                  aria-label="Search users"
-                  style={{
-                    display: "block",
-                    width: "calc(100% - 16px)",
-                    padding: "8px",
-                    marginBottom: "5px",
-                  }}
-                />
+              <h3>Create New Group</h3>
+              <label htmlFor="group-name-input">Group Name:</label>
+              <input
+                id="group-name-input"
+                type="text"
+                placeholder="Enter group name"
+                value={newGroupName}
+                onChange={(e) => setNewGroupName(e.target.value)}
+                aria-label="Group name"
+                required
+              />
+              <label htmlFor="user-search-input-create">Add Members:</label>
+              <input
+                id="user-search-input-create"
+                type="text"
+                placeholder="Search users to add..."
+                value={userSearchTerm}
+                onChange={handleUserSearchChange}
+                aria-label="Search users"
+              />
+              {selectedUsers.length > 0 && (
+                <div className="selected-users-display">
+                  <ul className="selected-users-pills">
+                    {selectedUsers.map((user) => (
+                      <li key={user.id} className="user-pill">
+                        <UserAvatar name={user.name || user.id} size={20} />
+                        <span className="pill-name">
+                          {user.name || user.id}
+                        </span>
+                        <button
+                          onClick={() => handleRemoveUser(user.id)}
+                          title="Remove user"
+                          className="remove-pill-btn"
+                        >
+                          <FaTimes size="0.8em" />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <div className="user-search-results">
                 {isSearchingUsers && (
-                  <FaSpinner className="spin" style={{ margin: "5px 0" }} />
+                  <div className="loading-indicator">
+                    <FaSpinner className="spin" /> Searching...
+                  </div>
                 )}
-                {searchResults.length > 0 && (
-                  <ul
-                    style={{
-                      listStyle: "none",
-                      padding: "0",
-                      margin: "5px 0 15px 0",
-                      maxHeight: "150px",
-                      overflowY: "auto",
-                      border: "1px solid #ccc",
-                    }}
-                  >
+                {!isSearchingUsers && searchResults.length > 0 && (
+                  <ul className="user-results-list">
                     {searchResults.map((user) => (
                       <li
                         key={user.id}
+                        className="user-result-item"
                         onClick={() => handleSelectUser(user)}
-                        style={{
-                          padding: "5px 10px",
-                          cursor: "pointer",
-                          borderBottom: "1px solid #eee",
-                        }}
+                        role="button"
+                        tabIndex={0}
                       >
-                        {/* --- REVERTED LINE - ID REMOVED --- */}
-                        {user.name || `${user.firstName} ${user.lastName}`}
-                        {/* --- END REVERTED LINE --- */}
+                        <UserAvatar name={user.name || user.id} size={30} />
+                        <div className="user-info">
+                          {" "}
+                          <span className="user-name">
+                            {user.name || user.id}
+                          </span>{" "}
+                        </div>
                       </li>
                     ))}
                   </ul>
                 )}
                 {!isSearchingUsers &&
-                  userSearchTerm &&
+                  userSearchTerm.trim() &&
                   searchResults.length === 0 && (
-                    <p
-                      style={{
-                        fontSize: "0.8em",
-                        color: "grey",
-                        margin: "5px 0 15px 0",
-                      }}
-                    >
-                      No matching users found.
-                    </p>
+                    <p className="modal-info-text">No matching users found.</p>
                   )}
-                {selectedUsers.length > 0 && (
-                  <div
-                    style={{
-                      marginBottom: "15px",
-                      border: "1px solid #ccc",
-                      padding: "5px",
-                      maxHeight: "100px",
-                      overflowY: "auto",
-                    }}
-                  >
-                    <p
-                      style={{
-                        margin: "0 0 5px 0",
-                        fontSize: "0.9em",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Selected:
-                    </p>
-                    <ul
-                      style={{ listStyle: "none", padding: "0", margin: "0" }}
-                    >
-                      {selectedUsers.map((user) => (
-                        <li
-                          key={user.id}
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            fontSize: "0.85em",
-                            padding: "2px 5px",
-                            background: "#eee",
-                            marginBottom: "3px",
-                            borderRadius: "3px",
-                          }}
-                        >
-                          {" "}
-                          {user.name ||
-                            `${user.firstName} ${user.lastName}`}{" "}
-                          <button
-                            onClick={() => handleRemoveUser(user.id)}
-                            style={{
-                              background: "none",
-                              border: "none",
-                              color: "red",
-                              cursor: "pointer",
-                              padding: "0 5px",
-                            }}
-                          >
-                            {" "}
-                            <FaTimes />{" "}
-                          </button>{" "}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {createError && (
-                  <div
-                    className="modal-error"
-                    style={{ color: "red", marginBottom: "10px" }}
-                  >
-                    {" "}
-                    {createError}{" "}
-                  </div>
-                )}
-                <div
-                  className="modal-actions"
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    gap: "10px",
-                    marginTop: "auto",
-                  }}
+              </div>
+              {createError && (
+                <div className="modal-error"> {createError} </div>
+              )}
+              <div className="modal-actions">
+                <button
+                  className="button-secondary"
+                  onClick={closeModal}
+                  disabled={isCreatingChannel}
                 >
-                  <button
-                    onClick={createChannel}
-                    disabled={isCreatingChannel}
-                    style={{ padding: "8px 15px" }}
-                  >
-                    {" "}
-                    {isCreatingChannel ? (
-                      <FaSpinner className="spin" />
-                    ) : (
-                      "Create"
-                    )}{" "}
-                  </button>
-                  <button
-                    onClick={() => {
-                      setShowCreateModal(false);
-                      setSelectedUsers([]);
-                      setUserSearchTerm("");
-                      setSearchResults([]);
-                    }}
-                    disabled={isCreatingChannel}
-                    style={{ padding: "8px 15px" }}
-                  >
-                    {" "}
-                    Cancel{" "}
-                  </button>
-                </div>
+                  Cancel
+                </button>
+                <button
+                  className="button-primary"
+                  onClick={createChannel}
+                  disabled={
+                    isCreatingChannel ||
+                    !newGroupName.trim() ||
+                    selectedUsers.length === 0
+                  }
+                >
+                  {isCreatingChannel ? (
+                    <>
+                      <FaSpinner className="spin" /> Creating...
+                    </>
+                  ) : (
+                    "Create Group"
+                  )}
+                </button>
               </div>
             </div>
-          )}
-          {/* === End Create Group Modal === */}
-        </div>{" "}
-        {/* === End Left Sidebar Section === */}
-        {/* === Right Chat Window Section (Keep As Is) === */}
-        <div
-          className="chat-window-area"
-          style={{ flex: 1, display: "flex", flexDirection: "column" }}
-        >
-          <Channel>
-            <Window>
-              <ChannelHeader />
-              <MessageList />
-              <MessageInput />
-            </Window>
-            {/* <Thread /> */}
-          </Channel>
-        </div>{" "}
-        {/* === End Right Chat Window Section === */}
+          </div>
+        )}
+
+        {/* Add Members Modal */}
+        {showAddMembersModal && modalChannel && (
+          <div className="modal-backdrop">
+            <div
+              className="modal-content add-members-modal"
+              ref={modalRef}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3>
+                {" "}
+                Add Members to "{modalChannel.data?.name ||
+                  modalChannel.id}"{" "}
+              </h3>
+              <label htmlFor="user-search-input-add">Find Users:</label>
+              <input
+                id="user-search-input-add"
+                type="text"
+                placeholder="Search users to add..."
+                value={userSearchTerm}
+                onChange={handleUserSearchChange}
+                aria-label="Search users"
+              />
+              {selectedUsers.length > 0 && (
+                <div className="selected-users-display">
+                  <ul className="selected-users-pills">
+                    {selectedUsers.map((user) => (
+                      <li key={user.id} className="user-pill">
+                        <UserAvatar name={user.name || user.id} size={20} />
+                        <span className="pill-name">
+                          {user.name || user.id}
+                        </span>
+                        <button
+                          onClick={() => handleRemoveUser(user.id)}
+                          title="Remove selection"
+                          className="remove-pill-btn"
+                        >
+                          <FaTimes size="0.8em" />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <div className="user-search-results">
+                {isSearchingUsers && (
+                  <div className="loading-indicator">
+                    <FaSpinner className="spin" /> Searching...
+                  </div>
+                )}
+                {!isSearchingUsers && searchResults.length > 0 && (
+                  <ul className="user-results-list">
+                    {searchResults.map((user) => (
+                      <li
+                        key={user.id}
+                        className="user-result-item"
+                        onClick={() => handleSelectUser(user)}
+                        role="button"
+                        tabIndex={0}
+                      >
+                        <UserAvatar name={user.name || user.id} size={30} />
+                        <div className="user-info">
+                          {" "}
+                          <span className="user-name">
+                            {user.name || user.id}
+                          </span>{" "}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {!isSearchingUsers &&
+                  userSearchTerm.trim() &&
+                  searchResults.length === 0 && (
+                    <p className="modal-info-text">
+                      No matching users found (or already members).
+                    </p>
+                  )}
+              </div>
+              {addMembersError && (
+                <div className="modal-error"> {addMembersError} </div>
+              )}
+              <div className="modal-actions">
+                <button
+                  className="button-secondary"
+                  onClick={closeModal}
+                  disabled={isAddingMembers}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="button-primary"
+                  onClick={handleAddMembers}
+                  disabled={isAddingMembers || selectedUsers.length === 0}
+                >
+                  {isAddingMembers ? (
+                    <>
+                      <FaSpinner className="spin" /> Adding...
+                    </>
+                  ) : (
+                    "Add Selected"
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* View Members Modal */}
+        {showViewMembersModal && modalChannel && (
+          <div className="modal-backdrop">
+            <div
+              className="modal-content view-members-modal"
+              ref={modalRef}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3>Members in "{modalChannel.data?.name || modalChannel.id}"</h3>
+              <ul className="members-list-view">
+                {Object.values(modalChannel.state.members)
+                  .sort((a, b) =>
+                    (a.user?.name || a.user_id).localeCompare(
+                      b.user?.name || b.user_id
+                    )
+                  )
+                  .map((member) => (
+                    <li key={member.user_id} className="member-list-item-view">
+                      <UserAvatar
+                        name={member.user?.name || member.user_id}
+                        size={32}
+                      />
+                      <span className="member-name">
+                        {member.user?.name || member.user_id}
+                      </span>
+                      {member.user_id === currentUser.id && (
+                        <span className="you-tag">(You)</span>
+                      )}
+                    </li>
+                  ))}
+              </ul>
+              <div className="modal-actions">
+                <button className="button-primary" onClick={closeModal}>
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* === End Modals Section === */}
       </Chat>
-    </div> // --- End Flexbox Layout Wrapper ---
+    </div>
   );
 };
 
