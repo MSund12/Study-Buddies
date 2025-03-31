@@ -5,83 +5,98 @@ import { logout } from '../features/authSlice';
 import RedShape from './components/RedShape';
 import PinkShape from './components/PinkShape';
 import PurpleShape from './components/PurpleShape';
-import { fetchGroups } from '../features/groupSlice'; // Assuming fetchGroups fetches ALL groups when no filter passed
-import { useNavigate } from 'react-router-dom'; // Added useNavigate for potential future use
-import "./styles/GroupFinderPage.css"; // Import specific CSS
+// Ensure fetchGroups is adapted to handle pagination parameters { page, limit, sortOrder }
+import { fetchGroups } from '../features/groupSlice';
+import { useNavigate } from 'react-router-dom';
+import "./styles/GroupFinderPage.css";
 import Header from '../Header';
+
+// Define items per page
+const ITEMS_PER_PAGE = 8;
 
 const GroupFinderPage = ({ onBack, onSelectGroup }) => {
   const currentUser = useSelector((state) => state.auth.currentUser);
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate();
 
-  // Handle logout (remains the same)
-    const handleSignOut = () => {
-      dispatch(logout());
-      navigate('/signin');
-    };
-
-  // Read state from Redux, provide defaults
-  const {
-      groups = [],
-      loading: isLoading = true, // Default to loading
-      error = null,
-      // Include pagination info if needed, otherwise default groups is fine
-      // totalPages = 0,
-      // currentPage = 1
-  } = useSelector((state) => state.groups || {}); // Default to {} if slice is undefined
-
+  // --- State Hooks ---
   const [sortOrder, setSortOrder] = useState('asc');
-  // Add state for search term if you want to add search later
-  // const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1); // State for current page number
 
-  // Fetch all groups when the component mounts (no filters)
-  useEffect(() => {
-    // Dispatch fetchGroups without any parameters to get all (or first page)
-    dispatch(fetchGroups({ limit: 50 })); // Fetch more groups, add pagination later if needed
-  }, [dispatch]);
-
-  // Sorting logic - SORT BY COURSE CODE NOW
-  const sortedGroups = React.useMemo(() => {
-        if (!Array.isArray(groups)) return []; // Defensive check
-        return [...groups].sort((a, b) => {
-            // Handle potential undefined/null course values gracefully
-            const courseA = a.course || '';
-            const courseB = b.course || '';
-            if (sortOrder === 'asc') {
-                return courseA.localeCompare(courseB);
-            } else {
-                return courseB.localeCompare(courseA);
-            }
-        });
-   }, [groups, sortOrder]); // Recalculate only when groups or sortOrder change
-
-
-  // Handler for clicking a group (calls prop function)
-  const handleGroupClick = (group) => {
-      console.log("Selected Group:", group);
-      // Call the onSelectGroup prop passed from the parent component (e.g., HomePage)
-      if (onSelectGroup) {
-          onSelectGroup(group);
-      } else {
-          // Fallback or alternative navigation if needed
-          // navigate(`/groups/${group._id}`); // Example
-          alert(`Selected Group: ${group.groupName}`);
-      }
+  // Handle logout
+  const handleSignOut = () => {
+    dispatch(logout());
+    navigate('/signin');
   };
 
+  // --- Read state from Redux ---
+  // Make sure your groups slice provides totalPages
+  const {
+      groups = [],
+      loading: isLoading = true,
+      error = null,
+      totalPages = 0 // Get totalPages from Redux state
+      // Optionally get currentPage from Redux if needed: reduxCurrentPage = 1
+  } = useSelector((state) => state.groups || {}); // Ensure initial state is handled
+
+  // --- Fetch groups based on current page and sort order ---
+  useEffect(() => {
+    // Dispatch fetchGroups with pagination and sorting parameters
+    dispatch(fetchGroups({
+        page: currentPage,
+        limit: ITEMS_PER_PAGE,
+        sortOrder: sortOrder
+        // Add other filters like 'search' or 'course' here if needed
+    }));
+  // Refetch when dispatch function, currentPage, or sortOrder changes
+  }, [dispatch, currentPage, sortOrder]);
+
+  // --- Sorting Logic ---
+  // This now sorts the groups *of the current page* locally.
+  // Alternatively, rely solely on backend sorting passed via fetchGroups.
+  const sortedGroups = React.useMemo(() => {
+      if (!Array.isArray(groups)) return [];
+      return [...groups].sort((a, b) => {
+          const courseA = a.course || '';
+          const courseB = b.course || '';
+          if (sortOrder === 'asc') {
+              return courseA.localeCompare(courseB);
+          } else {
+              return courseB.localeCompare(courseA);
+          }
+      });
+  }, [groups, sortOrder]);
+
+  // Handler for clicking a group
+  const handleGroupClick = (group) => {
+    console.log("Selected Group:", group);
+    if (onSelectGroup) {
+        onSelectGroup(group);
+    } else {
+        alert(`Selected Group: ${group.groupName}`);
+    }
+  };
+
+  // --- Pagination Handlers ---
+  const handlePreviousPage = () => {
+    setCurrentPage(prev => Math.max(prev - 1, 1)); // Go back one page, minimum 1
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage(prev => Math.min(prev + 1, totalPages)); // Go forward one page, maximum totalPages
+  };
+
+
+  // --- Render Component ---
   return (
-    // Use starter-container for consistent base layout
-    <div className="starter-container"> {/* Added specific class */}
+    <div className="starter-container">
       <Header currentUser={currentUser} />
 
       {/* Sign Out Button */}
       {currentUser && (
-        <div className="signout-container">
-          <button className="signout-button" onClick={handleSignOut}>
-            Sign Out
-          </button>
-        </div>
+         <div className="signout-container">
+           <button className="signout-button" onClick={handleSignOut}>Sign Out</button>
+         </div>
       )}
 
       {/* Decorative Shapes */}
@@ -98,57 +113,83 @@ const GroupFinderPage = ({ onBack, onSelectGroup }) => {
          <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/book'); }}>Book a Room</a>
       </nav>
 
-       {/* Add a back button if this page isn't the root */}
-       {onBack && <button onClick={onBack} className="back-button"> &lt; Back</button>}
+      {/* Optional Back Button */}
+      {onBack && <button onClick={onBack} className="back-button"> &lt; Back</button>}
 
-       <h2 className="page-title">Find a Study Group</h2>
+      <h2 className="page-title">Find a Study Group</h2>
 
-      {/* Sorting Controls - Centered */}
+      {/* Sorting Controls */}
       <div className="sorting-controls">
         <label htmlFor="sortOrderSelect">Sort by Course Code:</label>
-        <select id="sortOrderSelect" value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
+        <select id="sortOrderSelect" value={sortOrder} onChange={(e) => { setSortOrder(e.target.value); setCurrentPage(1); }}> {/* Reset to page 1 on sort change */}
           <option value="asc">Ascending (A-Z)</option>
           <option value="desc">Descending (Z-A)</option>
         </select>
       </div>
 
       {/* Optional Search Bar */}
-      {/* <div className="search-container">
-          <input type="text" placeholder="Search groups by name or course..." className="search-bar"/>
-      </div> */}
-
+      {/* ... search input ... */}
 
       {/* Display Loading or Error States */}
       {isLoading && <p className="loading-message">Loading groups...</p>}
       {error && <p className="error-message">{error}</p>}
 
-      {/* Group Display - Use placeholder-container for layout */}
+      {/* Group Display Area */}
       <div className="placeholder-container">
-        {!isLoading && !error && sortedGroups.length === 0 && <p className="no-groups-message">No groups found.</p>}
+        {/* Message if no groups are found after loading */}
+        {!isLoading && !error && sortedGroups.length === 0 && totalPages <= 1 && (
+            <p className="no-groups-message">No groups found.</p>
+        )}
+        {/* Message if current page has no groups (but others might) */}
+        {!isLoading && !error && sortedGroups.length === 0 && totalPages > 1 && currentPage > totalPages && (
+             <p className="no-groups-message">No groups on this page.</p> // Or adjust logic based on how backend handles invalid pages
+        )}
+
+        {/* Render the 8 groups for the current page */}
         {!isLoading && !error && sortedGroups.map((group) => (
-          // Use div, apply 'group-box' class for styling
           <div
             key={group._id}
-            className="group-box" // Use the same class as CoursePage for red box style
+            className="group-box"
             onClick={() => handleGroupClick(group)}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleGroupClick(group)}
             title={`Select group: ${group.groupName}`}
           >
-             {/* Use consistent content structure */}
              <div className="group-box-content">
                <span className="group-name">{group.groupName}</span>
-               <span className="group-course">{group.course}</span> {/* Display course */}
+               <span className="group-course">{group.course}</span>
                <span className="group-members">
                  Members: {group.members?.length || 0} / {group.maxMembers}
                </span>
-            </div>
+             </div>
           </div>
         ))}
       </div>
 
-       {/* Pagination controls would go here if implemented */}
+      {/* --- Pagination Controls --- */}
+      {!isLoading && !error && totalPages > 1 && ( // Only show controls if there's more than one page
+        <div className="pagination-controls">
+          <button
+            onClick={handlePreviousPage}
+            disabled={currentPage === 1} // Disable if on first page
+            className="pagination-button"
+          >
+            &lt; Previous
+          </button>
+          <span className="page-indicator">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage >= totalPages} // Disable if on last page
+            className="pagination-button"
+          >
+            Next &gt;
+          </button>
+        </div>
+      )}
+       {/* --- End Pagination Controls --- */}
 
     </div>
   );
