@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createGroup, clearMessages } from '../features/groupSlice';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './styles/CreateGroupPage.css';
 import Header from '../Header';
 
 const CreateGroupPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const currentUser = useSelector((state) => state.auth.currentUser);
 
   const [groupData, setGroupData] = useState({
@@ -15,32 +16,49 @@ const CreateGroupPage = () => {
     groupName: '',
     maxMembers: ''
   });
-
   const [courseSearch, setCourseSearch] = useState('');
   const [courseResults, setCourseResults] = useState([]);
 
   const { loading, error, successMessage } = useSelector((state) => state.groups);
 
-  // Clear success/error messages when navigating away
+  // Effect to pre-fill course from URL query parameter
   useEffect(() => {
-    dispatch(clearMessages());
+    const queryParams = new URLSearchParams(location.search);
+    const courseFromQuery = queryParams.get('course');
+    if (courseFromQuery) {
+      // Pre-fill both the form data and the search display field
+      setGroupData(prevData => ({ ...prevData, course: courseFromQuery }));
+      setCourseSearch(courseFromQuery);
+    }
+  }, [location.search]);
+
+  // Effect to clear messages on mount/unmount
+  useEffect(() => {
+    if (typeof clearMessages === 'function') {
+      dispatch(clearMessages());
+    }
+    return () => {
+       if (typeof clearMessages === 'function') {
+            dispatch(clearMessages());
+       }
+    };
   }, [dispatch]);
 
-  // Search for courses from the database
+  // Effect for searching courses (debounced)
   useEffect(() => {
     const fetchCourses = async () => {
-      if (!courseSearch.trim()) {
+      // Don't search if the search input exactly matches the selected course
+      if (!courseSearch.trim() || courseSearch.trim() === groupData.course) {
         setCourseResults([]);
         return;
       }
-
       try {
         const response = await fetch(`http://localhost:5000/api/courses/search?query=${courseSearch}`);
         const data = await response.json();
-
-        if (response.ok) {
+        if (response.ok && Array.isArray(data)) {
           setCourseResults(data);
         } else {
+          console.warn("Course search response not ok or not an array:", data);
           setCourseResults([]);
         }
       } catch (error) {
@@ -49,28 +67,50 @@ const CreateGroupPage = () => {
       }
     };
 
-    const delaySearch = setTimeout(fetchCourses, 300); // Add debounce to reduce API calls
-    return () => clearTimeout(delaySearch); // Clear timeout on cleanup
-  }, [courseSearch]);
+    const delaySearch = setTimeout(fetchCourses, 300);
+    return () => clearTimeout(delaySearch);
+  }, [courseSearch, groupData.course]); // Added groupData.course dependency
 
+  // --- Handlers ---
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setGroupData({ ...groupData, [name]: value });
   };
 
+  // Handler for the Course Search input only
+  const handleCourseSearchChange = (e) => {
+      const newSearchValue = e.target.value;
+      setCourseSearch(newSearchValue);
+      // If user clears input OR types something different than the selected course,
+      // clear the actual selected course in the form data.
+      if (newSearchValue.trim() === '' || newSearchValue.trim() !== groupData.course) {
+          setGroupData({...groupData, course: ''});
+      }
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!groupData.course) {
+       // Set error state instead of console.error for user feedback
+       // setError("Please select a course first."); // Requires adding setError state
+       alert("Please select a course first."); // Simple alert for now
+       return;
+    }
     dispatch(createGroup(groupData));
-    setGroupData({ course: '', groupName: '', maxMembers: '' }); // Clear form fields
+    // Optionally navigate or clear form on success via extraReducers
   };
 
-  // Handle course selection from search results
   const handleSelectCourse = (dept, courseId) => {
-    setGroupData({ ...groupData, course: `${dept} ${courseId}` });
-    setCourseSearch(''); // Clear search input after selection
-    setCourseResults([]); // Clear displayed results
+    const fullCourseName = `${dept} ${courseId}`;
+    // Set the course value for submission
+    setGroupData({ ...groupData, course: fullCourseName });
+    // Set the search input to display the selected course
+    setCourseSearch(fullCourseName);
+    // Clear the search results dropdown
+    setCourseResults([]);
   };
 
+  // --- Render ---
   return (
     <div className="starter-container">
       <Header currentUser={currentUser} />
@@ -79,19 +119,20 @@ const CreateGroupPage = () => {
         <h2>Create a New Study Group</h2>
 
         <form onSubmit={handleSubmit} className="create-group-form">
-          {/* Course Search Bar */}
+          {/* Course Search and Selection */}
           <div className="input-group">
-            <label htmlFor="course">Search Course Code</label>
+            <label htmlFor="courseSearch">Search & Select Course</label>
             <input
               type="text"
               id="courseSearch"
               name="courseSearch"
-              placeholder="Type Dept or Course ID"
+              placeholder="Type Dept or Course ID (e.g., EECS 2311)"
               value={courseSearch}
-              onChange={(e) => setCourseSearch(e.target.value)}
+              // Use the dedicated handler now
+              onChange={handleCourseSearchChange}
+              autoComplete="off"
             />
-
-            {/* Display Matching Results */}
+            {/* Search Results Dropdown */}
             {courseResults.length > 0 && (
               <ul className="course-results">
                 {courseResults.map((course) => (
@@ -105,20 +146,15 @@ const CreateGroupPage = () => {
                 ))}
               </ul>
             )}
-
-          {/* Display 'No Results' Message */}
-            {courseResults.length === 0 && courseSearch && (
+            {/* No Results Message */}
+            {courseResults.length === 0 && courseSearch && courseSearch !== groupData.course && (
               <p className="no-results">No matching courses found.</p>
             )}
           </div>
 
-          {/* Display Selected Course */}
-          {groupData.course && (
-            <p className="selected-course">
-              Selected Course: <strong>{groupData.course}</strong>
-            </p>
-          )}
+          {/* --- REMOVED the separate "Selected Course" display --- */}
 
+          {/* Group Name Input */}
           <div className="input-group">
             <label htmlFor="groupName">Group Name</label>
             <input
@@ -127,29 +163,37 @@ const CreateGroupPage = () => {
               name="groupName"
               placeholder="Enter group name"
               value={groupData.groupName}
-              onChange={handleInputChange}
+              onChange={handleInputChange} // Uses generic input handler
               required
             />
           </div>
 
+          {/* Max Members Input */}
           <div className="input-group">
             <label htmlFor="maxMembers">Max Members</label>
             <input
               type="number"
               id="maxMembers"
               name="maxMembers"
-              placeholder="Enter max members"
+              placeholder="e.g., 5"
+              min="1"
               value={groupData.maxMembers}
-              onChange={handleInputChange}
+              onChange={handleInputChange} // Uses generic input handler
               required
             />
           </div>
 
-          <button type="submit" className="create-group-button" disabled={loading}>
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="create-group-button"
+            disabled={loading || !groupData.course} // Disable if loading or no course selected
+          >
             {loading ? 'Creating...' : 'Create Group'}
           </button>
         </form>
 
+        {/* Status Messages */}
         {successMessage && <p className="status-message success">{successMessage}</p>}
         {error && <p className="status-message error">{error}</p>}
       </div>
