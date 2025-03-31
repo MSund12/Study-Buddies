@@ -36,7 +36,7 @@ const CoursePage = () => {
   useEffect(() => {
     if (courseSlug) {
        // Dispatch fetchGroups thunk (unauthenticated version)
-       dispatch(fetchGroups({ course: courseTitle, page: currentPage, limit: 9 }));
+       dispatch(fetchGroups({ course: courseTitle, page: currentPage, limit: 8 }));
     }
   }, [dispatch, courseSlug, courseTitle, currentPage]);
 
