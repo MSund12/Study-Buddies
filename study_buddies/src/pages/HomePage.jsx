@@ -12,7 +12,7 @@ import './styles/HomePage.css';
 import Header from '../Header';
 
 // Define the courses in an array
-const courses = ["EECS 2311", "ENG 2003", "MATH 2930"];
+const courses = ["EECS 2311", "ENG 2003", "MATH 2930", "EECS 2101", "EECS 2030", "EECS 1011", "EECS 2001", "EECS 2011"];
 
 const HomePage = () => {
   const [showGroupFinder, setShowGroupFinder] = useState(false);
