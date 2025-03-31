@@ -1,6 +1,6 @@
 // src/pages/CoursePage.jsx
 import React, { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom'; // Ensure useParams is imported
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchGroups } from '../features/groupSlice';
 
@@ -12,43 +12,39 @@ import './styles/CoursePage.css'; // Ensure correct CSS import
 
 const CoursePage = () => {
   // --- HOOKS ---
-  const { courseSlug } = useParams(); // <-- ADD THIS LINE TO GET THE SLUG
+  const { courseSlug } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
 
   // --- Redux State ---
-  // Get user for Header etc.
   const { currentUser } = useSelector((state) => state.auth);
-  // Get groups slice state
+  // Get groups slice state safely
   const groupSliceState = useSelector(state => state.groups);
-  // Destructure state with defaults
   const {
       groups = [],
       loading: isLoading = true, // Default loading to true
       error = null,
       totalPages = 0
-  } = groupSliceState || {}; // Default to {} if slice state is undefined initially
+  } = groupSliceState || {}; // Default to {} if slice state is somehow undefined
 
   // --- Derived State ---
-  // Convert slug to displayable title (Now courseSlug should be defined)
   const courseTitle = courseSlug ? courseSlug.replace(/-/g, ' ') : 'Course';
 
   // --- Effects ---
-  // Fetch groups when component mounts or dependencies change
+  // Fetch groups when component mounts or relevant dependencies change
   useEffect(() => {
-    // Check if courseSlug is valid before dispatching
     if (courseSlug) {
-       dispatch(fetchGroups({ course: courseTitle, page: currentPage, limit: 8 }));
+       // Dispatch fetchGroups thunk (unauthenticated version)
+       dispatch(fetchGroups({ course: courseTitle, page: currentPage, limit: 9 }));
     }
-    // Intentionally not showing loading/error messages from here, rely on Redux state
   }, [dispatch, courseSlug, courseTitle, currentPage]);
 
 
   // --- Handlers ---
   const handleGroupClick = (groupId, groupName) => {
      alert(`Maps to group: ${groupName} (ID: ${groupId}) - Page not implemented yet.`);
-     // navigate(`/groups/${groupId}`);
+     // navigate(`/groups/${groupId}`); // Future navigation
   };
 
   // Robust Pagination Handlers
@@ -57,17 +53,13 @@ const CoursePage = () => {
   };
 
   const handleNextPage = () => {
-      // Use the safely destructured totalPages
       const validTotalPages = (typeof totalPages === 'number' && totalPages >= 0) ? totalPages : 0;
       setCurrentPage((prev) => (validTotalPages === 0 || prev >= validTotalPages) ? prev : prev + 1);
   };
 
-  // Log pagination values before render for debugging pagination specifically
-  console.log('Pagination check:', { currentPage, totalPages, isLoading });
-
   // --- Render Logic ---
   const validTotalPages = (typeof totalPages === 'number' && totalPages >= 0) ? totalPages : 0;
-  console.log('Pagination check:', { currentPage, totalPages, isLoading, error }); // <-- ADDED error
+
   return (
     <div className="starter-container course-page-container">
       <Header currentUser={currentUser} />
@@ -77,9 +69,10 @@ const CoursePage = () => {
       <PinkShape />
       <PurpleShape />
 
-      {/* Header */}
+      {/* Page Header */}
       <div className="course-page-header">
          <h1>Study Groups for {courseTitle}</h1>
+         <Link to="/home" className="back-link">Back to Courses</Link>
       </div>
 
       {/* Group Display Area */}
@@ -92,12 +85,17 @@ const CoursePage = () => {
           groups.map((group) => (
             <div
               key={group._id}
-              className="group-box" // Use specific class from CoursePage.css
+              className="group-box" // Uses styles from CoursePage.css
               role="listitem"
-              // Removed interactive attributes as requested previously
+              // Removed interactive attributes for non-clickable box
             >
               <div className="group-box-content">
                  <span className="group-name">{group.groupName}</span>
+                 {/* Display Owner Name */}
+                 <span className="group-owner">
+                   Owner: {group.owner ? `${group.owner.firstName ?? ''} ${group.owner.lastName ?? ''}`.trim() : 'N/A'}
+                 </span>
+                 {/* Display Member Count */}
                  <span className="group-members">
                    Members: {group.members?.length || 0} / {group.maxMembers}
                  </span>
@@ -110,19 +108,13 @@ const CoursePage = () => {
       </div>
 
       {/* Pagination Controls */}
-       {validTotalPages > 1 && ( // Only show if more than one page
+       {validTotalPages > 1 && ( // Only show controls if needed
            <div className="pagination-controls">
-               <button
-                   onClick={handlePrevPage}
-                   disabled={isLoading || currentPage <= 1}
-               >
+               <button onClick={handlePrevPage} disabled={isLoading || currentPage <= 1}>
                    &lt; Previous
                </button>
                <span>Page {currentPage} of {validTotalPages}</span>
-               <button
-                   onClick={handleNextPage}
-                   disabled={isLoading || currentPage >= validTotalPages}
-               >
+               <button onClick={handleNextPage} disabled={isLoading || currentPage >= validTotalPages}>
                    Next &gt;
                </button>
            </div>
@@ -131,7 +123,8 @@ const CoursePage = () => {
        {/* Create Group Button */}
        <button
          className="circular-button"
-         style={{ backgroundColor: 'C93030', bottom: '30px', right: '30px' }}
+         // Example style (adjust as needed or define fully in CSS)
+         style={{ backgroundColor: '#1E90FF', bottom: '30px', right: '30px', width: '140px', height:'140px', fontSize: '0.9rem' }}
          title={`Create a new group for ${courseTitle}`}
          onClick={() => navigate(`/create-group?course=${encodeURIComponent(courseTitle)}`)}
        >

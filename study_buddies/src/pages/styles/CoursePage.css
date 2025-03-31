@@ -1,14 +1,14 @@
 /* src/pages/styles/CoursePage.css */
 
-/* --- Container Styles (Can rely on global/HomePage.css for .starter-container if preferred) --- */
+/* --- Container Styles --- */
 .course-page-container {
-    padding-bottom: 120px; /* Ensure space for pagination/button */
+    padding-bottom: 120px;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     flex-grow: 1;
-    position: relative; /* Needed if shapes use absolute positioning */
+    position: relative;
   }
   
   /* --- Header Area --- */
@@ -22,30 +22,31 @@
   .course-page-header h1 {
     margin-bottom: 10px;
     font-size: 2em;
+    font-family: 'Potta One', cursive; /* Match homepage potentially */
   }
   .course-page-header .back-link {
-    color: #DE3838;
+    color: #DE3838; /* Match red theme */
     text-decoration: underline;
     font-size: 0.9em;
+    font-family: sans-serif; /* Use standard font for links */
   }
   
-  /* --- Group Container (Copied from .placeholder-container) --- */
+  /* --- Group Container --- */
   .placeholder-container {
     margin-top: 3vh;
     padding: 0 5%;
     gap: 25px;
     width: 90%;
     max-width: 1200px;
-    justify-content: center; /* Center items */
+    justify-content: center;
     display: flex;
     flex-wrap: wrap;
     z-index: 5;
-    min-height: 200px; /* Give minimum height */
+    min-height: 200px;
   }
   
-  /* --- Group Box Styling (Specific to Course Page) --- */
+  /* --- Group Box Styling (Red Theme, Non-Interactive Display) --- */
   .group-box {
-    /* --- Layout (Keep similar) --- */
     flex: 1 1 250px;
     max-width: 300px;
     min-width: 200px;
@@ -53,61 +54,48 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    height: 180px; /* Keep height or adjust */
+    height: 180px;
     padding: 15px;
     box-sizing: border-box;
-    border-radius: 10px; /* Keep rounded corners */
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.1); /* Keep shadow */
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
     overflow: hidden;
-  
-    /* --- Appearance (CHANGED BACK TO RED THEME) --- */
-    background-color: #DE3838; /* CHANGE: Red background */
-    color: white;             /* CHANGE: White text color */
-    border: none;             /* CHANGE: No border */
-    font-family: 'Potta One', cursive; /* Match homepage font if desired */
-    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */ /* Or keep previous */
-  
-    /* --- Interactivity (Keep as non-interactive) --- */
-    cursor: default; /* Use default cursor */
-    transition: none; /* No transition needed for non-interactive */
+    background-color: #DE3838; /* Red background */
+    color: white;             /* White text */
+    border: none;
+    font-family: 'Potta One', cursive; /* Match homepage font */
+    cursor: default; /* Default cursor */
+    transition: none;
   }
-  
-  .group-box:hover {
-    /* No visual change on hover for non-interactive elements */
+  .group-box:hover { /* No hover effect */
     transform: none;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.1); /* Keep base shadow */
-    background-color: #DE3838; /* Keep background same */
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    background-color: #DE3838;
   }
+  .group-box:focus { outline: none; }
   
-  .group-box:focus {
-    /* Remove focus outline as it's not interactive */
-    outline: none;
-  }
-  
-  /* --- Content inside box (Ensure white color) --- */
+  /* Content inside box */
   .group-box-content {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 4px; /* Adjust gap */
     width: 100%;
   }
-  
   .group-name {
     font-size: 1.1em;
     font-weight: bold;
     word-break: break-word;
     line-height: 1.3;
-    color: white; /* Ensure white */
+    color: white;
   }
-
   .group-owner {
     font-size: 0.75em;
     font-style: italic;
     opacity: 0.85;
-    color: white; /* Ensure contrast with background */
-    margin-top: -4px; /* Adjust vertical spacing */
+    color: white;
+    margin-top: -4px;
     margin-bottom: 4px;
     display: block;
     width: 100%;
@@ -115,12 +103,12 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  
   .group-members {
     font-size: 0.85em;
     font-weight: normal;
     opacity: 0.9;
-    color: white; /* Ensure white */
+    color: white;
+    margin-top: 0px;
   }
   
   /* --- Loading / Error / No Groups Messages --- */
@@ -131,19 +119,17 @@
       color: #555;
       padding: 40px 20px;
   }
-  /* Re-use error message style if defined globally or in HomePage.css */
   .error-message {
     color: #D8000C;
     background-color: #FFD2D2;
     border: 1px solid #D8000C;
     padding: 15px;
-    margin: 20px auto; /* Center horizontally */
+    margin: 20px auto;
     border-radius: 4px;
     text-align: center;
     width: 80%;
     max-width: 600px;
   }
-  
   
   /* --- Pagination Controls --- */
   .pagination-controls {
@@ -178,4 +164,35 @@
       font-weight: bold;
       font-size: 0.95rem;
       color: #444;
+  }
+  
+  /* Ensure circular button style is available */
+  .circular-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 140px; /* Adjusted */
+    height: 140px; /* Adjusted */
+    background-color: #1E90FF; /* Blue from JSX */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.9rem; /* Adjusted */
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease-in-out, background-color 0.2s ease;
+    z-index: 100;
+    padding: 10px;
+    box-sizing: border-box;
+    line-height: 1.2;
+  }
+  .circular-button:hover {
+    transform: scale(1.05);
+    /* Match hover color if needed */
+    /* background-color: #1C86EE; */
   }
