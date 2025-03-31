@@ -296,7 +296,7 @@ const BookRoom = () => {
     // Handle logout (remains the same)
       const handleSignOut = () => {
         dispatch(logout());
-        navigate('/signin');
+        navigate('/starter');
       };
 
     // --- Render Logic ---

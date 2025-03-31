@@ -26,7 +26,7 @@ const GroupFinderPage = ({ onBack, onSelectGroup }) => {
   // Handle logout
   const handleSignOut = () => {
     dispatch(logout());
-    navigate('/signin');
+    navigate('/starter');
   };
 
   // --- Read state from Redux ---
