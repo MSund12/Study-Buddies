@@ -192,7 +192,6 @@
     line-height: 1.2;
   }
   .circular-button:hover {
-    transform: scale(1.05);
-    /* Match hover color if needed */
-    /* background-color: #1C86EE; */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+    background-color: #C93030; /* Darker red on hover */
   }

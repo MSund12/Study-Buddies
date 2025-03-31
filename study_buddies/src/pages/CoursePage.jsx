@@ -72,7 +72,6 @@ const CoursePage = () => {
       {/* Page Header */}
       <div className="course-page-header">
          <h1>Study Groups for {courseTitle}</h1>
-         <Link to="/home" className="back-link">Back to Courses</Link>
       </div>
 
       {/* Group Display Area */}
@@ -122,14 +121,11 @@ const CoursePage = () => {
 
        {/* Create Group Button */}
        <button
-         className="circular-button"
-         // Example style (adjust as needed or define fully in CSS)
-         style={{ backgroundColor: '#1E90FF', bottom: '30px', right: '30px', width: '140px', height:'140px', fontSize: '0.9rem' }}
-         title={`Create a new group for ${courseTitle}`}
-         onClick={() => navigate(`/create-group?course=${encodeURIComponent(courseTitle)}`)}
-       >
-         Create Group
-       </button>
+        className="circular-button"
+        onClick={() => navigate('/create-group')}
+      >
+        Create a Group
+      </button>
 
     </div>
   );
