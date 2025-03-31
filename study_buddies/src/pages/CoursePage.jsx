@@ -39,7 +39,7 @@ const CoursePage = () => {
   useEffect(() => {
     // Check if courseSlug is valid before dispatching
     if (courseSlug) {
-       dispatch(fetchGroups({ course: courseTitle, page: currentPage, limit: 9 }));
+       dispatch(fetchGroups({ course: courseTitle, page: currentPage, limit: 8 }));
     }
     // Intentionally not showing loading/error messages from here, rely on Redux state
   }, [dispatch, courseSlug, courseTitle, currentPage]);
@@ -80,7 +80,6 @@ const CoursePage = () => {
       {/* Header */}
       <div className="course-page-header">
          <h1>Study Groups for {courseTitle}</h1>
-         <Link to="/home" className="back-link">Back to Courses</Link>
       </div>
 
       {/* Group Display Area */}
@@ -132,7 +131,7 @@ const CoursePage = () => {
        {/* Create Group Button */}
        <button
          className="circular-button"
-         style={{ backgroundColor: '#1E90FF', bottom: '30px', right: '30px' }}
+         style={{ backgroundColor: 'C93030', bottom: '30px', right: '30px' }}
          title={`Create a new group for ${courseTitle}`}
          onClick={() => navigate(`/create-group?course=${encodeURIComponent(courseTitle)}`)}
        >
