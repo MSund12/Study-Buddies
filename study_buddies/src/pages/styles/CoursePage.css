@@ -45,38 +45,46 @@
   
   /* --- Group Box Styling (Specific to Course Page) --- */
   .group-box {
-    flex: 1 1 250px; /* Allow growing/shrinking */
+    /* --- Layout (Keep similar) --- */
+    flex: 1 1 250px;
     max-width: 300px;
     min-width: 200px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    height: 180px;
-    background-color: #DE3838; /* DIFFERENT background color (e.g., blue) */
-    border-radius: 8px; /* Slightly less round */
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    height: 180px; /* Keep height or adjust */
     padding: 15px;
     box-sizing: border-box;
-    color: white;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Different font */
-    cursor: pointer; /* Still clickable */
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    border-radius: 10px; /* Keep rounded corners */
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1); /* Keep shadow */
     overflow: hidden;
+  
+    /* --- Appearance (CHANGED BACK TO RED THEME) --- */
+    background-color: #DE3838; /* CHANGE: Red background */
+    color: white;             /* CHANGE: White text color */
+    border: none;             /* CHANGE: No border */
+    font-family: 'Potta One', cursive; /* Match homepage font if desired */
+    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */ /* Or keep previous */
+  
+    /* --- Interactivity (Keep as non-interactive) --- */
+    cursor: default; /* Use default cursor */
+    transition: none; /* No transition needed for non-interactive */
   }
   
   .group-box:hover {
-    transform: translateY(-2px);
-    box-shadow: 4px 4px 10px rgba(0,0,0,0.15);
-    background-color: #D8000C; /* Darker blue on hover */
+    /* No visual change on hover for non-interactive elements */
+    transform: none;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1); /* Keep base shadow */
+    background-color: #DE3838; /* Keep background same */
   }
   
   .group-box:focus {
-    outline: 2px solid rgb(139, 0, 0); /* Focus outline */
-    outline-offset: 2px;
+    /* Remove focus outline as it's not interactive */
+    outline: none;
   }
   
-  /* Content within the group box */
+  /* --- Content inside box (Ensure white color) --- */
   .group-box-content {
     display: flex;
     flex-direction: column;
@@ -87,16 +95,18 @@
   }
   
   .group-name {
-    font-size: 1.1em; /* Adjusted size */
+    font-size: 1.1em;
     font-weight: bold;
     word-break: break-word;
     line-height: 1.3;
+    color: white; /* Ensure white */
   }
   
   .group-members {
-    font-size: 0.85em; /* Adjusted size */
+    font-size: 0.85em;
     font-weight: normal;
     opacity: 0.9;
+    color: white; /* Ensure white */
   }
   
   /* --- Loading / Error / No Groups Messages --- */

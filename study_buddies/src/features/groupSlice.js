@@ -1,42 +1,30 @@
 // features/groupSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-// Using axios as per previous examples, ensure it's installed and imported
 import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:5000/api';
 
-// createGroup thunk (remains unauthenticated as per previous step)
-export const createGroup = createAsyncThunk(
-  'groups/createGroup',
-  async (groupData, { rejectWithValue }) => {
-    try {
-      const config = { headers: { 'Content-Type': 'application/json' } };
-      const response = await axios.post(`${API_BASE_URL}/groups/create`, groupData, config);
-      return response.data;
-    } catch (error) {
-      const message = error.response?.data?.message || error.message || 'Failed to create group';
-      console.error("Create Group Thunk Error:", error.response?.data || error);
-      return rejectWithValue(message);
-    }
-  }
-);
+// createGroup thunk (unauthenticated version)
+export const createGroup = createAsyncThunk( /* ... as before ... */ );
 
-// fetchGroups thunk (Corrected Signature + Unauthenticated)
+// fetchGroups thunk (unauthenticated version with logging)
 export const fetchGroups = createAsyncThunk(
   'groups/fetchGroups',
-  // --- CORRECTED: Accept filterParams ---
   async (filterParams = {}, { rejectWithValue }) => {
+    // --- THUNK LOG ---
+    console.log('[fetchGroups Thunk] Starting. Params:', filterParams);
     try {
-      const config = {
-        // No Authorization header needed since we reverted auth
-        params: filterParams // Pass filters (like { course: '...' }) as query params
-      };
+      const config = { params: filterParams };
+      // --- THUNK LOG ---
+      console.log(`[fetchGroups Thunk] Requesting ${API_BASE_URL}/groups with config:`, config);
       const response = await axios.get(`${API_BASE_URL}/groups`, config);
-      // Return the full response object { groups: [], totalGroups: X, ... }
-      return response.data;
+      // --- THUNK LOG ---
+      console.log("[fetchGroups Thunk] Success Response Data:", response.data);
+      return response.data; // Return the full response object
     } catch (error) {
       const message = error.response?.data?.message || error.message || 'Failed to fetch groups';
-      console.error("Fetch Groups Thunk Error:", error.response?.data || error);
+      // --- THUNK LOG ---
+      console.error("[fetchGroups Thunk] Error:", error.response?.data || error);
       return rejectWithValue(message);
     }
   }
@@ -46,49 +34,39 @@ export const fetchGroups = createAsyncThunk(
 const groupSlice = createSlice({
   name: 'groups',
   initialState: {
-    groups: [],
-    loading: false,
-    error: null,
-    successMessage: null,
-    // Ensure these are defined in initial state
-    totalGroups: 0,
-    totalPages: 0,
-    currentPage: 1,
+    groups: [], loading: false, error: null, successMessage: null,
+    totalGroups: 0, totalPages: 0, currentPage: 1, // Ensure defaults are here
   },
-  reducers: {
-     // ... clearMessages ...
-  },
+  reducers: { /* ... clearMessages ... */ },
   extraReducers: (builder) => {
     builder
       // ... createGroup cases ...
 
-      // Fetch Groups Cases
+      // --- Fetch Groups Cases with Logging ---
       .addCase(fetchGroups.pending, (state) => {
+        console.log('[fetchGroups Reducer] Pending...'); // <-- LOG
         state.loading = true; state.error = null;
       })
       .addCase(fetchGroups.fulfilled, (state, action) => {
-        // ***** ADD LOGS *****
-        console.log('--- fetchGroups Fulfilled Reducer ---');
-        // Log the entire payload received from the thunk
-        console.log('Received action.payload:', JSON.stringify(action.payload, null, 2));
-        // Log state *before* changes
-        console.log('State BEFORE update:', JSON.stringify(state));
-        // ***** END LOGS *****
-
+        console.log('[fetchGroups Reducer] Fulfilled. Payload:', action.payload); // <-- LOG
         state.loading = false;
         state.groups = action.payload?.groups || [];
         state.totalGroups = action.payload?.totalGroups || 0;
-        state.totalPages = action.payload?.totalPages || 0; // Assign totalPages
-        state.currentPage = action.payload?.currentPage || 1; // Assign currentPage
-
-        // ***** ADD LOG *****
-        // Log state *after* changes
-        console.log('State AFTER update:', JSON.stringify(state));
-        // ***** END LOG *****
+        state.totalPages = action.payload?.totalPages || 0;
+        state.currentPage = action.payload?.currentPage || 1;
+        console.log('[fetchGroups Reducer] State Updated:', { totalPages: state.totalPages, currentPage: state.currentPage, groupsCount: state.groups.length }); // <-- LOG
       })
       .addCase(fetchGroups.rejected, (state, action) => {
-        // ... (error handling) ...
+        console.log('[fetchGroups Reducer] Rejected. Payload (Error):', action.payload); // <-- LOG
+        state.loading = false;
+        state.error = action.payload;
+        // Reset state on rejection
+        state.groups = [];
+        state.totalGroups = 0;
+        state.totalPages = 0;
+        state.currentPage = 1;
       });
+      // --- End Fetch Groups Cases ---
   },
 });
 

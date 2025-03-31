@@ -5,6 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import './styles/CreateGroupPage.css';
 import Header from '../Header';
 
+console.log('--- CreateGroupPage Module Import Check ---');
+console.log('Imported groupSliceModule:', groupSliceModule); // Log the whole module
+console.log('Value of clearMessages from module:', groupSliceModule.clearMessages); // Check specifically
+
 const CreateGroupPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -28,6 +32,10 @@ const CreateGroupPage = () => {
 
   // Search for courses from the database
   useEffect(() => {
+    console.log('--- CreateGroupPage useEffect ---');
+    console.log('Value of clearMessages INSIDE effect:', clearMessages);
+    console.log('Type of clearMessages INSIDE effect:', typeof clearMessages);
+
     const fetchCourses = async () => {
       if (!courseSearch.trim()) {
         setCourseResults([]);
