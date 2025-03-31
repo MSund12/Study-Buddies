@@ -40,6 +40,36 @@ const getDayBounds = (dateInput) => {
     }
 };
 
+//   GET /api/user/groups/courses
+//   Requires:  Authorization header (JWT)
+//   Returns:  Array of courses associated with groups created by the user
+
+router.get('/user/groups/courses', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId; //   Get user ID from the JWT
+
+    //   1. Find groups created by the user
+    const groups = await Group.find({ members: userId });  // Changed from createdBy to members
+
+    if (!groups || groups.length === 0) {
+      return res.status(200).json([]); //   No groups, no courses
+    }
+
+    //   2. Extract course information from the groups
+    const courseNames = groups.map(group => group.course); //  Groups have a 'course' field
+    const uniqueCourseNames = [...new Set(courseNames)]; // Remove duplicates
+
+    //   3. Fetch the full course details (if needed, based on your frontend needs)
+    //   If you only need the course names, you can send uniqueCourseNames directly
+    const courses = await Course.find({ "Course Name": { $in: uniqueCourseNames } }); //  Adjust field name as needed
+
+    res.status(200).json(courses); // Or res.status(200).json(uniqueCourseNames);
+  } catch (error) {
+    console.error('Error fetching user-created group courses:', error);
+    res.status(500).json({ message: 'Failed to fetch courses.' });
+  }
+});
+
 
 // ➤ Create Group Endpoint (Requires Authentication)
 router.post('/create', authenticateToken, async (req, res) => {
