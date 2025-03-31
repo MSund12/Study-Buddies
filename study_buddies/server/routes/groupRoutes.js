@@ -45,17 +45,40 @@ const getDayBounds = (dateInput) => {
 
 
 // ➤ Create Group Endpoint (Unauthenticated Version)
-router.post('/create', async (req, res) => { // Removed authenticateToken
+router.post('/create', authenticateToken, async (req, res) => { // <-- Added authenticateToken HERE only
   const { course, groupName, maxMembers } = req.body;
+  const creatorId = req.user?.userId; // <-- Get creator's ID from middleware
+
+  // Validate input
   if (!course || !groupName || !maxMembers) {
     return res.status(400).json({ message: 'All fields are required' });
   }
+  if (!creatorId) {
+      return res.status(401).json({ message: 'Authentication error: Creator ID missing.' });
+  }
+  const maxMembersNum = parseInt(maxMembers);
+  if (isNaN(maxMembersNum) || maxMembersNum < 1) {
+      return res.status(400).json({ message: 'Max members must be a positive number.' });
+  }
+
   try {
-    const newGroup = new Group({ course, groupName, maxMembers });
+    // Create the new group, initializing members array with the creator's ID
+    const newGroup = new Group({
+        course,
+        groupName,
+        maxMembers: maxMembersNum,
+        members: [creatorId] // <-- Initialize members array with creator
+    });
+
     await newGroup.save();
-    res.status(201).json({ message: 'Group created successfully!', group: newGroup });
+    console.log(`Group "${groupName}" Created by ${creatorId}`);
+
+    res.status(201).json({
+      message: 'Group created successfully!',
+      group: newGroup
+    });
   } catch (error) {
-    console.error('Error creating group:', error); // Keep essential error logs
+    console.error('Error creating group:', error);
     res.status(500).json({ message: 'Failed to create group' });
   }
 });

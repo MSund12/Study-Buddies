@@ -101,6 +101,20 @@
     line-height: 1.3;
     color: white; /* Ensure white */
   }
+
+  .group-owner {
+    font-size: 0.75em;
+    font-style: italic;
+    opacity: 0.85;
+    color: white; /* Ensure contrast with background */
+    margin-top: -4px; /* Adjust vertical spacing */
+    margin-bottom: 4px;
+    display: block;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   
   .group-members {
     font-size: 0.85em;

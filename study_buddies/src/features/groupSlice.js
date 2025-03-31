@@ -7,15 +7,30 @@ const API_BASE_URL = 'http://localhost:5000/api';
 // Async Thunk for Creating Groups (Unauthenticated Version)
 export const createGroup = createAsyncThunk(
   'groups/createGroup',
-  async (groupData, { rejectWithValue }) => {
+  // Add getState back
+  async (groupData, { getState, rejectWithValue }) => {
     try {
-      const config = { headers: { 'Content-Type': 'application/json' } };
-      // Making unauthenticated request as per previous step
+      // Get token from auth state
+      const token = getState().auth?.token; // Access token
+      if (!token) {
+        return rejectWithValue('Authentication required to create a group.'); // Specific message
+      }
+
+      // Configure headers with Authorization
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // <-- ADDED Authorization Header
+        }
+      };
+
+      // Make the authenticated API call
       const response = await axios.post(`${API_BASE_URL}/groups/create`, groupData, config);
-      return response.data; // Contains { message, group }
+      return response.data;
+
     } catch (error) {
       const message = error.response?.data?.message || error.message || 'Failed to create group';
-      console.error("Create Group Thunk Error:", error.response?.data || error); // Keep essential error log
+      console.error("Create Group Thunk Error:", error.response?.data || error);
       return rejectWithValue(message);
     }
   }
