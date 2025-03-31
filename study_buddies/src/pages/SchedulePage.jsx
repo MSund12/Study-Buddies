@@ -146,7 +146,7 @@ const SchedulePage = () => {
 
       {courseData && (
         <div>
-          <h2>
+          <h2 className='schedule-title'>
             Schedule for {courseData.Dept} {courseData["Course ID"]} - {courseData["Course Name"]} ({courseData.Term})
           </h2>
           <div className="schedule">
