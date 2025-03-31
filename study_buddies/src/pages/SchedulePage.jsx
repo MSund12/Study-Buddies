@@ -15,6 +15,7 @@ const SchedulePage = () => {
   const [term, setTerm] = useState('F'); // Term is either "F" or "W"
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { courseData, loading, error } = useSelector((state) => state.courses);
 
   const scheduleStartMinutes = 8 * 60 + 30;
