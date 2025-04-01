@@ -28,7 +28,7 @@ Note: If you have an issue when running npm -v view the bottom of this doc
 First, clone the repository to your local machine using Git. Open your terminal and run:
 ```bash
 git clone https://github.com/username/repository-name.git
-cd repository-name
+cd study_buddies (MUST be in study_buddies not Study-Buddies
 ```
 This will download the project files to your local directory and navigate into it.
 
