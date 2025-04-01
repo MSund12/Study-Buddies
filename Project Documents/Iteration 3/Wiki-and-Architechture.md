@@ -16,57 +16,88 @@ The project root (`/STUDY_BUDDIES`) is organized into three primary segments: we
 /STUDY_BUDDIES
 │
 ├── /ScheduleScraper
-│   └── (Contains code for scraping schedule data, potentially for class schedules or study groups.)
+│   └── HTMLScrape.py            --> Python script for scraping course/schedule data.
+│   └── courses_data.json        --> Scraped course data in JSON format.
 │
-├── /server
+├── /server                      --> Backend directory.
 │   ├── /models
-│   │   ├── Course.js           --> Mongoose schema for course data.
-│   │   └── User.js             --> Mongoose schema for user data.
+│   │   ├── Booking.js           --> Mongoose schema for session bookings.
+│   │   ├── Course.js            --> Mongoose schema for course information.
+│   │   ├── Group.js             --> Mongoose schema for study groups.
+│   │   ├── TempUser.js          --> Schema for temporary user state (e.g., unverified).
+│   │   └── User.js              --> Mongoose schema for user authentication and data.
 │   │
 │   ├── /routes
-│   │   ├── courseRoutes.js     --> Express routes managing course-related CRUD operations.
-│   │   └── userRoutes.js       --> Express routes handling user operations (registration, login, profile updates).
+│   │   ├── bookingRoutes.js     --> Endpoints for scheduling study sessions.
+│   │   ├── courseRoutes.js      --> Endpoints for managing user courses.
+│   │   ├── groupRoutes.js       --> Endpoints for creating, joining, and managing groups.
+│   │   └── userRoutes.js        --> Endpoints for login, registration, and profile handling.
 │   │
-│   ├── package-lock.json       --> Locks backend dependency versions.
-│   ├── package.json            --> Lists server dependencies, scripts, and metadata.
-│   └── server.js               --> Entry point for the backend; initializes Express and connects to MongoDB.
+│   ├── .env                     --> Environment variables for sensitive configs.
+│   ├── package.json             --> Backend dependencies and scripts.
+│   ├── package-lock.json        --> Locked dependency tree for backend.
+│   └── server.js                --> Express app setup and MongoDB connection.
 │
-├── /src
+├── /src                        --> Frontend source code.
 │   ├── /archive
-│   │   ├── LoginPage.jsx       --> Deprecated or backup LoginPage component.
-│   │   └── RegisterPage.jsx    --> Deprecated or backup RegisterPage component.
+│   │   ├── LoginPage.jsx        --> Deprecated or backup login page.
+│   │   └── RegisterPage.jsx     --> Deprecated or backup register page.
+│   │
+│   ├── /features
+│   │   ├── authSlice.js         --> Redux slice for authentication.
+│   │   ├── courseSlice.js       --> Redux slice for courses.
+│   │   └── groupSlice.js        --> Redux slice for group state.
 │   │
 │   ├── /hooks
-│   │   └── useAuth.js          --> Custom React hook for authentication logic.
+│   │   └── useAuth.js           --> Custom hook for managing auth context and status.
 │   │
 │   ├── /pages
-│   │   └── /components
-│   │       ├── GroupChatSidebar.jsx   --> Sidebar component for group chat functionality.
-│   │       ├── GroupFinderPage.jsx    --> Page for discovering and searching for study groups.
-│   │       ├── GroupPage.jsx          --> Displays detailed information for a selected study group.
-│   │       ├── HomePage.jsx           --> Main homepage showcasing core app features.
-│   │       ├── SchedulePage.jsx       --> Page for displaying or managing study schedules.
-│   │       ├── SignIn.jsx             --> Component for user login functionality.
-│   │       ├── SignUp.jsx             --> Component for user registration functionality.
-│   │       └── StarterPage.jsx        --> Landing page guiding users to SignIn or SignUp.
+│   │   ├── BookRoom.jsx         --> Modal/Component for booking study rooms.
+│   │   ├── CoursePage.jsx       --> Page for viewing and managing course info.
+│   │   ├── CreateGroupPage.jsx  --> Page for creating new study groups.
+│   │   ├── GroupChatSidebar.jsx --> Sidebar chat for study group communication.
+│   │   ├── GroupFinderPage.jsx  --> Discover/search existing study groups.
+│   │   ├── GroupPage.jsx        --> Displays group metadata and members.
+│   │   ├── HomePage.jsx         --> Post-login dashboard with navigation.
+│   │   ├── SchedulePage.jsx     --> Manage and view scheduled study sessions.
+│   │   ├── SignIn.jsx           --> Login form with API integration.
+│   │   ├── SignUp.jsx           --> Registration form with backend hook.
+│   │   ├── StarterPage.jsx      --> Entry/landing page with navigation options.
+│   │   └── Verify.jsx           --> Email verification page (if required).
 │   │
-│   ├── App.css                 --> Main stylesheet for the application.
-│   ├── App.jsx                 --> Root component; contains app-wide logic and routing.
-│   ├── Header.jsx              --> Reusable header component for navigation.
-│   ├── index.css               --> Global CSS styling.
-│   └── main.jsx                --> Frontend entry point that renders the `<App />` component.
+│   ├── /components
+│   │   ├── PinkShape.jsx        --> UI shape asset (for aesthetic use).
+│   │   ├── PurpleShape.jsx      --> UI shape asset (for aesthetic use).
+│   │   └── RedShape.jsx         --> UI shape asset (for aesthetic use).
+│   │
+│   ├── /styles                  --> Component-based CSS files.
+│   │   └── *.css                --> Styles scoped per feature/page/component.
+│   │
+│   ├── App.css                  --> Global app styles.
+│   ├── App.jsx                  --> Main component with routing and layout.
+│   ├── Header.jsx               --> Header navigation bar.
+│   ├── main.jsx                 --> React root entry point.
+│
+├── /store                      --> Redux store setup.
 │
 ├── /test
-│   └── (Contains unit and integration tests for frontend components and backend functionality.)
+│   ├── /components
+│   │   ├── GroupChatSidebar.test.jsx
+│   │   ├── GroupFinderPage.test.jsx
+│   │   └── GroupPage.test.jsx
+│   │
+│   ├── HomePage.test.jsx
+│   ├── LoginPage.test.jsx
+│   ├── RegisterPage.test.jsx
+│   └── setup.js                --> Test environment setup (e.g., Jest, RTL).
 │
-├── .gitignore                  --> Specifies files/folders to exclude from version control.
-├── eslint.config.js            --> ESLint configuration for code consistency and linting.
-├── index.html                  --> Main HTML file for the frontend; serves as the root template for the React app.
-├── package-lock.json           --> Locks frontend dependency versions.
-├── package.json                --> Lists frontend dependencies, scripts, and metadata.
-└── vite.config.js              --> Configuration file for Vite, the fast development build tool.
+├── .gitignore                 --> Specifies files/folders to exclude from Git.
+├── index.html                 --> Root HTML template for React app.
+├── package.json               --> Frontend scripts and dependencies.
+├── package-lock.json          --> Locked frontend dependencies.
+├── vite.config.js             --> Vite bundler and dev server config.
+└── eslintrc.config.js         --> ESLint rules and formatting.
 ```
-
 ---
 
 ## Data Flow & Component Communication
