@@ -17,6 +17,7 @@ import './App.css';
 import CreateGroupPage from './pages/CreateGroupPage';
 import GroupChatSidebar from './pages/GroupChatSidebar';
 import GroupFinderPage from './pages/GroupFinderPage';
+import CoursePage from './pages/CoursePage';
 import { current } from '@reduxjs/toolkit';
 
 const App = () => {
@@ -45,6 +46,8 @@ const App = () => {
         <Route path="/create-group" element={<CreateGroupPage />} />
         <Route path="/group-finder" element={<GroupFinderPage />} />
         <Route path="/book" element={<BookRoom currentUser={currentUser}/>}/>
+
+        <Route path="/courses/:courseSlug" element={<CoursePage />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </div>

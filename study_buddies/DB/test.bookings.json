@@ -1,0 +1,115 @@
+[{
+  "_id": {
+    "$oid": "67e9ac62773d4158e8fe914d"
+  },
+  "user": {
+    "$oid": "67e35ec677016333f1760625"
+  },
+  "roomName": "StudyRoomA",
+  "startTime": {
+    "$date": "2025-04-02T13:00:00.000Z"
+  },
+  "endTime": {
+    "$date": "2025-04-02T13:30:00.000Z"
+  },
+  "durationMinutes": 30,
+  "createdAt": {
+    "$date": "2025-03-30T20:41:06.139Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-30T20:41:06.139Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e9b3a2587b395647ddcc11"
+  },
+  "user": {
+    "$oid": "67e35ec677016333f1760625"
+  },
+  "roomName": "StudyRoomA",
+  "startTime": {
+    "$date": "2025-04-02T16:30:00.000Z"
+  },
+  "endTime": {
+    "$date": "2025-04-02T17:00:00.000Z"
+  },
+  "durationMinutes": 30,
+  "createdAt": {
+    "$date": "2025-03-30T21:12:02.381Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-30T21:12:02.381Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e9f2986f712be1559435ef"
+  },
+  "user": {
+    "$oid": "67e35ec677016333f1760625"
+  },
+  "roomName": "StudyRoomA",
+  "startTime": {
+    "$date": "2025-04-17T15:30:00.000Z"
+  },
+  "endTime": {
+    "$date": "2025-04-17T17:00:00.000Z"
+  },
+  "durationMinutes": 90,
+  "createdAt": {
+    "$date": "2025-03-31T01:40:40.578Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-31T01:40:40.578Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e9ffe7dd0e28697adf3eb7"
+  },
+  "user": {
+    "$oid": "67e9753c0833841876c76ae3"
+  },
+  "roomName": "StudyRoomA",
+  "startTime": {
+    "$date": "2025-04-02T13:30:00.000Z"
+  },
+  "endTime": {
+    "$date": "2025-04-02T14:00:00.000Z"
+  },
+  "durationMinutes": 30,
+  "createdAt": {
+    "$date": "2025-03-31T02:37:27.489Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-31T02:37:27.489Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67eac48c7730567768c03981"
+  },
+  "user": {
+    "$oid": "67e425ba52d6e668bc32f38a"
+  },
+  "roomName": "StudyRoomA",
+  "startTime": {
+    "$date": "2025-03-31T17:00:00.000Z"
+  },
+  "endTime": {
+    "$date": "2025-03-31T17:30:00.000Z"
+  },
+  "durationMinutes": 30,
+  "createdAt": {
+    "$date": "2025-03-31T16:36:28.214Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-31T16:36:28.214Z"
+  },
+  "__v": 0
+}]

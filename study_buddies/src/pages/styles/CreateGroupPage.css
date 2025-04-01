@@ -21,8 +21,35 @@ body {
   justify-content: center;
 }
 
-.header-title{
-  bottom: 50vh;
+.create-group-container{
+  position: relative;
+  top: 10vh;
+  display: block;
+}
+
+.input-group label{
+  width: 20vw;
+}
+
+.create-group-button{
+  justify-self: center;
+  padding: 8px;
+  width: 12vw;
+  padding: 1vh;
+  font-size: 1vw;
+  font-weight: bold;
+  color: #FFFFFF;
+  background: black;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 3vh;
+}
+
+.course-results{
+  justify-self: center;
+  width: 20.5vw;
 }
 
 .status-message {

@@ -1,11 +1,12 @@
 body {
-  background: #FFFFFF;
-  font-family: 'Potta One', cursive;
+  background: #ffffff;
+  font-family: 'Potta One', cursive; /* Keep existing font */
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  /* Consider removing overflow: hidden if content might exceed viewport */
+  /* overflow: hidden; */
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh; /* Use min-height to allow content scrolling */
   display: flex;
   flex-direction: column;
 }
@@ -14,107 +15,168 @@ body {
 .starter-container {
   position: relative;
   width: 100%;
-  height: 100%; /* Full screen height */
+  flex-grow: 1; /* Allow container to grow */
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */ /* Remove this if content isn't meant to be vertically centered overall */
+  padding-bottom: 50px; /* Add some padding at the bottom */
 }
 
 
 /* Beginning of HomePage.jsx */
 .buttons-container-home {
-    top: 4vh;
-    position: relative;
-    left: 20vh;
-    display: flex;
-    align-items: center;
-    gap: 3vw;
-    white-space: nowrap;
+   /* Keep existing styles - maybe adjust positioning if needed */
+   top: 4vh;
+   position: relative;
+   /* left: 20vh; */ /* Consider removing fixed left offset or using % */
+   display: flex;
+   align-items: center;
+   gap: 3vw;
+   white-space: nowrap;
+   margin-bottom: 3vh; /* Add some margin below buttons */
+   z-index: 10; /* Ensure buttons are above shapes if overlapping */
   }
 
   .buttons{
     text-decoration: none;
+    color: inherit; /* Inherit color from parent, adjust if needed */
+    font-size: 1rem; /* Example font size */
+    padding: 5px 10px; /* Add some padding */
   }
 
   .buttons:hover{
     color: blue;
     opacity: 0.6;
   }
-  
-  .search-container{
-    position: relative;
-    top: 12vh;
+
+  .search-group{
+    position: relative; /* Keep relative positioning */
+    /* top: 12vh; */ /* Adjust top position if needed or use margin */
+    margin-top: 4vh;
+    margin-bottom: 4vh;
     display: flex;
+    width: 70%; /* Example width */
+    max-width: 800px; /* Max width for search */
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
   }
-  
-  .search-bar{
-    width: 150vh;
+
+  .search-group input{
+    width: 100%; /* Make search bar fill its container */
     height: 3.5vh;
-    background-color: #ada5a5;
+    min-height: 30px; /* Minimum height */
+    background-color: #f0f0f0; /* Lighter grey */
     color: black;
-    border: transparent;
-    border-radius: 30px;
-    font-weight: bold;
-    font-family: 'Potta One', cursive;
-    font-size: 0.8vw;
-    padding: 1.5vh;
+    border: 1px solid #ccc; /* Add subtle border */
+    border-radius: 20px; /* Slightly less rounded */
+    font-weight: normal; /* Use normal weight unless bold is desired */
+    font-family: 'Segoe UI', sans-serif; /* Use a more standard UI font maybe */
+    font-size: 1rem; /* Adjust font size */
+    padding: 10px 20px; /* Adjust padding (vh might be too large) */
+    box-sizing: border-box; /* Include padding/border in width */
   }
-  
+
+/* --- UPDATED PLACEHOLDER CONTAINER --- */
   .placeholder-container{
-    position: relative;
-    top: 17vh;
-    padding-left: 7vh;
-    gap: 2vh 2vw;
-    width: 120vh;
-    justify-content: flex-start;
-    align-self: flex-start;
+    /* position: relative; */ /* Remove relative positioning if not needed for offset */
+    /* top: 17vh; */ /* Remove fixed top offset, use margin/padding */
+    margin-top: 3vh; /* Add margin */
+    padding: 0 5%; /* Add some side padding instead of just left */
+    gap: 25px; /* Use fixed gap */
+    width: 90%; /* Use percentage width */
+    max-width: 1200px; /* Set a max-width for large screens */
+    /* justify-content: flex-start; */ /* Old value */
+    justify-content: space-around; /* Distribute space around items */
+    /* align-self: flex-start; */ /* Remove align-self */
     display: flex;
     flex-wrap: wrap;
+    z-index: 5; /* Ensure it's above background shapes */
   }
-  
-  .placeholder-box{
-    flex: 1 1 calc(33.33%);
-    max-width: 23%;
-    min-width: 100px;
-    display: flex;
-    height: 280px;
-    background-color:#DE3838;
-    padding-bottom: 1vh;
-  }
-  
+
+/* --- UPDATED PLACEHOLDER BOX --- */
+  /* HomePage.css */
+
+/* Ensure styles apply correctly to the button element */
+.placeholder-box {
+  /* --- Keep existing styles for layout and appearance --- */
+  flex: 1 1 250px;
+  max-width: 300px;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 200px;
+  background-color: #DE3838; /* Keep red background */
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  padding: 15px;
+  box-sizing: border-box;
+
+  /* --- Text styles --- */
+  color: white; /* Keep white text */
+  font-size: 1.5em;
+  font-weight: bold;
+  font-family: inherit; /* Inherit font from body/container */
+
+  /* --- Add/Ensure styles for BUTTON behavior --- */
+  border: none; /* Remove default button border */
+  cursor: pointer; /* Show pointer on hover */
+  transition: transform 0.2s ease, background-color 0.2s ease; /* Add transition */
+}
+
+.placeholder-box:hover {
+  /* Optional: Add hover effect */
+  background-color: #C93030; /* Darker red */
+  transform: translateY(-2px); /* Slight lift effect */
+}
+
+.placeholder-box:focus {
+  /* Optional: Improve focus outline for accessibility */
+  outline: 2px solid blue;
+  outline-offset: 2px;
+}
+
+/* Other styles (.placeholder-container, etc.) remain the same */
+/* ... */
+
   .circular-button {
-    position: fixed; /* Keeps button in place even when scrolling */
-    top: 45vh; /* Position from top*/
-    right: 35vh; /* Position from right */
-    width: 180px; /* Circular width */
-    height: 180px; /* Circular height */
-    background-color: #DE3838; /* Red background */
+    position: fixed; /* Keeps button in place */
+    bottom: 30px; /* Position from bottom */
+    right: 30px; /* Position from right */
+    width: 150px; /* Adjusted size */
+    height: 150px; /* Adjusted size */
+    background-color: #DE3838;
     color: white;
     border: none;
-    border-radius: 50%; /* Makes it circular */
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    text-align: center; /* Center text if it wraps */
+    font-size: 1rem; /* Adjusted font size */
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Adds slight shadow */
-    transition: transform 0.2s ease-in-out;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease-in-out, background-color 0.2s ease;
+    z-index: 100; /* Ensure it's above most elements */
   }
-  
+
   .circular-button:hover {
-    transform: scale(1.1); /* Slightly enlarge on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
     background-color: #C93030; /* Darker red on hover */
   }
-  
-  
+
+  /* Signout button styles remain the same */
   .signout-container {
     position: absolute;
     top: 20px;
     right: 20px;
+    z-index: 100; /* Ensure it's above other elements */
   }
-  
+
   .signout-button {
     background-color: #ff4d4d;
     color: white;
@@ -125,8 +187,20 @@ body {
     font-weight: bold;
     transition: background-color 0.3s ease;
   }
-  
+
   .signout-button:hover {
     background-color: #e03c3c;
   }
   /* End of HomePage.jsx */
+
+  /* Added specific message style for signin page message */
+  .signin-message {
+      color: #D8000C; /* Example error color */
+      background-color: #FFD2D2; /* Light red background */
+      border: 1px solid #D8000C;
+      padding: 10px;
+      margin-top: 15px;
+      border-radius: 4px;
+      text-align: center;
+      font-size: 0.9em; /* Adjust as needed */
+  }

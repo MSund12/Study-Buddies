@@ -45,7 +45,7 @@ body {
 .title{
   padding: 5px;
   position: relative;
-  top: 4vh;
+  top: 1vh;
 }
   
 .back-button {
@@ -60,7 +60,7 @@ body {
   }
   
   .filter-container {
-    top: 8vh;
+    top: 4vh;
     position: relative;
     margin-bottom: 20px;
     text-align: center;
@@ -76,6 +76,8 @@ body {
     padding: 5px 10px;
     font-size: 1rem;
   }
+
+
   
   .schedule {
     position: relative;
@@ -83,6 +85,12 @@ body {
     border: 1px solid #ddd;
     margin-top: 20px;
     display: flex;
+    bottom: 5vh;
+  }
+
+  .schedule-title{
+    position: relative;
+    bottom: 10vh;
   }
   
   .day {

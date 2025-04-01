@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCourseData, clearCourseData } from '../features/courseSlice';
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../features/authSlice';
 import RedShape from './components/RedShape';
 import PurpleShape from './components/PurpleShape';
 import PinkShape from './components/PinkShape';
@@ -15,9 +16,15 @@ const SchedulePage = () => {
   const [term, setTerm] = useState('F'); // Term is either "F" or "W"
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { courseData, loading, error } = useSelector((state) => state.courses);
 
   const scheduleStartMinutes = 8 * 60 + 30;
+
+  const handleSignOut = () => {
+          dispatch(logout());
+          navigate('/starter');
+        };
 
   // Submit handler to dispatch Redux async thunk
   const handleSubmit = (e) => {
@@ -69,12 +76,20 @@ const SchedulePage = () => {
   return (
     <div className="starter-container">
       <Header currentUser={currentUser} />
+
+      {/* Sign Out Button */}
+      {currentUser && (
+        <div className="signout-container">
+          <button className="signout-button" onClick={handleSignOut}>
+            Sign Out
+          </button>
+        </div>
+      )}
       <RedShape color="#58C8D7" />
       <PurpleShape color="#E6487F"/>
       <PinkShape color="#F6960A"/>
 
       <nav className="buttons-container-home">
-        <a href="#" className="buttons">Courses</a>
 
         <a
           href="#"
@@ -146,7 +161,7 @@ const SchedulePage = () => {
 
       {courseData && (
         <div>
-          <h2>
+          <h2 className='schedule-title'>
             Schedule for {courseData.Dept} {courseData["Course ID"]} - {courseData["Course Name"]} ({courseData.Term})
           </h2>
           <div className="schedule">

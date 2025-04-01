@@ -22,7 +22,8 @@ const GroupPage = ({ group, onBack, currentUser }) => {
     setStatus('Resource uploaded successfully!');
     setTimeout(() => setStatus(''), 3000);
   };
-
+  
+  console.log('Pagination check:', { currentPage, totalPages, isLoading });
   return (
     <div className="starter-container">
       <Header currentUser={currentUser} />

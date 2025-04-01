@@ -1,8 +1,14 @@
 // src/pages/BookRoom.jsx
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../features/authSlice';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
+import RedShape from './components/RedShape';
+import PinkShape from './components/PinkShape';
+import PurpleShape from './components/PurpleShape';
+import Header from '../Header';
 import {
     format,
     setHours,
@@ -23,7 +29,9 @@ import {
 
 import 'react-datepicker/dist/react-datepicker.css';
 import './styles/BookRoom.css'; // Ensure this CSS file exists
-import Header from '../Header'; // Adjust path as needed
+
+
+
 
 // --- Configuration ---
 const API_BASE_URL = 'http://localhost:5000/api'; // Keep corrected Port
@@ -53,6 +61,8 @@ const BookRoom = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const navigate = useNavigate(); // Get the navigate function
+    const dispatch = useDispatch();
 
     // --- Redux State ---
     const currentUser = useSelector((state) => state.auth.currentUser);
@@ -283,12 +293,41 @@ const BookRoom = () => {
         return day !== 0 && day !== 6;
     };
 
+    // Handle logout (remains the same)
+      const handleSignOut = () => {
+        dispatch(logout());
+        navigate('/starter');
+      };
+
     // --- Render Logic ---
     // JSX remains the same
     return (
-        <div className="book-room-container">
+        <div className="starter-container">
             <Header currentUser={currentUser} />
-            <h2>Book a Study Room</h2>
+
+            {/* Sign Out Button */}
+                  {currentUser && (
+                    <div className="signout-container">
+                      <button className="signout-button" onClick={handleSignOut}>
+                        Sign Out
+                      </button>
+                    </div>
+                  )}
+            
+                  {/* Decorative Shapes */}
+                  <RedShape color="#1EE1A8" />
+                  <PinkShape />
+                  <PurpleShape />
+            
+                  {/* Navigation Buttons */}
+                  <nav className="buttons-container-home">
+                     <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/group-finder'); }}>Study Groups</a>
+                     <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/chat'); }}>Chats</a>
+                     <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/schedule'); }}>Schedules</a>
+                     <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/book'); }}>Book a Room</a>
+                  </nav>
+
+            <div className="boom-room-container">
             <p>Select a date, time, and duration (Mon-Fri, 8:30 AM - 5:00 PM, max 2 hours/day).</p>
 
             <div className="message-area">
@@ -355,6 +394,7 @@ const BookRoom = () => {
                          ) : <p>You have no bookings.</p>}
                      </div>
                  )}
+            </div>
             </div>
         </div>
     );

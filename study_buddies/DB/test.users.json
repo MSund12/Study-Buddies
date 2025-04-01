@@ -1,0 +1,108 @@
+[{
+  "_id": {
+    "$oid": "67e35ec677016333f1760625"
+  },
+  "firstName": "Admin",
+  "lastName": "Admin",
+  "email": "admin@example.com",
+  "password": "$2b$10$aQ/2eggj6gioG/DCA5P5/uwlzUiWjeMCwPkIDwe.cBgYUhu12mdHC",
+  "isAdmin": true,
+  "isVerified": true,
+  "createdAt": {
+    "$date": "2025-03-26T01:56:22.277Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-26T01:56:22.277Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e425ba52d6e668bc32f38a"
+  },
+  "firstName": "Lukasz",
+  "lastName": "Nowosad",
+  "email": "lnowosad@my.yorku.ca",
+  "password": "$2b$10$Aes95oOtH7jTMYBkPq6fBO6PLZbv6t2K.2rcSarXet5fcK4bXv/iu",
+  "isAdmin": true,
+  "isVerified": true,
+  "createdAt": {
+    "$date": "2025-03-26T16:05:14.270Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-26T16:05:14.270Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e9153771cc8e19d7d85ddb"
+  },
+  "firstName": "Abdullah",
+  "lastName": "Khatib",
+  "email": "kabdulla@my.yorku.ca",
+  "password": "$2b$10$qJg3PRuYoB7BWl/ZVA3xSuMQIbQzyMNFroGKvbBwma9VwkTXF5asO",
+  "isAdmin": false,
+  "isVerified": true,
+  "createdAt": {
+    "$date": "2025-03-30T09:56:07.350Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-30T09:56:07.350Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e9753c0833841876c76ae3"
+  },
+  "firstName": "Marko",
+  "lastName": "Zovic",
+  "email": "zovic@my.yorku.ca",
+  "password": "$2b$10$cmrTMJg5wCWHlZsWi/vZWeMVRh5C/PmsXoBtPxCdxz4bXSApk49QW",
+  "isAdmin": false,
+  "isVerified": true,
+  "createdAt": {
+    "$date": "2025-03-30T16:45:48.205Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-30T16:45:48.205Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67eac31b7730567768c03943"
+  },
+  "firstName": "Joe",
+  "lastName": "Smith",
+  "email": "joe@my.yorku.ca",
+  "password": "$2b$10$/LbHrEBEzxjo/.v66AP7Qu/CXY8MEV7kiCwePJf92HpxgRbsHGWBW",
+  "isAdmin": false,
+  "isVerified": true,
+  "createdAt": {
+    "$date": "2025-03-31T16:30:19.074Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-31T16:30:19.074Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67eb57c970af9993cf33f97a"
+  },
+  "firstName": "test",
+  "lastName": "account",
+  "email": "test@my.yorku.ca",
+  "password": "$2b$10$nyGVII7AQA2j8Yz56FenleiKlYIhZZ8ahvYtiIEmSRnRNob7tRLZm",
+  "isAdmin": false,
+  "isVerified": true,
+  "createdAt": {
+    "$date": "2025-04-01T03:04:41.330Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-01T03:04:41.330Z"
+  },
+  "__v": 0
+}]
