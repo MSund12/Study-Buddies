@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "react-router-dom": "^7.1.5"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
