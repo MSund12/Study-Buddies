@@ -175,15 +175,5 @@
 | Room Booking                | Pre-booked room logic + info-only sections    | Functional booking form + backend check       | Delivered working core                       |
 | Authentication              | Mostly stable                                 | Added email ownership verification            | Minor polish                                 |
 
----
 
-## 🧠 Reflections
 
-The project saw a shift from **feature-heavy brainstorming** to **focused implementation**:
-- Many original features (polls, read receipts, banned words) were cut or outsourced.
-- You prioritized **core usability and system stability**.
-- Using a **chat API** shows maturity in managing scope and leveraging existing tools.
-
----
-
-Let me know if you’d like this as a PDF, Markdown export, or want help documenting the chat API decision in your final report!
