@@ -157,9 +157,10 @@ const GroupFinderPage = ({ onBack, onSelectGroup }) => {
              <div className="group-box-content">
                <span className="group-name">{group.groupName}</span>
                <span className="group-course">{group.course}</span>
-               <span className="group-members">
-                 Members: {group.members?.length || 0} / {group.maxMembers}
-               </span>
+               <span className="group-owner">
+                   Owner: {group.owner ? `${group.owner.firstName ?? ''} ${group.owner.lastName ?? ''}`.trim() : 'N/A'}
+                 </span>
+          
              </div>
           </div>
         ))}

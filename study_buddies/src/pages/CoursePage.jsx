@@ -95,9 +95,7 @@ const CoursePage = () => {
                    Owner: {group.owner ? `${group.owner.firstName ?? ''} ${group.owner.lastName ?? ''}`.trim() : 'N/A'}
                  </span>
                  {/* Display Member Count */}
-                 <span className="group-members">
-                   Members: {group.members?.length || 0} / {group.maxMembers}
-                 </span>
+                 
               </div>
             </div>
           ))

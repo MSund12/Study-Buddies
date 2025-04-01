@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../features/authSlice';
+// *** NOTE: Ensure createGroup in groupSlice doesn't expect maxMembers ***
+// You might need to adjust the createGroup action/reducer if it expects maxMembers
 import { createGroup, clearMessages } from '../features/groupSlice';
 import { useNavigate, useLocation } from 'react-router-dom';
 import RedShape from './components/RedShape';
@@ -15,15 +17,20 @@ const CreateGroupPage = () => {
   const location = useLocation();
   const currentUser = useSelector((state) => state.auth.currentUser);
 
+  // --- MODIFICATION START ---
+  // Remove maxMembers from initial state
   const [groupData, setGroupData] = useState({
     course: '',
     groupName: '',
-    maxMembers: ''
+    // maxMembers: '' // REMOVED
   });
+  // --- MODIFICATION END ---
+
   const [courseSearch, setCourseSearch] = useState('');
   const [courseResults, setCourseResults] = useState([]);
+  const [formError, setFormError] = useState('');
 
-  const { loading, error, successMessage } = useSelector((state) => state.groups);
+  const { loading, error: groupError, successMessage } = useSelector((state) => state.groups);
 
   const handleSignOut = () => {
       dispatch(logout());
@@ -35,7 +42,6 @@ const CreateGroupPage = () => {
     const queryParams = new URLSearchParams(location.search);
     const courseFromQuery = queryParams.get('course');
     if (courseFromQuery) {
-      // Pre-fill both the form data and the search display field
       setGroupData(prevData => ({ ...prevData, course: courseFromQuery }));
       setCourseSearch(courseFromQuery);
     }
@@ -46,9 +52,10 @@ const CreateGroupPage = () => {
     if (typeof clearMessages === 'function') {
       dispatch(clearMessages());
     }
+    setFormError('');
     return () => {
        if (typeof clearMessages === 'function') {
-            dispatch(clearMessages());
+           dispatch(clearMessages());
        }
     };
   }, [dispatch]);
@@ -56,13 +63,12 @@ const CreateGroupPage = () => {
   // Effect for searching courses (debounced)
   useEffect(() => {
     const fetchCourses = async () => {
-      // Don't search if the search input exactly matches the selected course
       if (!courseSearch.trim() || courseSearch.trim() === groupData.course) {
         setCourseResults([]);
         return;
       }
       try {
-        const response = await fetch(`http://localhost:5000/api/courses/search?query=${courseSearch}`);
+        const response = await fetch(`http://localhost:5000/api/courses/search?query=${encodeURIComponent(courseSearch)}`);
         const data = await response.json();
         if (response.ok && Array.isArray(data)) {
           setCourseResults(data);
@@ -78,20 +84,20 @@ const CreateGroupPage = () => {
 
     const delaySearch = setTimeout(fetchCourses, 300);
     return () => clearTimeout(delaySearch);
-  }, [courseSearch, groupData.course]); // Added groupData.course dependency
+  }, [courseSearch, groupData.course]);
 
   // --- Handlers ---
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    // No change needed here, as 'maxMembers' input won't exist
     setGroupData({ ...groupData, [name]: value });
+    setFormError('');
   };
 
-  // Handler for the Course Search input only
   const handleCourseSearchChange = (e) => {
       const newSearchValue = e.target.value;
       setCourseSearch(newSearchValue);
-      // If user clears input OR types something different than the selected course,
-      // clear the actual selected course in the form data.
+      setFormError('');
       if (newSearchValue.trim() === '' || newSearchValue.trim() !== groupData.course) {
           setGroupData({...groupData, course: ''});
       }
@@ -99,25 +105,42 @@ const CreateGroupPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setFormError(''); // Clear previous form errors
+
     if (!groupData.course) {
-       // Set error state instead of console.error for user feedback
-       // setError("Please select a course first."); // Requires adding setError state
-       alert("Please select a course first."); // Simple alert for now
-       return;
+      setFormError("Please select a course first.");
+      return;
     }
+
+    // --- MODIFICATION START ---
+    // Remove validation for maxMembers
+    // const maxMembersNum = 8; // No longer needed
+    // if (isNaN(maxMembersNum) || maxMembersNum <= 0) {
+    //     setFormError("Please enter a valid number of maximum members (at least 1).");
+    //     return;
+    // }
+    // --- MODIFICATION END ---
+
+
+    // Dispatch the action - groupData now only contains course and groupName
+    // Ensure your createGroup action/slice handles this correctly (doesn't require maxMembers)
     dispatch(createGroup(groupData));
-    // Optionally navigate or clear form on success via extraReducers
   };
 
   const handleSelectCourse = (dept, courseId) => {
     const fullCourseName = `${dept} ${courseId}`;
-    // Set the course value for submission
     setGroupData({ ...groupData, course: fullCourseName });
-    // Set the search input to display the selected course
     setCourseSearch(fullCourseName);
-    // Clear the search results dropdown
     setCourseResults([]);
+    setFormError('');
   };
+
+  // --- MODIFICATION START ---
+  // Update disabled logic - no longer depends on maxMembers
+  // It only depends on loading state and if a course has been selected
+  const isSubmitDisabled = loading || !groupData.course || !groupData.groupName.trim(); // Added check for groupName
+  // --- MODIFICATION END ---
+
 
   // --- Render ---
   return (
@@ -140,10 +163,10 @@ const CreateGroupPage = () => {
 
       {/* Navigation Buttons */}
       <nav className="buttons-container-home">
-         <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/group-finder'); }}>Study Groups</a>
-         <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/chat'); }}>Chats</a>
-         <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/schedule'); }}>Schedules</a>
-         <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/book'); }}>Book a Room</a>
+          <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/group-finder'); }}>Study Groups</a>
+          <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/chat'); }}>Chats</a>
+          <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/schedule'); }}>Schedules</a>
+          <a href="#" className="buttons" onClick={(e) => { e.preventDefault(); navigate('/book'); }}>Book a Room</a>
       </nav>
 
       <div className="create-group-container">
@@ -159,11 +182,10 @@ const CreateGroupPage = () => {
               name="courseSearch"
               placeholder="Type Dept or Course ID (e.g., EECS 2311)"
               value={courseSearch}
-              // Use the dedicated handler now
               onChange={handleCourseSearchChange}
               autoComplete="off"
+              required
             />
-            {/* Search Results Dropdown */}
             {courseResults.length > 0 && (
               <ul className="course-results">
                 {courseResults.map((course) => (
@@ -177,13 +199,12 @@ const CreateGroupPage = () => {
                 ))}
               </ul>
             )}
-            {/* No Results Message */}
             {courseResults.length === 0 && courseSearch && courseSearch !== groupData.course && (
               <p className="no-results">No matching courses found.</p>
             )}
+            {/* Display selected course if needed */}
+            {/* {groupData.course && <p className="selected-course">Selected: {groupData.course}</p>} */}
           </div>
-
-          {/* --- REMOVED the separate "Selected Course" display --- */}
 
           {/* Group Name Input */}
           <div className="input-group">
@@ -194,39 +215,39 @@ const CreateGroupPage = () => {
               name="groupName"
               placeholder="Enter group name"
               value={groupData.groupName}
-              onChange={handleInputChange} // Uses generic input handler
+              onChange={handleInputChange}
               required
             />
           </div>
 
-          {/* Max Members Input */}
+          {/* --- MODIFICATION START --- */}
+          {/* Max Members Input - REMOVED */}
+          {/*
           <div className="input-group">
-            <label htmlFor="maxMembers">Max Members</label>
+            <label htmlFor="maxMembers">Max Members (1-8)</label>
             <input
-              type="number"
-              id="maxMembers"
-              name="maxMembers"
-              placeholder="e.g., 5"
-              min="1"
-              value={groupData.maxMembers}
-              onChange={handleInputChange} // Uses generic input handler
-              required
+              // ... attributes ...
             />
           </div>
+          */}
+          {/* --- MODIFICATION END --- */}
+
 
           {/* Submit Button */}
           <button
             type="submit"
             className="create-group-button"
-            disabled={loading || !groupData.course} // Disable if loading or no course selected
+            disabled={isSubmitDisabled} // Use updated disabled logic
           >
             {loading ? 'Creating...' : 'Create Group'}
           </button>
         </form>
 
         {/* Status Messages */}
-        {successMessage && <p className="status-message success">{successMessage}</p>}
-        {error && <p className="status-message error">{error}</p>}
+        {formError && <p className="status-message error">{formError}</p>}
+        {!formError && successMessage && <p className="status-message success">{successMessage}</p>}
+        {!formError && groupError && <p className="status-message error">{groupError}</p>}
+
       </div>
     </div>
   );
