@@ -39,7 +39,7 @@ npm install
 3. Create .env file
 In the server folder create a new file titled .env
 In that file paste what was emailed.
-Or if you have the tile, put it inside the server folder, inside the project.
+Or if you have the tile, rename it from env to .env put it inside the server folder, inside the project. Tha tis study_buddies/server
 **Remember: Do not share this file publicly, as it contains sensitive information.**
 
 5. Start Server
