@@ -1,17 +1,3 @@
-Below is an updated version of the Wiki-and-Architecture documentation that reflects the current project structure and highlights the MERN stack implementation:
-
----
-
-# Group Study Finder – Wiki & Architecture
-
-**Group Study Finder** is a full-stack application built using the **MERN stack**—**MongoDB, Express, React, and Node.js**. The application offers a collaborative platform for users to register, log in, search for study groups, access group resources, and engage in real-time group chat.
-
----
-
-## Project Structure
-
-The project root (`/STUDY_BUDDIES`) is organized into three primary segments: web scraping tools, the backend server, and the React-based frontend. Below is the directory tree:
-
 ```
 /STUDY_BUDDIES
 │
@@ -100,63 +86,104 @@ The project root (`/STUDY_BUDDIES`) is organized into three primary segments: we
 ```
 ---
 
-## Data Flow & Component Communication
+## 🔁 Summary of Key Changes
 
-1. **User Management and Authentication:**
+### 1. **Chat and Group Features**
 
-   - **Registration:**
-     - New users register using the `SignUp.jsx` component.
-     - Registration data is processed via the Express backend (using `/server/routes/userRoutes.js`), which utilizes the `User.js` Mongoose schema to persist user information in MongoDB.
-     - _Testing:_ Dedicated tests (formerly in RegisterPage tests) verify that the registration form behaves correctly and that the backend successfully stores user data.
+#### 🗓 February 18
+- Chat system had ambitious functionality including:
+  - Read receipts
+  - Polls
+  - Inactivity timers (auto-kick and group deletion)
+  - Banned word filtering
+  - One-on-one chat
+  - Group size limits (4–8)
+  - Reporting unsafe content
 
-   - **Login:**
-     - The `SignIn.jsx` component handles user authentication.
-     - Submitted credentials are validated against the database via the backend. On a successful login, user information is stored in the application state.
-     - _Testing:_ Login tests ensure appropriate error handling and successful redirection upon authentication.
+#### 📆 March 21
+- Shift toward **simplified and more user-focused stories**:
+  - Emphasis on **creating a group**, **chatting within it**, and managing group lists.
+  - Students can now view a **sorted list of group chats** and **course-specific groups**.
+  - Chat safety and moderation (like banned words, inactivity timers) were removed from the scope.
 
-2. **Group & Resource Management:**
-
-   - **Schedule:**
-     - `SchedulePage.jsx` presents study schedules; this data is supplemented by the scraping functionality in the `/ScheduleScraper` directory.
-    
-   - **Chat:**
-
-     - The `GroupChatSidebar.jsx` component provides a temporary chat implementation
-
----
-
-## MERN Stack Implementation
-
-The application leverages our MERN stack framework to separate concerns and ensure scalability:
-
-- **MongoDB:**  
-  Acts as the NoSQL database to store user data, course information, and group details. Schemas defined in `/server/models` ensure structured data persistence. Used as opposed to SQL based databases for its ease of implementation with rest of tech stack.
-
-- **Express & Node.js:**  
-  The backend, initialized in `server.js`, exposes a set of RESTful APIs under `/server/routes` for user registration, authentication, resource management, and more. Express works hand-in-hand with MongoDB via Mongoose.
-
-- **React:**  
-  Powers the frontend, offering dynamic and responsive user interfaces. Files in the `/src` directory (especially under `/pages/components`) handle UI rendering and user interactions. Custom hooks like `useAuth.js` simplify component-level authentication logic.
-
-This modular approach not only streamlines development but also provides a clear pathway for scalability and future feature enhancements (e.g., real-time WebSocket integration for chat).
+#### ✅ Final Implementation
+- The team **decided to use a third-party API for chat**, reducing the complexity of building custom logic like message moderation, read receipts, and real-time sync from scratch.
 
 ---
 
-## ScheduleScraper Directory
+### 2. **Schedule and Course Info**
 
-The `/ScheduleScraper` directory is dedicated to external data collection:
-- It likely contains scripts (such as Python scripts) to scrape schedule data for classes or study groups.
-- The scraped data can be integrated with the React application (for example, via the `SchedulePage.jsx`) or used to enhance course/group details stored in MongoDB.
+#### 🗓 February 18
+- Included:
+  - Professor office hours
+  - PASS sessions
+  - Uploading and voting on due dates
+  - Verified course resources and unsafe content reporting
+
+#### 📆 March 21
+- Simplified to:
+  - Viewing schedules across sections
+  - Automated course info population (owners don’t enter manually)
+
+#### ✅ Final Implementation
+- Features were streamlined to show class times and enable course filtering. Office hours, community-based due date submissions, and moderation of shared resources were removed.
 
 ---
 
-## Testing & Quality Assurance
+### 3. **Room Booking**
 
-- **Unit & Component Tests:**  
-  The `/test` directory contains tests to verify that React components (such as `GroupChatSidebar.jsx`, `GroupFinderPage.jsx`, and others) render correctly and handle user interactions as expected.
+#### 🗓 February 18
+- Book pre-assigned rooms
+- Explore how to book on campus (Scott Library, Sandbox)
 
-- **Integration Testing:**  
-  Tests also cover the flow between the frontend and the backend, ensuring that API endpoints (defined in `/server/routes`) correctly process requests and that data flows seamlessly into the React state.
+#### 📆 March 21
+- Focused on a **working room booking interface**, with restrictions on:
+  - Booking hours (8:30 am – 5:00 pm)
+  - Preventing double bookings
 
-- **Linting & Consistency:**  
-  ESLint is configured through `eslint.config.js` to enforce code quality and consistency, aiding in the long-term maintainability of the project.
+#### ✅ Final Implementation
+- A minimal, functional room booking system is implemented through a form that checks for time and collision.
+
+---
+
+### 4. **Authentication**
+
+#### 🗓 February 18
+- Included:
+  - Sign out feature
+  - Displaying name from Gmail
+  - YorkU verification emphasized
+
+#### 📆 March 21
+- Mostly unchanged:
+  - Users must register/login with York email
+  - Emphasis on email ownership verification
+
+#### ✅ Final Implementation
+- JWT-based login system, enforced York email format, and basic verification support.
+
+---
+
+## 🎯 Major Scope Adjustments
+
+| Feature                      | Feb 18 Plan                                   | March 21 Finalized Direction                  | Notes                                        |
+|-----------------------------|-----------------------------------------------|-----------------------------------------------|----------------------------------------------|
+| Chat                        | Highly customized w/ moderation, read status  | Simplified + moved to external API            | Smart move to cut dev time + complexity      |
+| Schedule                    | Office hours, PASS, dates, resource voting    | Show schedule by course section               | Prioritized clarity and usability            |
+| Resources                   | Verified links, reports, uploads              | Removed                                       | Possibly deferred for future iteration       |
+| Group Rules                 | Size limits, inactivity auto-kick             | Removed                                       | Complexity vs. value tradeoff                |
+| Room Booking                | Pre-booked room logic + info-only sections    | Functional booking form + backend check       | Delivered working core                       |
+| Authentication              | Mostly stable                                 | Added email ownership verification            | Minor polish                                 |
+
+---
+
+## 🧠 Reflections
+
+The project saw a shift from **feature-heavy brainstorming** to **focused implementation**:
+- Many original features (polls, read receipts, banned words) were cut or outsourced.
+- You prioritized **core usability and system stability**.
+- Using a **chat API** shows maturity in managing scope and leveraging existing tools.
+
+---
+
+Let me know if you’d like this as a PDF, Markdown export, or want help documenting the chat API decision in your final report!
