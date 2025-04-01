@@ -11,6 +11,8 @@ Before running the project, you need to have **Node.js** installed. If you donâ€
 - **Recommended version:** LTS (Long Term Support).
 - ![image](https://github.com/user-attachments/assets/d8d65014-ba44-4bde-a8fa-fb5782ddccf8)
 
+- this version is the correct one, same thing for mac or linux, if using installer simply let it run UNTIL it is clear it has finished, dont guess
+
 
 After installing Node.js, make sure you have **npm** (Node Package Manager) available by running:
 
