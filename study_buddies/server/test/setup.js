@@ -6,7 +6,16 @@ let mongoServer;
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
   const uri = mongoServer.getUri();
-  await mongoose.connect(uri);
+
+  // Close any existing connections
+  if (mongoose.connection.readyState !== 0) { // 0 = disconnected
+    await mongoose.disconnect();
+  }
+
+  await mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  });
 });
 
 afterAll(async () => {
