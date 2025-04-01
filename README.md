@@ -9,6 +9,8 @@ Before running the project, you need to have **Node.js** installed. If you donâ€
 
 - Download and install **Node.js** from the official website: [nodejs.org](https://nodejs.org/en/download).
 - **Recommended version:** LTS (Long Term Support).
+- ![image](https://github.com/user-attachments/assets/d8d65014-ba44-4bde-a8fa-fb5782ddccf8)
+
 
 After installing Node.js, make sure you have **npm** (Node Package Manager) available by running:
 
