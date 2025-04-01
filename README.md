@@ -55,7 +55,7 @@ node server.js
 If you're not already in the server folder, navigate to it with:
 
 ```bash
-cd <File-Path-to-Server-Folder>
+cd <File-Path-to-Server-Folder> aka cd server (if in study_buddies)
 ```
 
 5. Start Frontend (New Terminal):
