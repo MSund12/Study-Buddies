@@ -1,0 +1,20 @@
+[{
+  "_id": {
+    "$oid": "67eb594370af9993cf33f99a"
+  },
+  "firstName": "joe",
+  "lastName": "Band",
+  "email": "joe@yorku.ca",
+  "password": "$2b$10$x7sCG1/zd4fOAz3t/ogWaumYXQfonJaXVJcHAZxCNMwl4lgiC1K3O",
+  "VerifCode": "778032",
+  "CodeExpiry": {
+    "$date": "2025-04-01T04:10:59.742Z"
+  },
+  "createdAt": {
+    "$date": "2025-04-01T03:10:59.742Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-01T03:10:59.742Z"
+  },
+  "__v": 0
+}]

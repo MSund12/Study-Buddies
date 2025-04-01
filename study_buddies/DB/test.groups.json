@@ -1,0 +1,126 @@
+[{
+  "_id": {
+    "$oid": "67ea17313966b72a58d92ea8"
+  },
+  "groupName": "Sunial",
+  "course": "EECS 2032",
+  "maxMembers": 6,
+  "members": [
+    "67e425ba52d6e668bc32f38a"
+  ],
+  "createdAt": {
+    "$date": "2025-03-31T04:16:49.397Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-31T04:16:49.397Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67eaa53ce91db7aab13408ab"
+  },
+  "groupName": "Stats",
+  "course": "MATH 2930",
+  "maxMembers": 8,
+  "members": [
+    "67e425ba52d6e668bc32f38a"
+  ],
+  "createdAt": {
+    "$date": "2025-03-31T14:22:52.657Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-31T14:22:52.657Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67eaa553e91db7aab1340b38"
+  },
+  "groupName": "ENG",
+  "course": "ENG 2003",
+  "maxMembers": 8,
+  "members": [
+    "67e425ba52d6e668bc32f38a"
+  ],
+  "createdAt": {
+    "$date": "2025-03-31T14:23:15.370Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-31T14:23:15.370Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67eaa5f9e91db7aab1340bc8"
+  },
+  "groupName": "Civil Team",
+  "course": "CIVL 3210",
+  "maxMembers": 8,
+  "members": [
+    "67e425ba52d6e668bc32f38a"
+  ],
+  "createdAt": {
+    "$date": "2025-03-31T14:26:01.795Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-31T14:26:01.795Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67eaba4f7730567768c03577"
+  },
+  "groupName": "Testtingplease",
+  "course": "MATH 2930",
+  "maxMembers": 8,
+  "members": [
+    "67e425ba52d6e668bc32f38a"
+  ],
+  "createdAt": {
+    "$date": "2025-03-31T15:52:47.294Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-31T15:52:47.294Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67eabc6d7730567768c03934"
+  },
+  "groupName": "chem",
+  "course": "CHEM 2011",
+  "maxMembers": 8,
+  "members": [
+    "67e425ba52d6e668bc32f38a"
+  ],
+  "createdAt": {
+    "$date": "2025-03-31T16:01:49.341Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-31T16:01:49.341Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67eac33d7730567768c03964"
+  },
+  "groupName": "Statistics",
+  "course": "MATH 2930",
+  "maxMembers": 8,
+  "members": [
+    "67e425ba52d6e668bc32f38a"
+  ],
+  "createdAt": {
+    "$date": "2025-03-31T16:30:53.081Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-31T16:30:53.081Z"
+  },
+  "__v": 0
+}]
