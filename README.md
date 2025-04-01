@@ -38,10 +38,11 @@ npm install
 
 3. Create .env file
 In the server folder create a new file titled .env
-In that file paste what was emailed. 
+In that file paste what was emailed.
+Or if you have the tile, put it inside the server folder, inside the project.
 **Remember: Do not share this file publicly, as it contains sensitive information.**
 
-4. Start Server
+5. Start Server
 From the **server** folder, run:
 
 ```bash
@@ -66,7 +67,7 @@ If you're not already in the study_buddies folder, navigate to it with:
 cd <File-Path-to-study_buddies-Folder>
 ```
 
-This will launch the development server, and your project will be accessible at the link provided in the terminal
+This will launch the development server, and your project will be accessible at the link provided in the terminal, (control + click on the link)
 
 ## Please start at log.txt when marking project documents, it will make it easier for you!! 
 Can be found in Project Documents
